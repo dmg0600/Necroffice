@@ -38,9 +38,10 @@ public class InteractionManager : MonoBehaviour
     public Transform m_Player = null;
 
     /// <summary>
-    /// Color con el que se modulará el objeto en foco
+    /// Lista de objetos cercanos interactuables
+    /// <see cref="Stats"/>
     /// </summary>
-    public Color m_Color;
+    public List<GameObject> nearInteractiveObjs = new List<GameObject>();
 
     #endregion
 
@@ -63,10 +64,6 @@ public class InteractionManager : MonoBehaviour
     private GameObject m_NearInteractiveObj = null;
     public GameObject NearInteractive { get { return m_NearInteractiveObj; } }
 
-    /// <summary>
-    /// Color anterior del material
-    /// </summary>
-    private Color m_PrevColor = Color.white;
 
     #endregion
 
@@ -79,9 +76,6 @@ public class InteractionManager : MonoBehaviour
     {
         _UpdateLists();
 
-        // Sanity check
-        if (m_Player == null)
-            Debug.Log("Player is not assigned. The Interaction Manager will be deactivated.");
     }
 
     /// <summary>
@@ -89,54 +83,14 @@ public class InteractionManager : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (m_Player != null)
+
+        // Control de tiempos
+        m_ElapsedTime += Time.deltaTime;
+        if (m_ElapsedTime > m_TimeToUpdate)
         {
-            // Control de tiempos
-            m_ElapsedTime += Time.deltaTime;
-            if (m_ElapsedTime > m_TimeToUpdate)
-            {
-                //GameObject lastNearInteractive = m_NearInteractiveObj;
+            _DoChecks(m_InteractiveObjs, out m_NearInteractiveObj);
 
-                // Deactivate effect if needed
-                if (m_NearInteractiveObj != null)
-                    _ShowInteractiveLayer(false);
-
-                // TODO - 1 Lla,mada a _DoChecks()
-                _DoChecks(m_InteractiveObjs, out m_NearInteractiveObj);
-
-                // Activar efecto en caso de que sea necesario
-                if (m_NearInteractiveObj != null)
-                {
-                    _ShowInteractiveLayer(true);
-                }
-
-                m_ElapsedTime = 0.0f;
-            }
-
-
-            if (m_NearInteractiveObj)
-            {
-                // TODO 4 - Al pulsar una tecla, se usa el objeto actual
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    Stats myProperties = m_NearInteractiveObj.GetComponent<Stats>();
-                    //myProperties.On...
-                }
-            }
-
-        }
-    }
-
-    /// <summary>
-    /// Ésta función se llama cuando el manager es desactivado
-    /// </summary>
-    void OnDisable()
-    {
-        // Deactivate effect if needed
-        if (m_NearInteractiveObj != null)
-        {
-            _ShowInteractiveLayer(false);
-            m_NearInteractiveObj = null;
+            m_ElapsedTime = 0.0f;
         }
     }
 
@@ -160,7 +114,6 @@ public class InteractionManager : MonoBehaviour
             Stats interProp = inter.GetComponent<Stats>() as Stats;
             Transform interTransform = inter.transform;
 
-
             Vector3 dist;
             if (_CheckDistance(interTransform, interProp.m_InteractionRadius, m_Player, out dist))
             {
@@ -169,6 +122,9 @@ public class InteractionManager : MonoBehaviour
                 if ((interProp.m_InteractionAngle >= 360.0f) ||
                     _CheckInterCone(dist, interTransform, interProp.m_InteractionAngle * 0.5f))
                 {
+                    //rellenamos una lista con los objetos más cercanos al GameObject 
+                    nearInteractiveObjs.Add(inter);
+
                     //Debug.Log("Cone Passed");
                     if (newAngle < bestAngle)
                     {
@@ -283,29 +239,6 @@ public class InteractionManager : MonoBehaviour
 
     #endregion
 
-    #region Helper Methods
 
-    /// <summary>
-    /// Activa/Desactiva la modulación de color
-    /// </summary>
-    /// <param name="status">True en caso de querer activar la modulación, false en caso contrario</param>
-    private void _ShowInteractiveLayer(bool status)
-    {
-
-        MeshRenderer mr = m_NearInteractiveObj.GetComponent<MeshRenderer>();
-        if (mr != null && mr.material != null)
-        {
-            if (status)
-            {
-                m_PrevColor = mr.material.color;
-                mr.material.color = m_Color;
-            }
-            else
-            {
-                mr.material.color = m_PrevColor;
-            }
-        }
-    }
-    #endregion
 }
 
