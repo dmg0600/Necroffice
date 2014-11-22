@@ -7,13 +7,10 @@ public class PlayerCamera : MonoBehaviour
     public float distance = 10;
     float currentDistance;
 
-    //The default distance of the camera from the target.
-    public float _distance = 20.0f;
-
     //Control the speed of zooming and dezooming.
     public float _zoomStep = 1.0f;
 
-    float fixYAngle = 55.0f;
+    public float fixYAngle = 55.0f;
 
     //The speed of the camera. Control how fast the camera will rotate.
     public float _xSpeed = 1f;
