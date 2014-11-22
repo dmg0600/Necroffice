@@ -50,6 +50,24 @@ public class Controller : MonoBehaviour
             // Calculate how fast we should be moving
             if (targetOrientation == Vector3.zero) return;
 
+            RaycastHit hit;
+            int layermask = 1 << LayerMask.NameToLayer("Floor");
+            if (Physics.Raycast(transform.position, transform.up * -1, out hit, layermask))
+            {
+                Transform rampa;
+                if (hit.transform.name == "Rampa")
+                    rampa = hit.transform;
+                else
+                    rampa = hit.transform.FindChild("Rampa");
+
+                if (rampa != null)
+                {
+                    int orientation = Vector3.Angle(targetOrientation, rampa.forward) > 90 ? -1 : 1;
+                    Quaternion rotate = Quaternion.LookRotation(rampa.forward * -1);
+                    targetOrientation = rotate * targetOrientation;
+                }
+            }
+
             if (!attacking)
                 LookAt(targetOrientation);
 

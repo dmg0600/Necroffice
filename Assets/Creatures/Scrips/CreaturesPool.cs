@@ -80,7 +80,6 @@ public class CreaturesPool : MonoBehaviour {
 	// Spawn a game object with the specified position/rotation.
 	public GameObject Spawn(Vector3 position, Quaternion rotation)
 	{
-        Debug.Log("Spawn");
 		GameObject result;
 
 		if(available.Count == 0){
