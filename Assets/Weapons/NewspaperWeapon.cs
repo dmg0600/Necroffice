@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class AxeWeapon : Weapon
+public class NewspaperWeapon : Weapon
 {
-
+    
     public override void attack()
     {
         _attacking = true;

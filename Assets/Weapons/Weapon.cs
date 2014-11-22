@@ -18,7 +18,6 @@ public abstract class Weapon : MonoBehaviour
     abstract public void selectTarget();
     abstract public void move();
 
-    public void updateTargets();
 
     public WeaponMode weaponMode
     {
