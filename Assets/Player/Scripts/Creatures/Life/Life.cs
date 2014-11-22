@@ -3,13 +3,7 @@ using System.Collections;
 
 public class Life : MonoBehaviour 
 {
-    public PlayerLifeManager LifeManager;
     public Stats.Attribute life;
-
-    void Awake() 
-    {
-        if (LifeManager == null) Debug.Log("Life of " + transform.root.gameObject.name + " must have a LifeManager");
-    }
 
     public void OnDamage(int damage) 
     {
