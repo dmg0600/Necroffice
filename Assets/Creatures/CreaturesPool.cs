@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-using UnityEngine;
-using System.Collections;
-
-public class CreaturesPool {
+public class CreaturesPool : MonoBehaviour {
 
 	// The prefab that the game objects will be instantiated from.
-	private GameObject prefab;
+	public GameObject prefab;
 	
 	// The list of available game objects (initially empty by default).
 	private Stack available;
@@ -16,10 +15,17 @@ public class CreaturesPool {
 	// unspawning all of them at once, see UnspawnAll).
 	private ArrayList all;
 
+    private List<GameObject> burrows;
+        
 	// An optional function that will be called whenever a new object is instantiated.
 	// The newly instantiated object is passed to it, which allows users of the pool
 	// to do custom initialization.
 	//private var initializationFunction : Function;
+
+    private int initialCapacity = 50;
+
+    public int minDelay = 1;
+    public int maxDelay = 2;
 
 	// Creates a pool.
 	// The initialCapacity is used to initialize the .NET collections, and determines
@@ -28,9 +34,8 @@ public class CreaturesPool {
 	// If an initialCapacity that is <= to zero is provided, the pool uses the default
 	// initial capacities of its internal .NET collections.
 	//function GameObjectPool(prefab : GameObject, initialCapacity : int, initializationFunction : Function, setActiveRecursively : boolean){
-	public CreaturesPool(GameObject prefab, int initialCapacity)
+	public void Start()
 	{
-		this.prefab = prefab;
 		if(initialCapacity > 0){
 			this.available = new Stack(initialCapacity);
 			this.all = new ArrayList(initialCapacity);
@@ -39,21 +44,48 @@ public class CreaturesPool {
 			this.available = new Stack();
 			this.all = new ArrayList();
 		}
-		//this.initializationFunction = initializationFunction;
+
+        burrows = GameObject.FindGameObjectsWithTag("CreatureSpanwPoint").ToList();
+
+        if (burrows.Count < 1) Debug.LogError("Must be almost one CreatureSpanwPoint in the scene");
 	}
+
+    public bool waiting = false;
+    public void Update()
+    {
+        if (waiting) return;
+
+        waiting = true;
+        StartCoroutine(DelaySpawn());
+    }
+
+    IEnumerator DelaySpawn() 
+    {
+        yield return new WaitForSeconds(Random.Range(minDelay, maxDelay));
+        GameObject burrow = RamdomSpawnPoint();
+        Spawn(Noise(burrow.transform.position), burrow.transform.rotation);
+        waiting = false;
+    }
+
+    public GameObject RamdomSpawnPoint() 
+    {
+        return burrows[Random.Range(0, burrows.Count)];
+    }
+
+    public Vector3 Noise(Vector3 v) 
+    {
+        return v + new Vector3(Random.Range(0, 3), Random.Range(0, 3), 0);
+    }
 
 	// Spawn a game object with the specified position/rotation.
 	public GameObject Spawn(Vector3 position, Quaternion rotation)
 	{
+        Debug.Log("Spawn");
 		GameObject result;
 
 		if(available.Count == 0){
 			// Create an object and initialize it.
 			result = GameObject.Instantiate(prefab, position, rotation) as GameObject;
-			//if(initializationFunction != null){
-			//	initializationFunction(result);
-			//}
-			// Keep track of it.
 			all.Add(result);
 		} else {
 			result = available.Pop() as GameObject;
@@ -130,6 +162,8 @@ public class CreaturesPool {
     {
 		return available.Count;
 	}
+
+    public bool hasAvaiables { get { return GetAvailableCount() > 0; } }
 
 	// Returns the prefab being used by this pool.
 	public GameObject GetPrefab()
