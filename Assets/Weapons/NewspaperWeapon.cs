@@ -45,37 +45,6 @@ public class NewspaperWeapon : Weapon
         
     }
 
-    public override void selectTarget()
-    {
-        NavMeshPath path = new NavMeshPath();
-        if (!_targetList.Contains(target))
-        {
-            foreach (GameObject pTarget in _targetList)
-            {
-                NavMesh.CalculatePath(transform.position, pTarget.transform.position, -1, path);
-
-                if (path.corners.Length < _currentPath.corners.Length && path.status != NavMeshPathStatus.PathInvalid)
-                {
-                    _currentPath = path;
-                    _currentCorner = 0;
-                }
-            }
-        }
-
-        Invoke("selectTarget", 1.0f);
-    }
-
-    public override void move()
-    {
-        Vector3 direction = _currentPath.corners[_currentCorner] - transform.position;
-
-        direction.y = 0;
-
-        if (direction.magnitude < 1.0)
-            direction = _currentPath.corners[++_currentCorner] - transform.position;
-
-        //owner.GetComponent<Controller>().OnInputAxis(direction);
-    }
 
     /**
      * Controla la colision del arma cuando esta atacando
@@ -90,7 +59,5 @@ public class NewspaperWeapon : Weapon
     }
 
     private bool _attacking;
-    private int _currentCorner;
-    private NavMeshPath _currentPath;
     private List<GameObject> _damagedEntities;
 }

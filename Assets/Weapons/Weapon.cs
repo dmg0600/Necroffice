@@ -10,15 +10,51 @@ public enum WeaponMode
 
 public abstract class Weapon : MonoBehaviour
 {
+    #region unimplemented methods
     abstract public void attack();
     abstract public bool canAttack();
 
     //IA METHODS
     abstract public void updateAI();
-    abstract public void selectTarget();
-    abstract public void move();
 
+    #endregion
 
+    public virtual void selectTarget()
+    {
+        NavMeshPath path = new NavMeshPath();
+        if (!_targetList.Contains(target))
+        {
+            foreach (GameObject pTarget in _targetList)
+            {
+                NavMesh.CalculatePath(transform.position, pTarget.transform.position, -1, path);
+
+                if (path.corners.Length < _currentPath.corners.Length && path.status != NavMeshPathStatus.PathInvalid)
+                {
+                    _currentPath = path;
+                    _currentCorner = 0;
+                }
+            }
+        }
+
+        Invoke("selectTarget", 1.0f);
+    }
+
+    public virtual void move()
+    {
+        Vector3 direction = _currentPath.corners[_currentCorner] - transform.position;
+
+        direction.y = 0;
+
+        if (direction.magnitude < 1.0)
+            direction = _currentPath.corners[++_currentCorner] - transform.position;
+
+        //owner.GetComponent<Controller>().OnInputAxis(direction);
+    }
+
+    #region GET/SET
+    ///////////////////////////////////////////////////////////////
+    ////////////////////// GETTERS Y SETTERS //////////////////////
+    ///////////////////////////////////////////////////////////////
     public WeaponMode weaponMode
     {
         set
@@ -70,6 +106,7 @@ public abstract class Weapon : MonoBehaviour
             return _range;
         }
     }
+    #endregion
 
     [SerializeField]
     private string _name;
@@ -84,6 +121,9 @@ public abstract class Weapon : MonoBehaviour
     private GameObject _owner;
     protected List<GameObject> _targetList;
 
+
+    private int _currentCorner;
+    private NavMeshPath _currentPath;
     private WeaponMode _mode;
 
 }
