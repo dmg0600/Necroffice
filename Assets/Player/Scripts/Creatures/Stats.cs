@@ -64,16 +64,9 @@ public class Stats : MonoBehaviour
             return (((value - lower) * (NewMax - NewMin)) / (NewMax - lower)) + NewMin;
         }
 
-        public static Attribute operator +(Attribute a, int i)
+        public float Get01Value()
         {
-            a.value = Mathf.Clamp(a.value + i, a.lower, a.max);
-            return a;
-        }
-
-        public static Attribute operator -(Attribute a, int i)
-        {
-            a.value = Mathf.Clamp(a.value - i, a.lower, a.max);
-            return a;
+            return (value * 1f / upper);
         }
     }
     #endregion

@@ -19,7 +19,6 @@ public class Creature : MonoBehaviour
     {
         _Control = GetComponent<Controller>();
         _Stats = GetComponent<Stats>();
-        Debug.Log("Pillao");
     }
 
 }

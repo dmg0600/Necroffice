@@ -8,6 +8,11 @@ public class Controller : MonoBehaviour
 {
     public Creature _Creature = null;
 
+
+    public AnimationCurve AgilityToSpeed;
+
+
+
     //Parametrization
     float movementSpeed = 1;
     float floatiness = Defines.Gravity;
@@ -23,6 +28,7 @@ public class Controller : MonoBehaviour
     //Controller
     Vector3 targetOrientation = Vector3.zero;
     Transform graphic;
+    GameObject groundObject { get; set; }
 
     void Awake() 
     {
@@ -31,7 +37,9 @@ public class Controller : MonoBehaviour
 
     void RefreshVariables()
     {
-        movementSpeed = _Creature._Stats.Agility.value * 0.35f;
+        float Multiplier = AgilityToSpeed.Evaluate(_Creature._Stats.Agility.Get01Value());
+
+        movementSpeed = Multiplier * 1.5f;
     }
 
     void Update()
@@ -90,9 +98,10 @@ public class Controller : MonoBehaviour
 
     }
 
-    void OnCollisionStay()
+    void OnCollisionStay(Collision other)
     {
         grounded = true;
+        groundObject = other.gameObject;
     }
 
     void OnAttackStarts(Vector3 objetive)
