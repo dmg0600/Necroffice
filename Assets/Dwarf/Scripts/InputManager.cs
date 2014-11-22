@@ -12,7 +12,6 @@ public class InputManager : MonoBehaviour
     void Awake() 
     {
         Sujet = this.transform.root.gameObject;
-
         floorLayer = 1 << LayerMask.NameToLayer("Floor");
     }
 

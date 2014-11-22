@@ -8,11 +8,9 @@ public class DwarfController : MonoBehaviour
 {
     //Parametrization
     [SerializeField]
-    float speed = 10.0f;
+    float speed = 1.0f;
     [SerializeField]
     float gravity = 10.0f;
-    [SerializeField]
-    float maxVelocityChange = 10.0f;
     [SerializeField]
     public bool smooth = false;
     [SerializeField]
@@ -60,6 +58,13 @@ public class DwarfController : MonoBehaviour
         targetOrientation = direction;
     }
 
+    public void OnInputMouseClick(object o)
+    {
+        Vector3 objetive = (Vector3)o;
+        if (objetive != null)
+            OnAttackStarts(objetive);
+    }
+
     void LookAt(Vector3 direction, bool forze = false) 
     {
         Quaternion rotation = Quaternion.LookRotation(direction);
@@ -74,13 +79,6 @@ public class DwarfController : MonoBehaviour
     void OnCollisionStay()
     {
         grounded = true;
-    }
-
-    public void OnInputMouseClick(object o)
-    {
-        Vector3 objetive = (Vector3)o;
-        if (objetive != null)
-            OnAttackStarts(objetive);
     }
 
     void OnAttackStarts(Vector3 objetive)
