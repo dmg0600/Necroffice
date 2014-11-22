@@ -11,9 +11,6 @@ public class Controller : MonoBehaviour
     float gravity = 10.0f;
     float lookSpeed = 2.0f;
 
-
-
-    
     bool smooth = true;
 
     //States... ifs... ~~
@@ -31,7 +28,7 @@ public class Controller : MonoBehaviour
     }
 
 
-    void RefreshVariables()
+    void RefreshVariables(Stats stats)
     {
 
     }
