@@ -3,14 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+[RequireComponent(typeof(Life))]
 public class PlayerLifeBehaviour : PlayerLifeManager
 {
     GameObject RespawnPoint;
-    public Life Life;
+    Life Life;
 
     //<HACK>
     //bool wait = false;
-    //public void Update() 
+    //public void Update()
     //{
     //    if (!wait) StartCoroutine(FalseLife());
     //}
@@ -25,9 +26,10 @@ public class PlayerLifeBehaviour : PlayerLifeManager
 
     public void Awake()
     {
+        Life = GetComponent<Life>();
         GameObject[] Respawn = GameObject.FindGameObjectsWithTag("Respawn");
 
-        if(Respawn.Length != 1) Debug.Log("Must be just and only 1 Respawn point in scene, bitch");
+        if(Respawn.Length != 1) Debug.Log("Must be just and only 1 Player Respawn point in scene, bitch");
 
         RespawnPoint = Respawn.FirstOrDefault();
 
