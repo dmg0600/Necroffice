@@ -30,7 +30,7 @@ public class Creature : MonoBehaviour
 
     void EquipWeapon(Weapon newWeapon)
     {
-        if (_Weapon != null)
+        if (_Weapon != null && _Weapon != GameManager.Instance.DefaultWeapon)
         {
             DropWeapon();
         }
