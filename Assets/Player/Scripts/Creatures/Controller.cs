@@ -30,6 +30,11 @@ public class Controller : MonoBehaviour
     Transform graphic;
     GameObject groundObject { get; set; }
 
+    void Awake() 
+    {
+        _Creature = transform.root.GetComponent<Creature>();
+    }
+
     void RefreshVariables()
     {
         float Multiplier = AgilityToSpeed.Evaluate(_Creature._Stats.Agility.Get01Value());
