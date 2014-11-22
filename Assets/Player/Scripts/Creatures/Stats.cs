@@ -55,6 +55,12 @@ public class Stats : MonoBehaviour
     }
     #endregion
 
+    public void RamdomStats() 
+    {
+        Agility.ramdomValue();
+        Power.ramdomValue();
+    }
+
     #region Attribute
     [System.Serializable]
     public class Attribute
