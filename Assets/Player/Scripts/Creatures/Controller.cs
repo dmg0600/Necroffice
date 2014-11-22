@@ -6,10 +6,13 @@ using System.Collections;
 
 public class Controller : MonoBehaviour
 {
+    public Creature _Creature = null;
+
     //Parametrization
-    float speed = 1.0f;
-    float gravity = 10.0f;
-    float lookSpeed = 2.0f;
+    float movementSpeed = 1;
+    float floatiness = Defines.Gravity;
+    float pivotSpeed = 8;
+    float pivotAngleStop = 45;
 
     bool smooth = true;
 
@@ -19,18 +22,16 @@ public class Controller : MonoBehaviour
 
     //Controller
     Vector3 targetOrientation = Vector3.zero;
-
     Transform graphic;
 
-    void Awake()
+    void RefreshVariables()
     {
-        graphic = transform.root.FindChild("Graphic");
+        movementSpeed = _Creature._Stats.Agility.value * 0.35f;
     }
 
-
-    void RefreshVariables(Stats stats)
+    void Update()
     {
-        
+        RefreshVariables();
     }
 
     void FixedUpdate()
@@ -42,21 +43,26 @@ public class Controller : MonoBehaviour
 
             if (targetOrientation == Vector3.zero) return;
 
-            if(!attacking)
+            if (!attacking)
                 LookAt(targetOrientation);
-                //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(targetOrientation), Time.deltaTime);
 
-            rigidbody.AddForce(targetOrientation * speed, ForceMode.VelocityChange);
+
+            //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(targetOrientation), Time.deltaTime);
+
+            float _angle = Vector3.Angle(targetOrientation, transform.forward);
+
+            if (_angle < pivotAngleStop)
+                rigidbody.AddForce(targetOrientation * movementSpeed, ForceMode.VelocityChange);
         }
 
         // We apply gravity manually for more tuning control
-        rigidbody.AddForce(new Vector3(0, -gravity * rigidbody.mass, 0));
+        rigidbody.AddForce(new Vector3(0, -floatiness * rigidbody.mass, 0));
 
         grounded = false;
         targetOrientation = Vector3.zero;
     }
 
-    void OnInputAxis(Vector3 direction) 
+    void OnInputAxis(Vector3 direction)
     {
         targetOrientation = direction;
     }
@@ -68,15 +74,15 @@ public class Controller : MonoBehaviour
             OnAttackStarts(objetive);
     }
 
-    void LookAt(Vector3 direction, bool forze = false) 
+    void LookAt(Vector3 direction, bool forze = false)
     {
         Quaternion rotation = Quaternion.LookRotation(direction);
 
-        if(smooth && !forze)
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.fixedDeltaTime * lookSpeed); //Look at the rotation smoothly
-		else
+        if (smooth && !forze)
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.fixedDeltaTime * pivotSpeed); //Look at the rotation smoothly
+        else
             transform.rotation = rotation; //Just look at
- 
+
     }
 
     void OnCollisionStay()
