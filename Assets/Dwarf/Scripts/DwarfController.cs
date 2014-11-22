@@ -76,7 +76,7 @@ public class DwarfController : MonoBehaviour
         grounded = true;
     }
 
-    public void OnMouseClick(object o)
+    public void OnInputMouseClick(object o)
     {
         Vector3 objetive = (Vector3)o;
         if (objetive != null)

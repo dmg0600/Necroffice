@@ -24,7 +24,7 @@ public class InputManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayer))
-                Sujet.BroadcastMessage("OnMouseClick", hit.point);
+                Sujet.BroadcastMessage("OnInputMouseClick", hit.point);
         }
 
         Vector3 axis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
