@@ -11,11 +11,6 @@ public class PlayerCamera : MonoBehaviour
     float damping = 3;
     Vector3 offset;
 
-    void Start()
-    {
-        target = GameObject.FindGameObjectWithTag("Player").transform;
-    }
-
     void LateUpdate()
     {
         Vector3 _desiredPosition = target.position - (transform.forward * distance);
