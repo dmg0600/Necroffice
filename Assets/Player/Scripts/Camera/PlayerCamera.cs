@@ -8,13 +8,12 @@ public class PlayerCamera : MonoBehaviour
     float currentDistance;
 
     //Control the speed of zooming and dezooming.
-    public float _zoomStep = 1.0f;
-
+    float _zoomStep = 3;
     public float fixYAngle = 55.0f;
 
     //The speed of the camera. Control how fast the camera will rotate.
-    public float _xSpeed = 1f;
-    public float _ySpeed = 1f;
+    float _xSpeed = 3f;
+    float _ySpeed = 1f;
 
     //The position of the cursor on the screen. Used to rotate the camera.
     private float _x = 0.0f;
@@ -22,6 +21,7 @@ public class PlayerCamera : MonoBehaviour
 
     float damping = 3;
     Vector3 offset;
+    Vector3 _distanceVector;
 
     float doubleClickStart = 0;
 
@@ -35,7 +35,7 @@ public class PlayerCamera : MonoBehaviour
             currentDistance = (transform.position - target.position).magnitude;
 
             this.RotateControls();
-            //this.Zoom();
+            this.Zoom();
         }
     }
 
@@ -93,38 +93,38 @@ public class PlayerCamera : MonoBehaviour
     ///**
     // * Zoom or dezoom depending on the input of the mouse wheel.
     // */
-    //void Zoom()
-    //{
-    //    if (Input.GetAxis("Mouse ScrollWheel") < 0.0f)
-    //    {
-    //        this.ZoomOut();
-    //    }
-    //    else if (Input.GetAxis("Mouse ScrollWheel") > 0.0f)
-    //    {
-    //        this.ZoomIn();
-    //    }
+    void Zoom()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") < 0.0f)
+        {
+            this.ZoomOut();
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") > 0.0f)
+        {
+            this.ZoomIn();
+        }
 
-    //}
+    }
 
-    ///**
-    // * Reduce the distance from the camera to the target and
-    // * update the position of the camera (with the Rotate function).
-    // */
-    //void ZoomIn()
-    //{
-    //    _distance -= _zoomStep;
-    //    _distanceVector = new Vector3(0.0f, 0.0f, -_distance);
-    //    this.Rotate(_x, _y);
-    //}
+    /**
+     * Reduce the distance from the camera to the target and
+     * update the position of the camera (with the Rotate function).
+     */
+    void ZoomIn()
+    {
+        distance -= _zoomStep;
+        _distanceVector = new Vector3(0.0f, 0.0f, -distance);
+        this.Rotate(_x);
+    }
 
-    ///**
-    // * Increase the distance from the camera to the target and
-    // * update the position of the camera (with the Rotate function).
-    // */
-    //void ZoomOut()
-    //{
-    //    _distance += _zoomStep;
-    //    _distanceVector = new Vector3(0.0f, 0.0f, -_distance);
-    //    this.Rotate(_x, _y);
-    //}
+    /**
+     * Increase the distance from the camera to the target and
+     * update the position of the camera (with the Rotate function).
+     */
+    void ZoomOut()
+    {
+        distance += _zoomStep;
+        _distanceVector = new Vector3(0.0f, 0.0f, -distance);
+        Rotate(_x);
+    }
 }
