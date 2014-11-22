@@ -7,11 +7,7 @@ using System.Collections;
 public class Controller : MonoBehaviour
 {
     public Creature _Creature = null;
-
-
     public AnimationCurve AgilityToSpeed;
-
-
 
     //Parametrization
     float movementSpeed = 1;
@@ -52,13 +48,10 @@ public class Controller : MonoBehaviour
         if (grounded)
         {
             // Calculate how fast we should be moving
-            //Vector3 targetOrientation = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-
             if (targetOrientation == Vector3.zero) return;
 
             if (!attacking)
                 LookAt(targetOrientation);
-
 
             //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(targetOrientation), Time.deltaTime);
 

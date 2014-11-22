@@ -68,6 +68,20 @@ public class Stats : MonoBehaviour
         {
             return (value * 1f / upper);
         }
+
+        public void sub(int i)
+        {
+            this.value = Mathf.Clamp(this.value - i, this.lower, this.max);
+        }
+
+        public void add(int i)
+        {
+            this.value = Mathf.Clamp(this.value + i, this.lower, this.max);
+        }
+
+        public bool isUpper { get { return value >= upper; } }
+        public bool isLower { get { return value <= lower; } }
+        public bool isMax { get { return value >= max; } }
     }
     #endregion
 }
