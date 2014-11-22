@@ -30,9 +30,8 @@ public class Controller : MonoBehaviour
 
     void RefreshVariables(Stats stats)
     {
-
+        speed = stats
     }
-
 
     void FixedUpdate()
     {
