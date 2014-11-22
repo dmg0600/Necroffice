@@ -3,6 +3,7 @@ using System.Collections;
 
 public class AttackController : MonoBehaviour 
 {
+    SmartWeapon weapon = null;
     float halfH = 0f;
 
     void Awake() 
@@ -15,7 +16,7 @@ public class AttackController : MonoBehaviour
     {
         Vector3 objetive = (Vector3)o;
 
-        if (objetive != null)
+        if (objetive != null && weapon != null)
         {
             Debug.DrawLine(transform.position, objetive + new Vector3(0, halfH, 0), Color.red, Mathf.Infinity);
             //TODO: Attack Logic
