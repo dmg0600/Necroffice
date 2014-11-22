@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject HitboxPrefab;
     public Weapon DefaultWeapon;
+    public ParticleSFX[] Particles;
 
     public void CreateHitbox(Creature owner, float radius, int damage, Vector3 velocity)
     {
@@ -35,6 +37,15 @@ public class GameManager : MonoBehaviour
         _hitbox.SetVelocity(velocity);
 
         _hitbox.Begin();
+    }
+
+    public void CreateParticle(string Name, Vector3 position)
+    {
+        ParticleSFX _particle = Particles.FirstOrDefault(x => x.name == Name);
+        if (_particle == null)
+            return;
+
+        GameObject _obj = Instantiate(_particle.gameObject, position, Quaternion.identity) as GameObject;
     }
 
 }
