@@ -6,9 +6,12 @@ using System.Collections;
 
 public class DwarfController : MonoBehaviour
 {
-    public float speed = 10.0f;
-    public float gravity = 10.0f;
-    public float maxVelocityChange = 10.0f;
+    float speed = 10.0f;
+    float gravity = 10.0f;
+    float maxVelocityChange = 10.0f;
+
+
+
     private bool grounded = false;
 
     void Awake()
