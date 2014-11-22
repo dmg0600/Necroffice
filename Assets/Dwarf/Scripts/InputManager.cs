@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class MouseLogic : MonoBehaviour
+public class InputManager : MonoBehaviour
 {
     GameObject Sujet;
 
@@ -26,5 +26,9 @@ public class MouseLogic : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayer))
                 Sujet.BroadcastMessage("OnMouseClick", hit.point);
         }
+
+        Vector3 axis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+        if(axis != Vector3.zero)
+            Sujet.BroadcastMessage("OnInputAxis", axis);
     }
 }

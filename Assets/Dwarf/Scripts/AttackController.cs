@@ -11,7 +11,7 @@ public class AttackController : MonoBehaviour
         if(c != null) halfH = c.height * 0.5f;
     }
 
-    public void OnAttOnMouseClickack(object o)
+    public void OnInputMouseClick(object o)
     {
         Vector3 objetive = (Vector3)o;
 

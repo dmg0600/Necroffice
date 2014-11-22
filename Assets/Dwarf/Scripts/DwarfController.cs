@@ -22,6 +22,9 @@ public class DwarfController : MonoBehaviour
     private bool grounded = false;
     private bool attacking = false;
 
+    //Controller
+    Vector3 targetOrientation = Vector3.zero;
+
     Transform graphic;
 
     void Awake()
@@ -34,7 +37,7 @@ public class DwarfController : MonoBehaviour
         if (grounded)
         {
             // Calculate how fast we should be moving
-            Vector3 targetOrientation = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+            //Vector3 targetOrientation = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
 
             if (targetOrientation == Vector3.zero) return;
 
@@ -49,6 +52,12 @@ public class DwarfController : MonoBehaviour
         rigidbody.AddForce(new Vector3(0, -gravity * rigidbody.mass, 0));
 
         grounded = false;
+        targetOrientation = Vector3.zero;
+    }
+
+    void OnInputAxis(Vector3 direction) 
+    {
+        targetOrientation = direction;
     }
 
     void LookAt(Vector3 direction, bool forze = false) 
