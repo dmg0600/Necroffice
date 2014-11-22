@@ -4,10 +4,25 @@ using System.Collections.Generic;
 
 public class AxeWeapon : Weapon
 {
-
     public override void attack()
     {
+        if (!canAttack())
+            return;
+
         _attacking = true;
+
+        //Animación
+        //todo
+
+
+        //Ataque
+        Vector3 _attackingDirection = owner.transform.forward;
+        _attackingDirection.y = 0;
+        _attackingDirection *= 8;
+
+        Creature _creatureOwner = owner.GetComponent<Creature>();
+
+        GameManager.Instance.CreateHitbox(_creatureOwner, 1, 1, _attackingDirection);
     }
 
     public override bool canAttack()
@@ -16,25 +31,17 @@ public class AxeWeapon : Weapon
     }
 
 
-
-	// Use this for initialization
-	void Start () {
-        selectTarget();
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-	    if (weaponMode == WeaponMode.AI)
+    void FixedUpdate()
+    {
+        if (weaponMode == WeaponMode.AI)
         {
             updateAI();
         }
-	}
+    }
 
     public override void updateAI()
     {
-        
-
-        if(Vector3.Distance(owner.transform.position, target.transform.position) > Range)
+        if (Vector3.Distance(owner.transform.position, target.transform.position) > Range)
         {
             move();
         }
@@ -42,21 +49,23 @@ public class AxeWeapon : Weapon
         {
             attack();
         }
-        
+
     }
 
-    /**
-     * Controla la colision del arma cuando esta atacando
-     * 
-    */
-    void OnCollisionEnter(Collision collision)
-    {
-        if(_attacking && !_damagedEntities.Contains(collision.gameObject))
-        {
-            //collision.gameObject.GetComponent<Life>().damage(1 + Power);
-        }
-    }
+    ///**
+    // * Controla la colision del arma cuando esta atacando
+    // * 
+    //*/
+    //void OnCollisionEnter(Collision collision)
+    //{
+    //    if(_attacking && !_damagedEntities.Contains(collision.gameObject))
+    //    {
+    //        //collision.gameObject.GetComponent<Life>().damage(1 + Power);
+    //    }
+    //}
+
+    //private List<GameObject> _damagedEntities;
 
     private bool _attacking;
-    private List<GameObject> _damagedEntities;
+
 }

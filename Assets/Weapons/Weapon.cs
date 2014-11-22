@@ -60,6 +60,9 @@ public abstract class Weapon : MonoBehaviour
         set
         {
             this._mode = value;
+
+            if (this._mode == WeaponMode.AI)
+                selectTarget();
         }
         get
         {
@@ -79,7 +82,7 @@ public abstract class Weapon : MonoBehaviour
         }
     }
 
-    public GameObject owner
+    public Creature owner
     {
         set
         {
@@ -118,12 +121,12 @@ public abstract class Weapon : MonoBehaviour
     private int _range = 0;
 
     private GameObject _currentTarget = null;
-    private GameObject _owner;
+    private Creature _owner;
     protected List<GameObject> _targetList;
 
 
     private int _currentCorner;
     private NavMeshPath _currentPath;
-    private WeaponMode _mode;
+    private WeaponMode _mode = WeaponMode.CONTROLLED;
 
 }
