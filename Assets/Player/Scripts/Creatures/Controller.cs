@@ -28,7 +28,7 @@ public class Controller : MonoBehaviour
     }
 
 
-    void RefreshVariables()
+    void RefreshVariables(Stats stats)
     {
 
     }
