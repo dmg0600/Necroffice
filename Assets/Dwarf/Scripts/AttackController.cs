@@ -3,13 +3,21 @@ using System.Collections;
 
 public class AttackController : MonoBehaviour 
 {
-    public void OnObjective(object o)
-    {
-        Debug.Log("asdfasdfasdf");
+    float halfH = 0f;
 
+    void Awake() 
+    {
+        var c = gameObject.collider as CapsuleCollider;
+        if(c != null) halfH = c.height * 0.5f;
+    }
+
+    public void OnAttack(object o)
+    {
         Vector3 objetive = (Vector3)o;
 
-        if(objetive != null)
-            Debug.DrawLine(transform.position, objetive);
+        if (objetive != null)
+        {
+            Debug.DrawLine(transform.position, objetive + new Vector3(0, halfH, 0), Color.red, Mathf.Infinity);
+        }
     }
 }

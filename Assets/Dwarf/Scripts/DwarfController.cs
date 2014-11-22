@@ -6,15 +6,22 @@ using System.Collections;
 
 public class DwarfController : MonoBehaviour
 {
-    public float speed = 10.0f;
-    public float gravity = 10.0f;
-    public float maxVelocityChange = 10.0f;
+    [SerializeField]
+    private float speed = 10.0f;
+    [SerializeField]
+    private float gravity = 10.0f;
+    [SerializeField]
+    private float maxVelocityChange = 10.0f;
+    [SerializeField]
+    private float lookSpeed = 10.0f;
+    
     private bool grounded = false;
+
+    Transform graphic;
 
     void Awake()
     {
-        rigidbody.freezeRotation = true;
-        rigidbody.useGravity = false;
+        graphic = transform.root.FindChild("Graphic");
     }
 
     void FixedUpdate()
@@ -22,17 +29,24 @@ public class DwarfController : MonoBehaviour
         if (grounded)
         {
             // Calculate how fast we should be moving
-            Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            targetVelocity = transform.TransformDirection(targetVelocity);
-            targetVelocity *= speed;
+            Vector3 targetOrientation = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+
+            if (targetOrientation == Vector3.zero) return;
 
             // Apply a force that attempts to reach our target velocity
             Vector3 velocity = rigidbody.velocity;
-            Vector3 velocityChange = (targetVelocity - velocity);
+            Vector3 velocityChange = (targetOrientation - velocity);
             velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
             velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
             velocityChange.y = 0;
-            rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
+            velocityChange.Normalize();
+
+            //Debug.DrawRay(transform.position, targetOrientation, Color.red, .5f);
+
+            transform.rotation = Quaternion.LookRotation(targetOrientation);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(targetOrientation), Time.fixedDeltaTime * lookSpeed);
+
+            rigidbody.AddForce(transform.forward * speed, ForceMode.VelocityChange);
         }
 
         // We apply gravity manually for more tuning control

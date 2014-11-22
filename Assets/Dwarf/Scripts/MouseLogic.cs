@@ -6,26 +6,25 @@ using System.Linq;
 public class MouseLogic : MonoBehaviour
 {
     GameObject Sujet;
-    Camera camera;
 
     int floorLayer;
 
     void Awake() 
     {
         Sujet = this.transform.root.gameObject;
-        camera = this.gameObject.GetComponent<Camera>();
+
         floorLayer = 1 << LayerMask.NameToLayer("Floor");
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetButtonDown("Fire1"))
         {
             RaycastHit hit;
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayer))
-                hit.transform.gameObject.BroadcastMessage("OnObjective", hit.point);
+                Sujet.BroadcastMessage("OnAttack", hit.point);
         }
     }
 }
