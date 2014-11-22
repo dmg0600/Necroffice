@@ -4,17 +4,17 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
 
-public class DwarfController : MonoBehaviour
+public class Controller : MonoBehaviour
 {
     //Parametrization
-    [SerializeField]
     float speed = 1.0f;
-    [SerializeField]
     float gravity = 10.0f;
-    [SerializeField]
-    public bool smooth = false;
-    [SerializeField]
     float lookSpeed = 2.0f;
+
+
+
+    
+    bool smooth = true;
 
     //States... ifs... ~~
     bool grounded = false;
@@ -29,6 +29,13 @@ public class DwarfController : MonoBehaviour
     {
         graphic = transform.root.FindChild("Graphic");
     }
+
+
+    void RefreshVariables()
+    {
+
+    }
+
 
     void FixedUpdate()
     {
