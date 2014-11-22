@@ -32,4 +32,16 @@ public class InteractiveObject : MonoBehaviour
         }
 
     }
+
+    public void OnDead()
+    {
+        //Se destruye
+        Debug.Log("Se destruye objeto " + gameObject.name);
+
+        //Partícula
+        //todo
+
+        //todo
+        Destroy(gameObject);
+    }
 }

@@ -82,5 +82,19 @@ public class Creature : MonoBehaviour
         return true;
     }
 
+    public void OnDead()
+    {
+        Debug.Log("Se muere " + name);
 
+        if (IsPlayer())
+        {
+            //Muere player 
+
+        }
+        else
+        {
+            //Muere enemigo
+
+        }
+    }
 }

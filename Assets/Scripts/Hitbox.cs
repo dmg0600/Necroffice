@@ -23,6 +23,7 @@ public class Hitbox : MonoBehaviour
 
     }
 
+    [HideInInspector]
     public float Duration = -1;
 
 
@@ -42,5 +43,26 @@ public class Hitbox : MonoBehaviour
     public void End()
     {
         Destroy(gameObject);
+    }
+
+
+    public void OnTriggerEnter(Collider other)
+    {
+        Creature _creature = other.transform.root.GetComponent<Creature>();
+        if (_creature != null)
+        {
+            if (_creature == Owner)
+                return;
+            else
+                _creature.SendMessage("OnDamage", this);
+        }
+        else
+        {
+            InteractiveObject _iObject = other.transform.root.GetComponent<InteractiveObject>();
+            if (_iObject == null)
+                return;
+            else
+                _iObject.SendMessage("OnDamage", this);
+        }
     }
 }

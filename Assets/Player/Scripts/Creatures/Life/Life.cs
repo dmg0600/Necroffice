@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Life : MonoBehaviour 
+public class Life : MonoBehaviour
 {
     public Stats.Attribute life;
 
-    public void OnDamage(int damage) 
+    public void OnDamage(Hitbox hitbox)
     {
-        life.sub(damage);
+        life.sub(hitbox.Damage);
 
         if (life.isLower)
-           transform.root.BroadcastMessage("OnDead");
+            transform.root.BroadcastMessage("OnDead");
     }
 
     public void OnHeal(int cure)
