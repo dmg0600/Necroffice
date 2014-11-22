@@ -11,9 +11,12 @@ public class Stats : MonoBehaviour
     [System.Serializable]
     public class Attribute
     {
-        public int upper {get;set;}
-        public int lower { get; set; }
-        public int value {get;set;}
+        int upper = 5;
+        int lower = 1;
+
+        public int value = 1;
+        public int max = 1;
+
         public Attribute() { }
 
         public Attribute(int minValue, int maxValue)
@@ -29,14 +32,14 @@ public class Stats : MonoBehaviour
             lower = minValue;
 
             if (validateValue(newval))
-                value = newval;
+                max = newval;
             else
                 Reset();
         }
 
         public void Regenerate()
         {
-            value = upper;
+            value = max;
         }
 
         public void Reset()
@@ -56,10 +59,10 @@ public class Stats : MonoBehaviour
                 : lower < num && num < upper;
         }
 
-        public float ChangeScale(int NewMin, int NewMax) 
+        public float ChangeScale(int NewMin, int NewMax)
         {
             return (((value - lower) * (NewMax - NewMin)) / (NewMax - lower)) + NewMin;
         }
     }
-    #endregion 
+    #endregion
 }

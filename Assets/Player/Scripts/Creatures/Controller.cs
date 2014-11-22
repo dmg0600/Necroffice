@@ -6,6 +6,8 @@ using System.Collections;
 
 public class Controller : MonoBehaviour
 {
+    public Creature _Creature = null;
+
     //Parametrization
     float movementSpeed = 1;
     float floatiness = Defines.Gravity;
@@ -20,18 +22,16 @@ public class Controller : MonoBehaviour
 
     //Controller
     Vector3 targetOrientation = Vector3.zero;
-
     Transform graphic;
-
-    void Awake()
-    {
-        graphic = transform.root.FindChild("Graphic");
-    }
-
 
     void RefreshVariables()
     {
-        speed = stats
+        movementSpeed = _Creature._Stats.Agility.value * 0.35f;
+    }
+
+    void Update()
+    {
+        RefreshVariables();
     }
 
     void FixedUpdate()
@@ -50,6 +50,7 @@ public class Controller : MonoBehaviour
             //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(targetOrientation), Time.deltaTime);
 
             float _angle = Vector3.Angle(targetOrientation, transform.forward);
+
             if (_angle < pivotAngleStop)
                 rigidbody.AddForce(targetOrientation * movementSpeed, ForceMode.VelocityChange);
         }
