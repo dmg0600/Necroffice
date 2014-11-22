@@ -18,6 +18,7 @@ public class AttackController : MonoBehaviour
         if (objetive != null)
         {
             Debug.DrawLine(transform.position, objetive + new Vector3(0, halfH, 0), Color.red, Mathf.Infinity);
+            //TODO: Attack Logic
         }
     }
 }

@@ -19,8 +19,8 @@ public class DwarfController : MonoBehaviour
     float lookSpeed = 2.0f;
 
     //States... ifs... ~~
-    private bool grounded = false;
-    private bool attacking = false;
+    bool grounded = false;
+    bool attacking = false;
 
     //Controller
     Vector3 targetOrientation = Vector3.zero;
