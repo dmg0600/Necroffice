@@ -5,12 +5,16 @@ using System.Linq;
 
 public class MouseLogic : MonoBehaviour
 {
-    public GameObject Floor;
     GameObject Sujet;
+    Camera camera;
+
+    int floorLayer;
 
     void Awake() 
     {
         Sujet = this.transform.root.gameObject;
+        camera = this.gameObject.GetComponent<Camera>();
+        floorLayer = 1 << LayerMask.NameToLayer("Floor");
     }
 
     void Update()
@@ -18,10 +22,10 @@ public class MouseLogic : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
-            if (Floor.collider.Raycast(ray, out hit, Mathf.Infinity)) 
-                Sujet.BroadcastMessage("OnObjetive", hit.point);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayer))
+                hit.transform.gameObject.BroadcastMessage("OnObjective", hit.point);
         }
     }
 }
