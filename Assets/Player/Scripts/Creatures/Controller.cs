@@ -24,6 +24,11 @@ public class Controller : MonoBehaviour
     Vector3 targetOrientation = Vector3.zero;
     Transform graphic;
 
+    void Awake() 
+    {
+        _Creature = transform.root.GetComponent<Creature>();
+    }
+
     void RefreshVariables()
     {
         movementSpeed = _Creature._Stats.Agility.value * 0.35f;

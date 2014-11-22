@@ -7,7 +7,6 @@ public class Life : MonoBehaviour
 
     public void OnDamage(int damage) 
     {
-        //life -= damage;
     }
 
     public void OnDeath() 
