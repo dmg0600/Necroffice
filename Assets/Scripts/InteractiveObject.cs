@@ -39,9 +39,6 @@ public class InteractiveObject : MonoBehaviour
         Debug.Log("Se destruye objeto " + gameObject.name);
 
         //Partícula
-        //todo
-
-        //todo
-        Destroy(gameObject);
+        GameManager.Instance.DestroyWithParticle("DustExplosion", gameObject);
     }
 }

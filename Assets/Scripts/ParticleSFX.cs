@@ -3,12 +3,34 @@ using System.Collections;
 
 public class ParticleSFX : MonoBehaviour
 {
-    public void DestroyAfterTime(float Time)
+    public float TimeToDestroy = 0;
+
+    [HideInInspector]
+    public GameObject ObjectToDestroy = null;
+
+    void Start()
     {
-        Invoke("GetDestroyed", Time);
+        if (TimeToDestroy > 0)
+            DestroyAfterTime(TimeToDestroy, ObjectToDestroy);
     }
 
-    public void GetDestroyed()
+    public void DestroyAfterTime(float Time, GameObject optionalObjectToDestroy = null)
+    {
+        ObjectToDestroy = optionalObjectToDestroy;
+        Invoke("EndEmission", Time);
+    }
+
+    public void EndEmission()
+    {
+        particleEmitter.emit = false;
+        if (ObjectToDestroy != null)
+        {
+            Destroy(ObjectToDestroy);
+        }
+        Invoke("GetDestroyed", 1);
+    }
+
+    void GetDestroyed()
     {
         Destroy(gameObject);
     }
