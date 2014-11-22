@@ -63,6 +63,11 @@ public class Stats : MonoBehaviour
         {
             return (((value - lower) * (NewMax - NewMin)) / (NewMax - lower)) + NewMin;
         }
+
+        public float Get01Value()
+        {
+            return (value * 1f / upper);
+        }
     }
     #endregion
 }
