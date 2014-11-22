@@ -26,6 +26,7 @@ public class PlayerCamera : MonoBehaviour
     float damping = 3;
     Vector3 offset;
 
+    float doubleClickStart = 0;
 
     void LateUpdate()
     {
@@ -52,9 +53,25 @@ public class PlayerCamera : MonoBehaviour
         if (Input.GetButton("Fire2"))
         {
             _x += Input.GetAxis("Mouse X") * _xSpeed;
+
+            if ((Time.time - doubleClickStart) < 0.3f)
+            {
+                this.OnDoubleClick();
+                doubleClickStart = -1;
+            }
+            else
+            {
+                doubleClickStart = Time.time;
+            }
         }
 
         this.Rotate(_x);
+    }
+
+
+    void OnDoubleClick()
+    {
+        Debug.Log("Double Clicked!");
     }
 
     /**
