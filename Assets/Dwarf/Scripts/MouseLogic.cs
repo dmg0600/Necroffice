@@ -24,7 +24,7 @@ public class MouseLogic : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayer))
-                Sujet.BroadcastMessage("OnAttack", hit.point);
+                Sujet.BroadcastMessage("OnMouseClick", hit.point);
         }
     }
 }

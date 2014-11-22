@@ -6,16 +6,21 @@ using System.Collections;
 
 public class DwarfController : MonoBehaviour
 {
+    //Parametrization
     [SerializeField]
-    private float speed = 10.0f;
+    float speed = 10.0f;
     [SerializeField]
-    private float gravity = 10.0f;
+    float gravity = 10.0f;
     [SerializeField]
-    private float maxVelocityChange = 10.0f;
+    float maxVelocityChange = 10.0f;
     [SerializeField]
-    private float lookSpeed = 10.0f;
-    
+    public bool smooth = false;
+    [SerializeField]
+    float lookSpeed = 2.0f;
+
+    //States... ifs... ~~
     private bool grounded = false;
+    private bool attacking = false;
 
     Transform graphic;
 
@@ -41,12 +46,11 @@ public class DwarfController : MonoBehaviour
             velocityChange.y = 0;
             velocityChange.Normalize();
 
-            //Debug.DrawRay(transform.position, targetOrientation, Color.red, .5f);
+            if(!attacking)
+                LookAt(targetOrientation);
+                //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(targetOrientation), Time.deltaTime);
 
-            transform.rotation = Quaternion.LookRotation(targetOrientation);
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(targetOrientation), Time.fixedDeltaTime * lookSpeed);
-
-            rigidbody.AddForce(transform.forward * speed, ForceMode.VelocityChange);
+            rigidbody.AddForce(targetOrientation * speed, ForceMode.VelocityChange);
         }
 
         // We apply gravity manually for more tuning control
@@ -55,8 +59,46 @@ public class DwarfController : MonoBehaviour
         grounded = false;
     }
 
+    void LookAt(Vector3 direction, bool forze = false) 
+    {
+        Quaternion rotation = Quaternion.LookRotation(direction);
+
+        if(smooth && !forze)
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.fixedDeltaTime * lookSpeed); //Look at the rotation smoothly
+		else
+            transform.rotation = rotation; //Just look at
+ 
+    }
+
     void OnCollisionStay()
     {
         grounded = true;
+    }
+
+    public void OnMouseClick(object o)
+    {
+        Vector3 objetive = (Vector3)o;
+        if (objetive != null)
+            OnAttackStarts(objetive);
+    }
+
+    void OnAttackStarts(Vector3 objetive)
+    {
+        attacking = true;
+        Vector3 objetiveDirection = objetive - transform.position;
+        objetiveDirection.y = 0;
+
+        LookAt(objetiveDirection, true);
+
+        //<HACK>
+        StartCoroutine(Attacking());
+        //<//HACK>
+    }
+
+    IEnumerator Attacking() { yield return new WaitForSeconds(Random.Range(2, 4)); OnAttackEnds(); }
+
+    void OnAttackEnds()
+    {
+        attacking = false;
     }
 }
