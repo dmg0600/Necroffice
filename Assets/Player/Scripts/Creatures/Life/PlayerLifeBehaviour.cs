@@ -40,7 +40,8 @@ public class PlayerLifeBehaviour : PlayerLifeManager
         //Respawn Player
         OnRespawn();
 
-        //TODO: Create a enemy
+        //TODO: Create a creature
+        //Instantiate(
     }
 
     public override void OnRespawn()
