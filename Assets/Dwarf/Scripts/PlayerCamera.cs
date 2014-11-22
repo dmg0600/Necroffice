@@ -3,20 +3,31 @@ using System.Collections;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public SpringPosition SpringPositionComponent;
+    public SpringPosition SpringComponent;
 
-    public Transform Pivot;
+    public Transform target;
 
-    public float Distance = 5.43f;
+    public float distance = 10;
 
 
-    void Update()
+    float damping = 3;
+
+    Vector3 offset;
+
+    void Start()
     {
-        Vector3 _target = Pivot.transform.position - transform.forward * Distance;
 
-        SpringPositionComponent.target = _target;
-        SpringPositionComponent.enabled = true;
+    }
 
-        //transform.LookAt(Pivot.transform.position);
+    void LateUpdate()
+    {
+        Vector3 _desiredPosition = target.position - (transform.forward * distance);
+
+        transform.position = Vector3.Lerp(transform.position, _desiredPosition, Time.deltaTime * damping);
+
+        //transform.position = _desiredPosition;
+
+        //SpringComponent.target = _desiredPosition;
+        //SpringComponent.enabled = true;
     }
 }
