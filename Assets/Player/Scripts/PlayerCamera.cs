@@ -14,6 +14,9 @@ public class PlayerCamera : MonoBehaviour
     void LateUpdate()
     {
         Vector3 _desiredPosition = target.position - (transform.forward * distance);
+
+
+
         transform.position = Vector3.Lerp(transform.position, _desiredPosition, Time.deltaTime * damping);
     }
 }
