@@ -38,14 +38,6 @@ public class DwarfController : MonoBehaviour
 
             if (targetOrientation == Vector3.zero) return;
 
-            // Apply a force that attempts to reach our target velocity
-            Vector3 velocity = rigidbody.velocity;
-            Vector3 velocityChange = (targetOrientation - velocity);
-            velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
-            velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
-            velocityChange.y = 0;
-            velocityChange.Normalize();
-
             if(!attacking)
                 LookAt(targetOrientation);
                 //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(targetOrientation), Time.deltaTime);
@@ -95,7 +87,9 @@ public class DwarfController : MonoBehaviour
         //<//HACK>
     }
 
+    //<HACK>
     IEnumerator Attacking() { yield return new WaitForSeconds(Random.Range(2, 4)); OnAttackEnds(); }
+    //<//HACK>
 
     void OnAttackEnds()
     {
