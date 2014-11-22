@@ -7,6 +7,9 @@ public class InputManager : MonoBehaviour
 {
     GameObject Sujet;
 
+    [SerializeField]
+    GameObject RotateRef;
+
     int floorLayer;
 
     void Awake() 
@@ -27,7 +30,13 @@ public class InputManager : MonoBehaviour
         }
 
         Vector3 axis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-        if(axis != Vector3.zero)
+
+        if (axis != Vector3.zero)
+        {
+            Quaternion rotate = Quaternion.LookRotation(new Vector3(RotateRef.transform.forward.x, 0, RotateRef.transform.forward.z));
+            axis = rotate * axis;
             Sujet.BroadcastMessage("OnInputAxis", axis);
+        }
+
     }
 }

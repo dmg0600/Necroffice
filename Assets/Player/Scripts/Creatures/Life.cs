@@ -7,14 +7,18 @@ public class Life : MonoBehaviour
 
     public void OnDamage(int damage) 
     {
+        life.sub(damage);
+
+        if (life.isLower)
+            OnDeath();
     }
 
-    public void OnDeath() 
+    public virtual void OnDeath()  
     {
 
     }
 
-    public void OnSpawn() 
+    public virtual void OnSpawn() 
     {
 
     }
