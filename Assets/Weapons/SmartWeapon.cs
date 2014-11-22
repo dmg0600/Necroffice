@@ -4,7 +4,7 @@ using System.Collections;
 public abstract class SmartWeapon : MonoBehaviour 
 {
     public GameObject owner;
-    public GameObject nextTarget;
+    public GameObject target;
 
     public abstract bool canAttack();
     public abstract bool attack();
