@@ -7,6 +7,12 @@ public class Stats : MonoBehaviour
     public Attribute Agility = new Attribute(0, 5);
     public Attribute Power = new Attribute(0, 5);
 
+    public void RamdomStats() 
+    {
+        Agility.ramdomValue();
+        Power.ramdomValue();
+    }
+
     #region Attribute
     [System.Serializable]
     public class Attribute

@@ -13,7 +13,7 @@ public class PlayerCamera : MonoBehaviour
     //Control the speed of zooming and dezooming.
     public float _zoomStep = 1.0f;
 
-    float fixYAngle = 55.0f;
+    float fixYAngle = 50.0f;
 
     //The speed of the camera. Control how fast the camera will rotate.
     public float _xSpeed = 1f;
@@ -26,8 +26,6 @@ public class PlayerCamera : MonoBehaviour
     float damping = 3;
     Vector3 offset;
 
-    float doubleClickStart = 0;
-
     void LateUpdate()
     {
         if (target)
@@ -38,46 +36,19 @@ public class PlayerCamera : MonoBehaviour
             currentDistance = (transform.position - target.position).magnitude;
 
             this.RotateControls();
-            //this.Zoom();
         }
     }
 
-    /**
-     * Rotate the camera when the first button of the mouse is pressed.
-     * 
-     */
     void RotateControls()
     {
         _x += Input.GetAxis("CameraHorizontal");
 
         if (Input.GetButton("Fire2"))
-        {
             _x += Input.GetAxis("Mouse X") * _xSpeed;
 
-            if ((Time.time - doubleClickStart) < 0.3f)
-            {
-                this.OnDoubleClick();
-                doubleClickStart = -1;
-            }
-            else
-            {
-                doubleClickStart = Time.time;
-            }
-        }
-
-        this.Rotate(_x);
+        Rotate(_x);
     }
 
-
-    void OnDoubleClick()
-    {
-        Debug.Log("Double Clicked!");
-    }
-
-    /**
-     * Transform the cursor mouvement in rotation and in a new position
-     * for the camera.
-     */
     void Rotate(float x)
     {
         //Transform angle in degree in quaternion form used by Unity for rotation.
@@ -93,41 +64,57 @@ public class PlayerCamera : MonoBehaviour
         transform.position = position;
     }
 
-    ///**
-    // * Zoom or dezoom depending on the input of the mouse wheel.
-    // */
-    //void Zoom()
-    //{
-    //    if (Input.GetAxis("Mouse ScrollWheel") < 0.0f)
-    //    {
-    //        this.ZoomOut();
-    //    }
-    //    else if (Input.GetAxis("Mouse ScrollWheel") > 0.0f)
-    //    {
-    //        this.ZoomIn();
-    //    }
+    // Default time in seconds for which to detect double clicking of a key.
+    public const float DefaultTimeThreshold = 0.5f;
 
-    //}
+    private static string _multiClickAnchorKey;
+    private static float _multiClickAnchorTime;
+    private static int _multiClickCount;
 
-    ///**
-    // * Reduce the distance from the camera to the target and
-    // * update the position of the camera (with the Rotate function).
-    // */
-    //void ZoomIn()
-    //{
-    //    _distance -= _zoomStep;
-    //    _distanceVector = new Vector3(0.0f, 0.0f, -_distance);
-    //    this.Rotate(_x, _y);
-    //}
+    public static void CancelMultiClick()
+    {
+        _multiClickAnchorKey = null;
+    }
 
-    ///**
-    // * Increase the distance from the camera to the target and
-    // * update the position of the camera (with the Rotate function).
-    // */
-    //void ZoomOut()
-    //{
-    //    _distance += _zoomStep;
-    //    _distanceVector = new Vector3(0.0f, 0.0f, -_distance);
-    //    this.Rotate(_x, _y);
-    //}
+    public static int GetMultiClickKeyCount(string key, float timeThreshold)
+    {
+        if (Input.GetButtonDown(key))
+        {
+            // Do we need to cancel the last multi-click operation for this key?
+            if (_multiClickAnchorKey == key)
+                if (Time.time - _multiClickAnchorTime > timeThreshold)
+                    CancelMultiClick();
+
+            _multiClickAnchorTime = Time.time;
+
+            // Has button been pressed for first time?
+            if (_multiClickAnchorKey != key)
+            {
+                _multiClickAnchorKey = key;
+                _multiClickCount = 1;
+            }
+            else
+            {
+                // Okay, so this is a multi-click operation!
+                ++_multiClickCount;
+            }
+            return _multiClickCount;
+        }
+        return 0;
+    }
+
+    public static int GetMultiClickKeyCount(string key)
+    {
+        return GetMultiClickKeyCount(key, DefaultTimeThreshold);
+    }
+
+    public static bool HasDoubleClickedKey(string key, float timeThreshold)
+    {
+        return GetMultiClickKeyCount(key, timeThreshold) == 2;
+    }
+
+    public static bool HasDoubleClickedKey(string key)
+    {
+        return HasDoubleClickedKey(key, DefaultTimeThreshold);
+    }
 }
