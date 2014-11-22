@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PickAxe : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
+public class PickAxe : MonoBehaviour
+{
+    void Start()
+    {
         gameObject.GetComponent<PickeableWeapon>().weaponPicked += this.weaponPicked;
-	}
-	
-	// Update is called once per frame
-	void weaponPicked (GameObject who) {
+    }
+
+    void weaponPicked(GameObject who)
+    {
         GameObject.Instantiate(AxeAttachable);
-        who.GetComponent<AxeWeapon>().owner = who;
+        who.GetComponent<AxeWeapon>().owner = who.GetComponent<Creature>();
 
         GameObject.Destroy(this.gameObject);
-	}
+    }
 
     [SerializeField]
     GameObject AxeAttachable;
