@@ -89,12 +89,12 @@ public class Creature : MonoBehaviour
         if (IsPlayer())
         {
             //Muere player 
-
+            GameManager.Instance.DestroyWithParticle("BloodSplat", gameObject);
         }
         else
         {
             //Muere enemigo
-
+            GameManager.Instance.DestroyWithParticle("BloodSplat", gameObject);
         }
     }
 }

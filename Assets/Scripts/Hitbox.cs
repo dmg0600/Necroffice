@@ -45,7 +45,6 @@ public class Hitbox : MonoBehaviour
         Destroy(gameObject);
     }
 
-
     public void OnTriggerEnter(Collider other)
     {
         Creature _creature = other.transform.root.GetComponent<Creature>();

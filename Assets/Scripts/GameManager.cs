@@ -48,4 +48,14 @@ public class GameManager : MonoBehaviour
         GameObject _obj = Instantiate(_particle.gameObject, position, Quaternion.identity) as GameObject;
     }
 
+    public void DestroyWithParticle(string Name, GameObject ObjectToDestroy)
+    {
+        ParticleSFX _particle = Particles.FirstOrDefault(x => x.name == Name);
+        if (_particle == null)
+            return;
+
+        GameObject _obj = Instantiate(_particle.gameObject, ObjectToDestroy.transform.position, ObjectToDestroy.transform.rotation) as GameObject;
+        ParticleSFX _sfxP = _obj.GetComponent<ParticleSFX>();
+        _sfxP.ObjectToDestroy = ObjectToDestroy;
+    }
 }
