@@ -155,7 +155,7 @@ public class Controller : MonoBehaviour
 
     void OnAttackEnd()
     {
-        Debug.Log("OnAttackEnd");
+        //Debug.Log("OnAttackEnd");
         attacking = false;
     }
 }
