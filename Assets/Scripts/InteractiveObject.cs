@@ -38,7 +38,7 @@ public class InteractiveObject : MonoBehaviour
         Debug.Log("Se destruye objeto " + gameObject.name);
 
         //Explosión
-        ExplodeBehaviour _explosion= GetComponent<ExplodeBehaviour>();
+        ExplodeBehaviour _explosion = GetComponent<ExplodeBehaviour>();
         if (_explosion != null)
         {
             _explosion.Detonate();
@@ -51,7 +51,11 @@ public class InteractiveObject : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.GetComponent<InteractiveObject>().myProperties.Contains(Properties.Fire) &&
+        InteractiveObject _iObject = collision.gameObject.GetComponent<InteractiveObject>();
+        if (_iObject == null)
+            return;
+
+        if (_iObject.myProperties.Contains(Properties.Fire) &&
             myProperties.Contains(Properties.CanBurn))
         {
             GameManager.Instance.CreateParticle("Fire", this.transform.position);
