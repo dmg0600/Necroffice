@@ -96,12 +96,12 @@ public class Creature : MonoBehaviour
 
     void OnDestroy()
     {
-        Debug.Log("me estan destruyendo" + gameObject.name);
+        //Debug.Log("me estan destruyendo" + gameObject.name);
     }
 
     public void OnDead()
     {
-        Debug.Log("Se muere " + name);
+        //Debug.Log("Se muere " + name);
 
         if (IsPlayer())
         {
