@@ -36,18 +36,24 @@ public class AxeWeapon : Weapon
 
     public override void updateAI()
     {
+        float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);
+        bool dead = GameManager.Instance.Player.GetComponent<Life>().life.value == 0;
         //Debug.Log(Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position));
-        if (Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position) > Range)
+        if (distance > Range && !dead)
         {
             move();
         }
-        else 
+        else  if (!dead)
         {
             if (!_attacking)
             {
                 StartCoroutine(atackHandler());
             }
-            
+        }
+        else
+        {
+            idle();
         }
     }
+
 }

@@ -294,7 +294,7 @@ public class GameManager : MonoBehaviour
         GameObject creature = GameObject.Instantiate(Corpse.gameObject, Player.transform.position, Player.transform.rotation) as GameObject;
         creature.transform.localScale = new Vector3(Defines.Scala01, Defines.Scala01, Defines.Scala01);
 
-        while (creature.transform.localScale != Vector3.one)
+        while (!creature.Equals(null) && creature.transform.localScale != Vector3.one)
         {
             creature.transform.localScale = Vector3.Lerp(creature.transform.localScale, Vector3.one, Time.fixedDeltaTime * SizeVelocity);
             yield return new WaitForEndOfFrame();

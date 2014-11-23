@@ -102,7 +102,7 @@ public class Creature : MonoBehaviour
         if (IsPlayer())
         {
             //Muere player 
-            GameManager.Instance.DestroyWithParticle("BloodSplat", gameObject);
+            GameManager.Instance.CreateParticle("BloodSplat", gameObject.transform.position);
 
         }
         else

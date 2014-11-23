@@ -28,6 +28,7 @@ public class PlayerLifeBehaviour : LifeBehaviour
     public override IEnumerator OnDead() 
     {
         if (imDead) yield break;
+
         imDead = true;
 
         //Corrutina de la muerte
@@ -35,6 +36,8 @@ public class PlayerLifeBehaviour : LifeBehaviour
 
         //Respawn Player
         StartCoroutine(OnRespawn());
+
+        
     }
 
     public override IEnumerator OnRespawn()
