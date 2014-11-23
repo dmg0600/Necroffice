@@ -10,12 +10,16 @@ public class Life : MonoBehaviour
 
     public void OnDamage(Hitbox hitbox)
     {
-
-        life.sub(hitbox.Damage);
-
         InteractiveObject _iObject = GetComponent<InteractiveObject>();
         if (_iObject != null)
             _iObject.DamagedByHitbox(hitbox);
+
+        OnDamage(hitbox.Damage);
+    }
+
+    public void OnDamage(int damage)
+    {
+        life.sub(damage);
 
         if (life.isLower)
         {
