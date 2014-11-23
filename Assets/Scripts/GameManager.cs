@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     public Weapon DefaultWeapon;
     public Creature Player;
 
+    public Creature Corpse;
+
     public TweenAlpha FadeCurtain;
     public UILabel EnterLevelLabel;
     public TweenPosition EnterLevelLabelTween;
@@ -169,6 +171,8 @@ public class GameManager : MonoBehaviour
         //Otras cosas al principio del nivel
         //...
 
+        Player.gameObject.SetActive(true);
+
         //Arriba cortina
         FadeCurtain.Toggle(); yield return new WaitForSeconds(0.5f);
 
@@ -220,5 +224,61 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Encargada del desplazamiento a un punto seguro 
+    /// para el respawn de tu cadaver
+    /// cinemática de la muerte y recarga del nivel actual
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator CorrutinaDeLaMuerte()
+    {
+        float nearDistObj = Mathf.Infinity;
+        float distance = 0.0f;
 
+        GameObject goSpawn = null;
+        
+        //todo 1
+        //Disable input
+        EnableInput(false);
+
+        //todo2 Cámara sobre el cadaver
+
+
+        //Todo3 fundido a negro
+
+
+
+        //Buscamos el punto seguro más cercano.
+        List<GameObject> go = GameObject.FindGameObjectsWithTag("PuntoSeguro").ToList();
+
+        foreach(GameObject goAux in go)
+        {
+            distance = Vector3.Distance(Player.transform.position, goAux.transform.position);
+
+            if (distance < nearDistObj)
+            {
+                goSpawn = goAux;
+                nearDistObj = distance;
+            }
+        }
+
+        //Trasladamos al player al pto seguro
+        Player.transform.position = goSpawn.transform.position;
+        //instanciamos el cadaver
+        Creature.Instantiate(Corpse,Player.transform.position, Player.transform.rotation);
+
+        Corpse.transform.localScale = new Vector3(Defines.Scala01, Defines.Scala01, Defines.Scala01);
+
+        //instanciamos las partículas de muerte
+        ParticleSFX _particleFire = GameManager.Instance.Particles.FirstOrDefault(x => x.name == Defines.ParticleDeath);
+
+        Vector3.Lerp(Corpse.transform.localScale, Vector3.one, Time.fixedDeltaTime);
+
+        Player.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(1);
+
+        LoadLevel(CurrentlyLoadedLevel);
+    }
 }
+
