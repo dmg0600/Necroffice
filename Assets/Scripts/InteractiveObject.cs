@@ -41,4 +41,14 @@ public class InteractiveObject : MonoBehaviour
         //Partícula
         GameManager.Instance.DestroyWithParticle("DustExplosion", gameObject);
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<InteractiveObject>().myProperties.Contains(Properties.Fire) &&
+            myProperties.Contains(Properties.CanBurn))
+        {
+            GameManager.Instance.CreateParticle("Fire", this.transform.position);
+        }
+
+    }
 }
