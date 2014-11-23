@@ -31,11 +31,12 @@ public class CreaturesLifeBehaviour : LifeBehaviour
 
     }
 
-    public override void OnDead() 
+    public override IEnumerator OnDead() 
     {
+        yield break;
     }
 
-    public override void OnRespawn()
+    public override IEnumerator OnRespawn()
     {
         transform.root.GetComponent<Stats>().RamdomStats();
         Life.life.Regenerate();
@@ -54,5 +55,7 @@ public class CreaturesLifeBehaviour : LifeBehaviour
             weaponFinal.BroadcastMessage("SetOwner", creature);
             weaponFinal.BroadcastMessage("SetMode", WeaponMode.AI);
         }
+
+        yield break;
     }
 }

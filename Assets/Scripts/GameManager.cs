@@ -135,10 +135,15 @@ public class GameManager : MonoBehaviour
     static bool _alreadyLoadingLevel = false;
     IEnumerator LoadLevelCoroutine(int level)
     {
+        EnableInput(false);
+
         _alreadyLoadingLevel = true;
 
         //Baja cortina
         FadeCurtain.Toggle(); yield return new WaitForSeconds(0.5f);
+
+        //Player.gameObject.SetActive(true);
+        GameManager.Instance.EnablePlayerNoDesactivate(true);
 
         if (CurrentlyLoadedLevel >= 0)
         {
@@ -165,22 +170,20 @@ public class GameManager : MonoBehaviour
         Camera.main.transform.position = Player.transform.position;
         Camera.main.transform.position -= Camera.main.transform.forward * 25;
 
-
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
 
         //Otras cosas al principio del nivel
         //...
 
-        Player.gameObject.SetActive(true);
-
         //Arriba cortina
         FadeCurtain.Toggle(); yield return new WaitForSeconds(0.5f);
+        EnableInput(true);
 
         //letrerico de nivel por el que vas
         EnterLevelLabel.text = "Entering Level " + (level + 1);
         EnterLevelLabelTween.Toggle();
 
-        yield return new WaitForSeconds(5f);
+        //yield return new WaitForSeconds(5f);
 
         _alreadyLoadingLevel = false;
     }
@@ -224,6 +227,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void EnablePlayerNoDesactivate(bool enable) 
+    {
+        Player.transform.Find("Model").transform.gameObject.SetActive(enable);
+        Player.transform.collider.enabled = enable;
+        EnableInput(enable);
+    }
+
     /// <summary>
     /// Encargada del desplazamiento a un punto seguro 
     /// para el respawn de tu cadaver
@@ -234,24 +244,19 @@ public class GameManager : MonoBehaviour
     {
         float nearDistObj = Mathf.Infinity;
         float distance = 0.0f;
+        float SizeVelocity = 2.0f;
 
-        GameObject goSpawn = null;
-        
-        //todo 1
-        //Disable input
-        EnableInput(false);
+        EnablePlayerNoDesactivate(false);
 
-        //todo2 Cámara sobre el cadaver
+        //instanciamos las partículas de muerte
+        ParticleSFX _particleFire = GameManager.Instance.Particles.FirstOrDefault(x => x.name == Defines.ParticleDeath);
 
-
-        //Todo3 fundido a negro
-
-
+        GameObject goSpawn = null;     
 
         //Buscamos el punto seguro más cercano.
         List<GameObject> go = GameObject.FindGameObjectsWithTag(Defines.PuntoSeguro).ToList();
 
-        foreach(GameObject goAux in go)
+        foreach (GameObject goAux in go)
         {
             distance = Vector3.Distance(Player.transform.position, goAux.transform.position);
 
@@ -264,26 +269,17 @@ public class GameManager : MonoBehaviour
 
         //Trasladamos al player al pto seguro
         Player.transform.position = goSpawn.transform.position;
-        Debug.Log("Trasladamos al player al pto seguro");
         //instanciamos el cadaver
-        Creature.Instantiate(Corpse,Player.transform.position, Player.transform.rotation);
-        Debug.Log("instanciamos el cadaver");
+        GameObject creature = GameObject.Instantiate(Corpse.gameObject, Player.transform.position, Player.transform.rotation) as GameObject;
+        creature.transform.localScale = new Vector3(Defines.Scala01, Defines.Scala01, Defines.Scala01);
 
-        Corpse.transform.localScale = new Vector3(Defines.Scala01, Defines.Scala01, Defines.Scala01);
+        while (creature.transform.localScale != Vector3.one)
+        {
+            creature.transform.localScale = Vector3.Lerp(creature.transform.localScale, Vector3.one, Time.fixedDeltaTime * SizeVelocity);
+            yield return new WaitForEndOfFrame();
+        }
 
-        //instanciamos las partículas de muerte
-        ParticleSFX _particleFire = GameManager.Instance.Particles.FirstOrDefault(x => x.name == Defines.ParticleDeath);
-        Debug.Log("instanciamos las partículas de muerte");
-
-        Vector3.Lerp(Corpse.transform.localScale, Vector3.one, Time.fixedDeltaTime);
-
-        Player.gameObject.SetActive(false);
-
-        yield return new WaitForSeconds(1);
-
-        LoadLevel(0);
-
-        yield return 0;
+        LoadLevel(CurrentlyLoadedLevel);
     }
 }
 

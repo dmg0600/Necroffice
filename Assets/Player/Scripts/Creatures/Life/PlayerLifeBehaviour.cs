@@ -6,7 +6,7 @@ using System.Linq;
 [RequireComponent(typeof(Life))]
 public class PlayerLifeBehaviour : LifeBehaviour
 {
-    GameObject RespawnPoint;
+    public GameObject RespawnPoint;
     Life Life;
 
     public void Awake()
@@ -25,19 +25,16 @@ public class PlayerLifeBehaviour : LifeBehaviour
         if (RespawnPoint != null) OnRespawn();
     }
 
-    public override void OnDead() 
+    public override IEnumerator OnDead() 
     {
         //Corrutina de la muerte
-        StartCoroutine(GameManager.Instance.CorrutinaDeLaMuerte());
+        yield return StartCoroutine(GameManager.Instance.CorrutinaDeLaMuerte());
 
         //Respawn Player
-        OnRespawn();
-
-        //TODO: Create a creature
-        //Instantiate(
+        StartCoroutine(OnRespawn());
     }
 
-    public override void OnRespawn()
+    public override IEnumerator OnRespawn()
     {
         if (RespawnPoint != null)
             transform.root.position = RespawnPoint.transform.position;
@@ -48,5 +45,7 @@ public class PlayerLifeBehaviour : LifeBehaviour
         GetComponent<Creature>().EquipWeapon(GameManager.Instance.DefaultWeapon);
 
         //TODO: Quitar la Weapon y poner periodico
+
+        yield break;
     }
 }
