@@ -4,25 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 [RequireComponent(typeof(Life))]
-public class PlayerLifeBehaviour : PlayerLifeManager
+public class PlayerLifeBehaviour : LifeBehaviour
 {
     GameObject RespawnPoint;
     Life Life;
-
-    //<HACK>
-    //bool wait = false;
-    //public void Update()
-    //{
-    //    if (!wait) StartCoroutine(FalseLife());
-    //}
-    //IEnumerator FalseLife()
-    //{
-    //    wait = true;
-    //    yield return new WaitForSeconds(Random.Range(2, 5));
-    //    Life.OnDamage(20);
-    //    wait = false;
-    //}
-    //</HACK>
 
     public void Awake()
     {
