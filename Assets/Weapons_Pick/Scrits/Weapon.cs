@@ -14,12 +14,10 @@ public abstract class Weapon : MonoBehaviour
     [HideInInspector]
     public Transform DangerousPoint;
 
-    public Hitbox MeleeHitbox;
+    public Hitbox Hitbox;
 
     [HideInInspector]
     public bool _attacking;
-
-    public int DamageRanged = 0;
 
     public void Awake()
     {
@@ -66,36 +64,96 @@ public abstract class Weapon : MonoBehaviour
 
         Vector3 direction = (GameManager.Instance.Player.transform.position - owner.transform.position).normalized;
 
+        int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
 
-        int layermask = ~(1 << LayerMask.NameToLayer("Creature"));
-        if (Physics.Raycast(owner.transform.position, direction, _visionRange, layermask))
-            owner.BroadcastMessage("OnInputAxis", direction);
-
-        // int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
-
-
-
-        float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);
-        /*
-
-                RaycastHit[] hits;
-                hits = Physics.RaycastAll(owner.transform.position, direction, (_visionRange > distance) ? distance : _visionRange, layermask);
-                int i = 0;
-                while (i < hits.Length)
-                {
-                    RaycastHit hit = hits[i];
-                    Debug.Log(hit.collider.gameObject.name);
-                    i++;
-                }
-                Debug.Log("----------------------------------------- ");
-        */
+        float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);   Debug.Log("----------------------------------------- ");
 
         if (!Physics.Raycast(owner.transform.position, direction, (_visionRange > distance) ? distance : _visionRange, layermask))
             owner.BroadcastMessage("OnInputAxis", direction);
 
     }
 
-    public InteractiveObject.Properties[] Property;
+
+    protected void idle()
+    {
+        if (objective != Vector3.zero && Vector3.Distance(owner.transform.position, objective) < 2.0f)
+        {
+            Vector3 direction = (objective - owner.transform.position).normalized;
+            owner.BroadcastMessage("OnInputAxis", direction);
+        }
+        else
+        {
+            CancelInvoke();
+            selectObjective();
+        }
+    }
+    protected void selectObjective()
+    {
+        int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
+
+        float maxDistance = 0;
+        Vector3 direction;
+        Vector3 currentDir = Vector3.zero;
+
+        RaycastHit hit;
+        while (true)
+        {
+            direction = Vector3.forward;
+            if (!Physics.Raycast(transform.position, direction, out hit))
+            {
+                objective = direction;
+                break;
+            }
+
+            if (hit.distance > maxDistance)
+            {
+                maxDistance = hit.distance;
+                currentDir = direction;
+            }
+
+            direction = Vector3.back;
+            if (!Physics.Raycast(transform.position, direction, out hit))
+            {
+                objective = direction;
+                break;
+            }
+            if (hit.distance > maxDistance)
+            {
+                maxDistance = hit.distance;
+                currentDir = direction;
+            }
+
+            direction = Vector3.left;
+            if (!Physics.Raycast(transform.position, direction, out hit))
+            {
+                objective = direction;
+                break;
+            }
+            if (hit.distance > maxDistance)
+            {
+                maxDistance = hit.distance;
+                currentDir = direction;
+            }
+
+            direction = Vector3.right;
+            if (!Physics.Raycast(transform.position, direction, out hit))
+            {
+                objective = direction;
+                break;
+            }
+            if (hit.distance > maxDistance)
+            {
+                maxDistance = hit.distance;
+                currentDir = direction;
+            }
+
+            break;
+        }
+
+        owner.BroadcastMessage("OnInputAxis", currentDir);
+
+        Invoke("selectObjective", 5.0f);
+    }
 
     #region GET/SET
     ///////////////////////////////////////////////////////////////
@@ -158,6 +216,9 @@ public abstract class Weapon : MonoBehaviour
         }
     }
 
+    public int DamageRanged = 0;
+    public int VelocityRanged = 0;
+
     public int Range
     {
         get
@@ -166,6 +227,18 @@ public abstract class Weapon : MonoBehaviour
         }
     }
     #endregion
+
+
+    public void SetOwner(Creature newOwner)
+    {
+        owner = newOwner;
+
+    }
+
+    public void SetMode(WeaponMode mode)
+    {
+        weaponMode = mode;
+    }
 
     [SerializeField]
     private string _name;
@@ -193,14 +266,7 @@ public abstract class Weapon : MonoBehaviour
     private InteractionManager _iManager;
     private WeaponMode _mode = WeaponMode.CONTROLLED;
 
-    public void SetOwner(Creature newOwner)
-    {
-        owner = newOwner;
+    private Vector3 objective = Vector3.zero;
 
-    }
-
-    public void SetMode(WeaponMode mode)
-    {
-        weaponMode = mode;
-    }
+    public InteractiveObject.Properties[] Property;
 }

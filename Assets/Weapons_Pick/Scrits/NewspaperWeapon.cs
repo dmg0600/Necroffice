@@ -6,10 +6,23 @@ public class NewspaperWeapon : Weapon
 {
     public override IEnumerator attack()
     {
-        _attacking = true;
+        if (!canAttack())
+            yield break;
 
-        //Quitar si no hace falta
-        yield break;
+        //Propiedades de hitbox
+        Hitbox.Duration = 0;
+        Hitbox.Damage = Mathf.Clamp(_owner._Stats.Power.value + Power, 1, 5);
+
+        //Habilitar hitbox
+        Hitbox.gameObject.SetActive(true);
+        //todo: desactivar con animacion
+
+        //<HACK>
+        //yield return new WaitForSeconds(1); MeleeHitbox.gameObject.SetActive(false);
+        //</HACK>
+
+        // Play Animacion
+        //todo
     }
 
     public override bool canAttack()
@@ -17,47 +30,27 @@ public class NewspaperWeapon : Weapon
         return true;
     }
 
-	// Use this for initialization
-	void Start () {
-        selectTarget();
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-	    if (weaponMode == WeaponMode.AI)
-        {
+
+    void FixedUpdate()
+    {
+        if (weaponMode == WeaponMode.AI)
             updateAI();
-        }
-	}
+    }
 
     public override void updateAI()
     {
-        
-
-        if(Vector3.Distance(owner.transform.position, target.transform.position) > Range)
+        //Debug.Log(Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position));
+        if (Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position) > Range)
         {
             move();
         }
         else
         {
-            attack();
-        }
-        
-    }
+            if (!_attacking)
+            {
+                StartCoroutine(atackHandler());
+            }
 
-
-    /**
-     * Controla la colision del arma cuando esta atacando
-     * 
-    */
-    void OnCollisionEnter(Collision collision)
-    {
-        if(_attacking && !_damagedEntities.Contains(collision.gameObject))
-        {
-            //collision.gameObject.GetComponent<Life>().damage(1 + Power);
         }
     }
-
-    private bool _attacking;
-    private List<GameObject> _damagedEntities;
 }

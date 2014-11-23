@@ -10,16 +10,19 @@ public class AxeWeapon : Weapon
             yield break;
 
         //Propiedades de hitbox
-        MeleeHitbox.Duration = 0;
-        MeleeHitbox.Damage = Mathf.Clamp(_owner._Stats.Power.value + Power, 1, 5);
+        Hitbox.Duration = 0;
+        Hitbox.Damage = Mathf.Clamp(_owner._Stats.Power.value + Power, 1, 5);
 
         //Habilitar hitbox
-        MeleeHitbox.gameObject.SetActive(true);
+        Hitbox.gameObject.SetActive(true);
         //todo: desactivar con animacion
+
+        //<HACK>
+        //yield return new WaitForSeconds(1); MeleeHitbox.gameObject.SetActive(false);
+        //</HACK>
 
         // Play Animacion
         //todo
-
     }
 
     public override bool canAttack()
@@ -36,18 +39,24 @@ public class AxeWeapon : Weapon
 
     public override void updateAI()
     {
+        float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);
+        bool dead = GameManager.Instance.Player.GetComponent<Life>().life.value == 0;
         //Debug.Log(Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position));
-        if (Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position) > Range)
+        if (distance > Range && !dead)
         {
             move();
         }
-        else 
+        else  if (!dead)
         {
             if (!_attacking)
             {
                 StartCoroutine(atackHandler());
             }
-            
         }
+        /*else
+        {
+            idle();
+        }*/
     }
+
 }
