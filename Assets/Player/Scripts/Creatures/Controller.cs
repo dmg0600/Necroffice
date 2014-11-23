@@ -26,7 +26,7 @@ public class Controller : MonoBehaviour
     Transform graphic;
     GameObject groundObject { get; set; }
 
-    void Awake() 
+    void Awake()
     {
         _Creature = transform.root.GetComponent<Creature>();
     }
@@ -38,9 +38,15 @@ public class Controller : MonoBehaviour
         movementSpeed = Multiplier * 1.5f;
     }
 
+    void RefreshUI()
+    {
+        PlayerUI.Instance.Refresh(_Creature);
+    }
+
     void Update()
     {
         RefreshVariables();
+        RefreshUI();
     }
 
     void FixedUpdate()
@@ -136,4 +142,7 @@ public class Controller : MonoBehaviour
     {
         attacking = false;
     }
+
+
+
 }

@@ -11,25 +11,35 @@ public class Creature : MonoBehaviour
 
     public Weapon _Weapon;
 
+    public string Name = "Player";
+
     [HideInInspector]
     public Controller _Control;
 
     [HideInInspector]
     public Stats _Stats;
 
-    bool isPlayer = false;
+    [HideInInspector]
+    public Life _Life;
 
 
     void Awake()
     {
         _Control = GetComponent<Controller>();
+
         _Stats = GetComponent<Stats>();
-        if (GetComponent<InputManager>() != null)
-            isPlayer = true;
+
+        _Life = GetComponent<Life>();
+
     }
 
     void Start()
     {
+        if (IsPlayer())
+        {
+            GeneratePlayerDwarf();
+        }
+
         EquipWeapon(GameManager.Instance.DefaultWeapon);
     }
 
@@ -84,7 +94,7 @@ public class Creature : MonoBehaviour
 
     public bool IsPlayer()
     {
-        return isPlayer;
+        return (tag == "Player");
     }
 
     public void OnDead()
@@ -101,5 +111,32 @@ public class Creature : MonoBehaviour
             //Muere enemigo
             GameManager.Instance.DestroyWithParticle("BloodSplat", gameObject);
         }
+    }
+
+    public string GenerateDwarvenName()
+    {
+        //Nombres
+        string[] _names = new string[] { "Ulan", "Fikden", "Iolkhan", "Gegdo", "Glorirgoid ", "Groornuki ", "Snavromi ", "Brufirlum ", "Dumroir ", "Mogis" };
+
+        //Apellidos
+        string[] _surnames = new string[] { "Trollrock", "Flaskmaker", "Brickarmour", "Chainflayer", "Axerock", "Chaosbreaker", "Pebblehorn", "Boneforged", "Koboldbelly", "Honorcloak" };
+
+
+        string _fName = _names[UnityEngine.Random.Range(0, _names.Length)];
+        string _fSurname = _surnames[UnityEngine.Random.Range(0, _surnames.Length)];
+        return _fName + " " + _fSurname;
+    }
+
+    public void GeneratePlayerDwarf()
+    {
+        Name = GenerateDwarvenName();
+        Debug.Log("Generado nombre");
+
+        int _maxLife = Random.Range(40, 45);
+
+        _maxLife -= (_Stats.Agility.value + _Stats.Power.value);
+
+        _Life.life = new Stats.Attribute(0, _maxLife);
+
     }
 }

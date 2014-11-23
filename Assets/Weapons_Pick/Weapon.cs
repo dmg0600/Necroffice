@@ -104,6 +104,14 @@ public abstract class Weapon : MonoBehaviour
         }
     }
 
+    public int Agility
+    {
+        get
+        {
+            return _agilityBonus;
+        }
+    }
+
     public int Range
     {
         get
@@ -121,6 +129,11 @@ public abstract class Weapon : MonoBehaviour
     private int _agilityBonus = 0;
     [SerializeField]
     private int _range = 0;
+    [SerializeField]
+    public Texture _icon;
+
+
+
 
     private GameObject _currentTarget = null;
     private Creature _owner;
