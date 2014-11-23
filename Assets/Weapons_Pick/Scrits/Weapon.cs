@@ -195,6 +195,7 @@ public abstract class Weapon : MonoBehaviour
             _owner = value;
             _iManager = _owner.gameObject.GetComponent<InteractionManager>();
             _range += 1;
+            Hitbox.Owner = value;
         }
         get
         {
