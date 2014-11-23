@@ -28,14 +28,17 @@ public abstract class Weapon : MonoBehaviour
 
     public IEnumerator atackHandler()
     {
+
+        owner.GetComponent<Animator>().SetInteger("Atttack", UnityEngine.Random.Range(3, 6));
+
         _attacking = true;
         yield return StartCoroutine(attack());
-        _attacking = false;
+        /*_attacking = false;
 
         //Esto se pone aqui para no ponerse al final de cada attack
         //Aqui pasa igual que el OnAttack y OnAttackStart en contoller, 
         //pero interesa que varias cosas reciban este evento, beach
-        _owner.BroadcastMessage("OnAttackEnd");
+        _owner.BroadcastMessage("OnAttackEnd");*/
     }
 
     abstract public IEnumerator attack();

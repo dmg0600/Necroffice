@@ -33,6 +33,12 @@ public class AxeWeapon : Weapon
 
     void FixedUpdate()
     {
+        if (_attacking && !owner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName(""))
+        {
+            _attacking = false;
+            _owner.BroadcastMessage("OnAttackEnd");
+        }
+
         if (weaponMode == WeaponMode.AI)
             updateAI();
     }

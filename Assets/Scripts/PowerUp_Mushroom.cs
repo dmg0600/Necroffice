@@ -3,26 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class PowerUp_Mushroom : MonoBehaviour {
+public class PowerUp_Mushroom : MonoBehaviour
+{
+    public enum Option { Health = 0, Explosion = 1, Fairy = 2 };
+
+    public Option opcion;
 
     void OnTriggerEnter(Collider col)
     {
         int Cure = 0;
-                System.Random ran = new System.Random();
+
         if (col.name == Defines.Player)
         {
             Creature Player = GameManager.Instance.Player;
 
-            switch (ran.Next(0, 2))
+            switch (opcion)
             {
-                case 0:
+                case Option.Health:
                     {
                         System.Random r = new System.Random();
-                        Cure = r.Next(40,60)/100 * Player.GetComponent<Life>().life.value;
+                        Cure = r.Next(40, 60) / 100 * Player.GetComponent<Life>().life.value;
                         Player.GetComponent<Life>().OnHeal(Cure);
                         break;
                     }
-                case 1:
+                case Option.Explosion:
                     {
                         System.Random r = new System.Random();
                         Cure = r.Next(10, 25) / 100 * Player.GetComponent<Life>().life.value;
@@ -33,7 +37,7 @@ public class PowerUp_Mushroom : MonoBehaviour {
                         ParticleSFX _particleFire = GameManager.Instance.Particles.FirstOrDefault(x => x.name == Defines.ParticleDustExplosion);
                         break;
                     }
-                case 2:
+                case Option.Fairy:
                     {
                         //instanciamos las partículas de explosión
                         ParticleSFX _particleFire = GameManager.Instance.Particles.FirstOrDefault(x => x.name == Defines.ParticleDeath);
@@ -42,7 +46,7 @@ public class PowerUp_Mushroom : MonoBehaviour {
                 default: break;
 
             }
-            
+
 
             Destroy(this.gameObject);
         }
