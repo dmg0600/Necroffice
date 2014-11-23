@@ -217,5 +217,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Encargada del desplazamiento a un punto seguro 
+    /// para el respawn de tu cadaver
+    /// cinemática de la muerte y recarga del nivel actual
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator CorrutinaDeLaMuerte()
+    {
 
+
+
+        yield return new WaitForSeconds(1);
+    }
 }
