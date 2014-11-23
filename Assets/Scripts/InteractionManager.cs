@@ -74,7 +74,12 @@ public class InteractionManager : MonoBehaviour
     /// </summary>
     void Awake()
     {
+        Creature Player = GameManager.Instance.Player;
+
+        m_Player = Player.transform;
+
         _UpdateLists();
+
 
     }
 

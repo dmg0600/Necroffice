@@ -50,7 +50,7 @@ public class InteractiveObject : MonoBehaviour
         }
 
         //Destruir genérico
-        GameManager.Instance.DestroyWithParticle("DustExplosion", gameObject);
+        GameManager.Instance.DestroyWithParticle(Defines.ParticleDustExplosion, gameObject);
     }
 
 
@@ -61,7 +61,7 @@ public class InteractiveObject : MonoBehaviour
         {
             onFire = true;
 
-            ParticleSFX _particleFire = GameManager.Instance.Particles.FirstOrDefault(x => x.name == "Fire");
+            ParticleSFX _particleFire = GameManager.Instance.Particles.FirstOrDefault(x => x.name == Defines.ParticleFire);
             ParticleController _pcontroller = _particleFire.GetComponent<ParticleController>();
             _pcontroller.Control2velasnegras();
         }
