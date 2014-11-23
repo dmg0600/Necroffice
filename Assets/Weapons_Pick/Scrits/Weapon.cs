@@ -11,7 +11,17 @@ public enum WeaponMode
 
 public abstract class Weapon : MonoBehaviour
 {
-    protected bool _attacking;
+    [HideInInspector]
+    public Transform DangerousPoint;
+    [HideInInspector]
+    public bool _attacking;
+
+    public int Damage = 0;
+
+    public void Awake()
+    {
+        DangerousPoint = this.transform.FindChild("DangerousPoint");
+    }
 
     #region unimplemented methods
 
