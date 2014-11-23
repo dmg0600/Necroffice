@@ -27,6 +27,7 @@ public class PlayerLifeBehaviour : LifeBehaviour
 
     public override IEnumerator OnDead() 
     {
+        Debug.Log("OnDead");
         //Corrutina de la muerte
         yield return StartCoroutine(GameManager.Instance.CorrutinaDeLaMuerte());
 
