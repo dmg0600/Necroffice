@@ -31,8 +31,10 @@ public class CreaturesLifeBehaviour : LifeBehaviour
 
     }
 
+    public AudioClip deadSound;
     public override IEnumerator OnDead() 
     {
+        AudioSource.PlayClipAtPoint(deadSound, transform.position);
         yield break;
     }
 
