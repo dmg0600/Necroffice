@@ -16,6 +16,8 @@ public class ParticleController : MonoBehaviour
 
     private bool bActEmisionEnd = false;
 
+    private float[] basicIniRate;
+    private float[] basicEndRate;
 
     // Use this for initialization
     void Start()
@@ -37,11 +39,36 @@ public class ParticleController : MonoBehaviour
             }
         }
 
+        basicIniRate = new float[lPartSysIni.Count];
+        for (int i = 0; i < lPartSysIni.Count; ++i)
+        {
+            basicIniRate[i] = lPartSysIni[i].emissionRate;
+        }
+        basicEndRate = new float[lPartSysEnd.Count];
+        for (int i = 0; i < lPartSysEnd.Count; ++i)
+        {
+            basicEndRate[i] = lPartSysEnd[i].emissionRate;
+        }
+
         tween.from = vScaleMin;
         tween.to = vScaleMax;
         tween.duration = fTimeLife;
 
         tween.enabled = true;
+    }
+
+    void Update()
+    {
+        for (int i = 0; i < lPartSysIni.Count; ++i)
+        {
+            lPartSysIni[i].emissionRate = basicIniRate[i] * transform.localScale.x;
+        }
+
+
+        for (int i = 0; i < lPartSysEnd.Count; ++i)
+        {
+            lPartSysEnd[i].emissionRate = basicEndRate[i] * transform.localScale.x;
+        }
     }
 
     public void Ended()
@@ -52,7 +79,7 @@ public class ParticleController : MonoBehaviour
             return;
         }
 
-        Invoke("ReLaunchTween", 0.5f);
+        Invoke("ReLaunchTween", 1f);
     }
 
     void ReLaunchTween()
