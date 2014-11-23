@@ -3,6 +3,10 @@ using System.Collections;
 
 public class Creature : MonoBehaviour
 {
+
+    public AudioClip DwarfDeadAudio;
+    public AudioClip SkeletonDeadAudio;
+
     public enum Alignments { PLAYER = 0, NEUTRAL, ENEMY };
 
     public Alignments Alignment = Alignments.ENEMY;
@@ -102,13 +106,14 @@ public class Creature : MonoBehaviour
         if (IsPlayer())
         {
             //Muere player 
-            GameManager.Instance.DestroyWithParticle("BloodSplat", gameObject);
-
+            GameManager.Instance.CreateParticle("BloodSplat", gameObject.transform.position);
+            AudioSource.PlayClipAtPoint(DwarfDeadAudio, transform.position);
         }
         else
         {
             //Muere enemigo
             GameManager.Instance.DestroyWithParticle("BloodSplat", gameObject);
+            AudioSource.PlayClipAtPoint(SkeletonDeadAudio, transform.position);
         }
     }
 

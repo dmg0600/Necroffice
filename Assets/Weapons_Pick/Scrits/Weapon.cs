@@ -13,10 +13,11 @@ public abstract class Weapon : MonoBehaviour
 {
     [HideInInspector]
     public Transform DangerousPoint;
+
+    public Hitbox Hitbox;
+
     [HideInInspector]
     public bool _attacking;
-
-    public int Damage = 0;
 
     public void Awake()
     {
@@ -25,7 +26,7 @@ public abstract class Weapon : MonoBehaviour
 
     #region unimplemented methods
 
-    public IEnumerator atackHandler() 
+    public IEnumerator atackHandler()
     {
         _attacking = true;
         yield return StartCoroutine(attack());
@@ -47,11 +48,12 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void selectTarget()
     {
+
     }
 
     void Start()
     {
-        if(_range == 0)
+        if (_range == 0)
         {
             Debug.LogError("ERROR!!! ARMA CON RANGO 0, ESTO ESTA PROHIBIDO POR DISEÑO! CACA! FUERAAAAAA");
         }
@@ -59,33 +61,99 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void move()
     {
-        
+
         Vector3 direction = (GameManager.Instance.Player.transform.position - owner.transform.position).normalized;
 
         int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
 
-        
-
         float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);
-/*
 
-        RaycastHit[] hits;
-        hits = Physics.RaycastAll(owner.transform.position, direction, (_visionRange > distance) ? distance : _visionRange, layermask);
-        int i = 0;
-        while (i < hits.Length)
-        {
-            RaycastHit hit = hits[i];
-            Debug.Log(hit.collider.gameObject.name);
-            i++;
-        }
-        Debug.Log("----------------------------------------- ");
-*/
+        if (!Physics.Raycast(owner.transform.position, direction, (_visionRange > distance) ? distance : _visionRange, layermask))
+            owner.BroadcastMessage("OnInputAxis", direction);
 
-        if (!Physics.Raycast(owner.transform.position, direction, (_visionRange > distance) ? distance: _visionRange , layermask))
-            owner.BroadcastMessage("OnInputAxis", direction); 
     }
 
-    public InteractiveObject.Properties[] Property;
+
+    protected void idle()
+    {
+        if (objective != Vector3.zero && Vector3.Distance(owner.transform.position, objective) < 2.0f)
+        {
+            Vector3 direction = (objective - owner.transform.position).normalized;
+            owner.BroadcastMessage("OnInputAxis", direction);
+        }
+        else
+        {
+            CancelInvoke();
+            selectObjective();
+        }
+    }
+    protected void selectObjective()
+    {
+        int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
+
+        float maxDistance = 0;
+        Vector3 direction;
+        Vector3 currentDir = Vector3.zero;
+
+        RaycastHit hit;
+        while (true)
+        {
+            direction = Vector3.forward;
+            if (!Physics.Raycast(transform.position, direction, out hit))
+            {
+                objective = direction;
+                break;
+            }
+
+            if (hit.distance > maxDistance)
+            {
+                maxDistance = hit.distance;
+                currentDir = direction;
+            }
+
+            direction = Vector3.back;
+            if (!Physics.Raycast(transform.position, direction, out hit))
+            {
+                objective = direction;
+                break;
+            }
+            if (hit.distance > maxDistance)
+            {
+                maxDistance = hit.distance;
+                currentDir = direction;
+            }
+
+            direction = Vector3.left;
+            if (!Physics.Raycast(transform.position, direction, out hit))
+            {
+                objective = direction;
+                break;
+            }
+            if (hit.distance > maxDistance)
+            {
+                maxDistance = hit.distance;
+                currentDir = direction;
+            }
+
+            direction = Vector3.right;
+            if (!Physics.Raycast(transform.position, direction, out hit))
+            {
+                objective = direction;
+                break;
+            }
+            if (hit.distance > maxDistance)
+            {
+                maxDistance = hit.distance;
+                currentDir = direction;
+            }
+
+            break;
+        }
+
+        owner.BroadcastMessage("OnInputAxis", currentDir);
+
+        Invoke("selectObjective", 5.0f);
+    }
 
     #region GET/SET
     ///////////////////////////////////////////////////////////////
@@ -148,6 +216,9 @@ public abstract class Weapon : MonoBehaviour
         }
     }
 
+    public int DamageRanged = 0;
+    public int VelocityRanged = 0;
+
     public int Range
     {
         get
@@ -157,8 +228,22 @@ public abstract class Weapon : MonoBehaviour
     }
     #endregion
 
+
+    public void SetOwner(Creature newOwner)
+    {
+        owner = newOwner;
+
+    }
+
+    public void SetMode(WeaponMode mode)
+    {
+        weaponMode = mode;
+    }
+
     [SerializeField]
     private string _name;
+    [SerializeField]
+    public Texture _icon;
     [SerializeField]
     private int _powerBonus = 0;
     [SerializeField]
@@ -166,13 +251,13 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField]
     private int _range = 0;
     [SerializeField]
-    public Texture _icon;
-    [SerializeField]
     private float _visionRange = 15.0f;
 
 
 
     private GameObject _currentTarget = null;
+
+    [HideInInspector]
     public Creature _owner;
 
     private int _currentCorner;
@@ -181,14 +266,7 @@ public abstract class Weapon : MonoBehaviour
     private InteractionManager _iManager;
     private WeaponMode _mode = WeaponMode.CONTROLLED;
 
-    public void SetOwner(Creature newOwner)
-    {
-        owner = newOwner;
-        
-    }
+    private Vector3 objective = Vector3.zero;
 
-    public void SetMode(WeaponMode mode)
-    {
-        weaponMode = mode;
-    }
+    public InteractiveObject.Properties[] Property;
 }

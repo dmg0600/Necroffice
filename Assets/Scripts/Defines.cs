@@ -18,4 +18,6 @@ public class Defines : MonoBehaviour
     public static float burningTime = 3f;
 
     public static string PuntoSeguro = "SafePoint";
+
+    public static string Player = "Player";
 }

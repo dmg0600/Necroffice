@@ -61,7 +61,7 @@ public class InvStat
 			case Identifier.Constitution:	return "Constitution increases health";
 			case Identifier.Agility:		return "Agility increases armor";
 			case Identifier.Intelligence:	return "Intelligence increases mana";
-			case Identifier.Damage:			return "Damage adds to the amount of damage done in combat";
+			case Identifier.Damage:			return "DamageRanged adds to the amount of damage done in combat";
 			case Identifier.Crit:			return "Crit increases the chance of landing a critical strike";
 			case Identifier.Armor:			return "Armor protects from damage";
 			case Identifier.Health:			return "Health prolongs life";
@@ -97,7 +97,7 @@ public class InvStat
 	}
 
 	/// <summary>
-	/// Comparison function for sorting weapons. Damage value will show up first, followed by armor.
+	/// Comparison function for sorting weapons. DamageRanged value will show up first, followed by armor.
 	/// </summary>
 
 	static public int CompareWeapon (InvStat a, InvStat b)
