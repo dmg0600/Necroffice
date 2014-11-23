@@ -12,7 +12,7 @@ public class InputManager : MonoBehaviour
 
     int floorLayer;
 
-    bool isInputEnable = false;
+    bool isInputEnable = true;
 
     public void EnableInput(bool isEnable)
     {

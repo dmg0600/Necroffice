@@ -25,7 +25,7 @@ public class PlayerCamera : MonoBehaviour
     float damping = 3;
     Vector3 offset;
 
-    bool isInputEnable = false;
+    bool isInputEnable = true;
 
     public void EnableInput(bool isEnable)
     {
