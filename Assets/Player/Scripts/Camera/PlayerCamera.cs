@@ -25,6 +25,13 @@ public class PlayerCamera : MonoBehaviour
     float damping = 3;
     Vector3 offset;
 
+    bool isInputEnable = false;
+
+    public void EnableInput(bool isEnable)
+    {
+        isInputEnable = isEnable;
+    }
+
     public void Start() 
     {
         distance = Mathf.Clamp(distance, _zoomMin, _zoomMax);
@@ -46,11 +53,13 @@ public class PlayerCamera : MonoBehaviour
 
     void RotateControls()
     {
-        _x += Input.GetAxis("CameraHorizontal");
+        if (isInputEnable)
+        {
+            _x += Input.GetAxis("CameraHorizontal");
 
-        if (Input.GetButton("Fire2"))
-            _x += Input.GetAxis("Mouse X") * _xSpeed;
-
+            if (Input.GetButton("Fire2"))
+                _x += Input.GetAxis("Mouse X") * _xSpeed;
+        }
         Rotate(_x);
     }
 
@@ -74,15 +83,17 @@ public class PlayerCamera : MonoBehaviour
      */
     void Zoom()
     {
-        if (Input.GetAxis("Mouse ScrollWheel") < 0.0f)
+        if (isInputEnable)
         {
-            this.ZoomOut();
+            if (Input.GetAxis("Mouse ScrollWheel") < 0.0f)
+            {
+                this.ZoomOut();
+            }
+            else if (Input.GetAxis("Mouse ScrollWheel") > 0.0f)
+            {
+                this.ZoomIn();
+            }
         }
-        else if (Input.GetAxis("Mouse ScrollWheel") > 0.0f)
-        {
-            this.ZoomIn();
-        }
-
     }
 
     /**

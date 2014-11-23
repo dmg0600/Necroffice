@@ -12,6 +12,13 @@ public class InputManager : MonoBehaviour
 
     int floorLayer;
 
+    bool isInputEnable = false;
+
+    public void EnableInput(bool isEnable)
+    {
+        isInputEnable = isEnable;
+    }
+
     void Awake() 
     {
         Sujet = this.transform.root.gameObject;
@@ -22,24 +29,27 @@ public class InputManager : MonoBehaviour
     {
         if (PauseMenu.isPaused) return;
 
-        if (Input.GetButtonDown("Fire1"))
+        if (isInputEnable)
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayer))
+            if (Input.GetButtonDown("Fire1"))
             {
-                Sujet.BroadcastMessage("OnInputMouseClick", hit.point); 
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayer))
+                {
+                    Sujet.BroadcastMessage("OnInputMouseClick", hit.point);
+                }
             }
-        }
 
-        Vector3 axis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+            Vector3 axis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
 
-        if (axis != Vector3.zero)
-        {
-            Quaternion rotate = Quaternion.LookRotation(new Vector3(RotateRef.transform.forward.x, 0, RotateRef.transform.forward.z));
-            axis = rotate * axis;
-            Sujet.BroadcastMessage("OnInputAxis", axis);
+            if (axis != Vector3.zero)
+            {
+                Quaternion rotate = Quaternion.LookRotation(new Vector3(RotateRef.transform.forward.x, 0, RotateRef.transform.forward.z));
+                axis = rotate * axis;
+                Sujet.BroadcastMessage("OnInputAxis", axis);
+            }
         }
     }
 
