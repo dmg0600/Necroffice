@@ -253,7 +253,7 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField]
     private float _visionRange = 15.0f;
 
-
+    public GameObject _weaponPickeable;
 
     private GameObject _currentTarget = null;
 

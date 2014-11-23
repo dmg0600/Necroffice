@@ -76,6 +76,8 @@ public class Creature : MonoBehaviour
 
         Destroy(_Weapon.gameObject);
 
+        GameObject.Instantiate(_Weapon._weaponPickeable, transform.position - Vector3.back, transform.rotation);
+
         _Weapon = null;
     }
 
