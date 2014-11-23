@@ -28,14 +28,16 @@ public abstract class Weapon : MonoBehaviour
 
     public IEnumerator atackHandler()
     {
+        
+
         _attacking = true;
         yield return StartCoroutine(attack());
-        _attacking = false;
+        /*_attacking = false;
 
         //Esto se pone aqui para no ponerse al final de cada attack
         //Aqui pasa igual que el OnAttack y OnAttackStart en contoller, 
         //pero interesa que varias cosas reciban este evento, beach
-        _owner.BroadcastMessage("OnAttackEnd");
+        _owner.BroadcastMessage("OnAttackEnd");*/
     }
 
     abstract public IEnumerator attack();
@@ -193,6 +195,7 @@ public abstract class Weapon : MonoBehaviour
             _owner = value;
             _iManager = _owner.gameObject.GetComponent<InteractionManager>();
             _range += 1;
+            Hitbox.Owner = value;
         }
         get
         {
@@ -253,7 +256,7 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField]
     private float _visionRange = 15.0f;
 
-
+    public GameObject _weaponPickeable;
 
     private GameObject _currentTarget = null;
 
