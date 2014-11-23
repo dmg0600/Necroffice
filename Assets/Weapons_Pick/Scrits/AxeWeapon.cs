@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class AxeWeapon : Weapon
 {
+    public AudioClip[] audio;
+
     public override IEnumerator attack()
     {
         if (!canAttack())
@@ -24,6 +26,8 @@ public class AxeWeapon : Weapon
 
         // Play Animacion
         //todo
+
+        AudioSource.PlayClipAtPoint(audio[Random.Range(0, audio.Length)], transform.position);
     }
 
     public override bool canAttack()

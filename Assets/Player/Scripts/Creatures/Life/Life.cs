@@ -3,6 +3,10 @@ using System.Collections;
 
 public class Life : MonoBehaviour
 {
+    public Creature owner;
+    public AudioClip[] DwarfDamage;
+    public AudioClip[] SkeDamage;
+
     public Stats.Attribute life;
 
     bool destroyinh = false;
@@ -19,6 +23,9 @@ public class Life : MonoBehaviour
 
     public void OnDamage(int damage)
     {
+        if (owner._Weapon.weaponMode == WeaponMode.CONTROLLED) AudioSource.PlayClipAtPoint(DwarfDamage[Random.Range(0, DwarfDamage.Length)], transform.position);
+        else if (owner._Weapon.weaponMode == WeaponMode.CONTROLLED) AudioSource.PlayClipAtPoint(SkeDamage[Random.Range(0, SkeDamage.Length)], transform.position);
+
         life.sub(damage);
         GetComponent<Controller>()._Animator.SetBool("Damaged", false);
 

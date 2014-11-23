@@ -66,7 +66,7 @@ public abstract class Weapon : MonoBehaviour
 
         int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
 
-        float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);   Debug.Log("----------------------------------------- ");
+        float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);
 
         if (!Physics.Raycast(owner.transform.position, direction, (_visionRange > distance) ? distance : _visionRange, layermask))
             owner.BroadcastMessage("OnInputAxis", direction);
