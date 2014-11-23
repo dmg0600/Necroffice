@@ -67,6 +67,7 @@ public abstract class Weapon : MonoBehaviour
         
 
         float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);
+/*
 
         RaycastHit[] hits;
         hits = Physics.RaycastAll(owner.transform.position, direction, (_visionRange > distance) ? distance : _visionRange, layermask);
@@ -78,6 +79,7 @@ public abstract class Weapon : MonoBehaviour
             i++;
         }
         Debug.Log("----------------------------------------- ");
+*/
 
         if (!Physics.Raycast(owner.transform.position, direction, (_visionRange > distance) ? distance: _visionRange , layermask))
             owner.BroadcastMessage("OnInputAxis", direction); 

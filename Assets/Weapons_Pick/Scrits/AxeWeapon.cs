@@ -43,7 +43,6 @@ public class AxeWeapon : Weapon
         }
         else 
         {
-            Debug.Log(_attacking);
             if (!_attacking)
             {
                 StartCoroutine(atackHandler());
