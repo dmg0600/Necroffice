@@ -74,6 +74,7 @@ public class CreaturesPool : MonoBehaviour {
 	public GameObject Spawn(Vector3 position, Quaternion rotation)
 	{
 		GameObject result;
+        if (!canSpawn) return null;
 
 		if(available.Count == 0){
 			// Create an object and initialize it.
@@ -169,9 +170,15 @@ public class CreaturesPool : MonoBehaviour {
 			obj.SetActive(val);
 	}
 
-    private bool canSpawn() 
+    private bool canSpawn
     {
-        //Physics.CapsuleCast
-        return true;
+        get
+        {
+            int Layer = 1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player");
+            RaycastHit creatureHit;
+            if (Physics.SphereCast(transform.position, 5.0f, transform.forward, out creatureHit, 0.1f, Layer))
+                return false;
+            return true;
+        }
     }
 }
