@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
     public Transform playerTransform;
 
-    public void CreateHitbox(Creature owner, float radius, int damage, Vector3 velocity, float duration)
+    public void CreateHitbox(Creature owner, float radius, int damage, Vector3 velocity, float duration, string nameOfHitbox = null)
     {
         GameObject _obj = Instantiate(HitboxPrefab, owner.transform.position + (owner.transform.forward * 0.5f), Quaternion.identity) as GameObject;
         Hitbox _hitbox = _obj.GetComponent<Hitbox>();
@@ -35,13 +35,15 @@ public class GameManager : MonoBehaviour
         _hitbox.Radius = radius;
         _hitbox.Damage = damage;
         _hitbox.Duration = duration;
+        _hitbox.name = nameOfHitbox ?? "Hitbox (" + owner.name + ")";
+
 
         _hitbox.SetVelocity(velocity);
 
         _hitbox.Begin();
     }
 
-    public void CreateHitbox(Transform origin, float radius, int damage, float duration)
+    public void CreateHitbox(Transform origin, float radius, int damage, float duration, string nameOfHitbox = null)
     {
         GameObject _obj = Instantiate(HitboxPrefab, origin.position, Quaternion.identity) as GameObject;
         Hitbox _hitbox = _obj.GetComponent<Hitbox>();
@@ -50,6 +52,8 @@ public class GameManager : MonoBehaviour
         _hitbox.Radius = radius;
         _hitbox.Damage = damage;
         _hitbox.Duration = duration;
+        _hitbox.name = nameOfHitbox ?? "Hitbox";
+
 
         _hitbox.Begin();
     }

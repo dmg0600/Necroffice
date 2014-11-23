@@ -6,10 +6,9 @@ using System.Linq;
 
 public class InteractiveObject : MonoBehaviour
 {
-    public enum Properties { Invisible = 0, Kinematic, Levitate, Fire, CanBurn, Explodes, Immortal };
+    public enum Properties { Invisible = 0, Kinematic, Levitate, Fire, CanBurn, Immortal };
 
     public List<Properties> myProperties = new List<Properties>();
-
 
     public void Start()
     {
@@ -38,7 +37,15 @@ public class InteractiveObject : MonoBehaviour
         //Se destruye
         Debug.Log("Se destruye objeto " + gameObject.name);
 
-        //Partícula
+        //Explosión
+        ExplodeBehaviour _explosion= GetComponent<ExplodeBehaviour>();
+        if (_explosion != null)
+        {
+            _explosion.Detonate();
+            return;
+        }
+
+        //Destruir genérico
         GameManager.Instance.DestroyWithParticle("DustExplosion", gameObject);
     }
 }

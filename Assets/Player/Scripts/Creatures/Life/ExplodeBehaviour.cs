@@ -1,25 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ExplodeBehaviour : LifeBehaviour {
-
-    public int damage;
+public class ExplodeBehaviour : MonoBehaviour
+{
+    public int damage = 0;
     public float force = 50f;
     public float radius = 10f;
 
-    public override void OnRespawn() { }
-
-    public override void OnDead()
+    public void Detonate()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
 
         foreach (Collider col in colliders)
         {
-            if (col.rigidbody != null)
+            InteractiveObject _iObject = col.GetComponent<InteractiveObject>();
+            if (_iObject != null)
             {
-                GameManager.Instance.CreateHitbox(transform, radius, damage, 1f);
-                col.rigidbody.AddExplosionForce(force, transform.position, radius);
+                if (col.rigidbody != null)
+                {
+                    GameManager.Instance.CreateHitbox(transform, radius, damage, 1f, "Explosion (" + gameObject.name + ")");
+
+                    col.rigidbody.AddExplosionForce(force, transform.position, radius);
+
+                    //todo: meter particula de explosion
+
+                }
             }
         }
+
     }
 }
