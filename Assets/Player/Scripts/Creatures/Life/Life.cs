@@ -6,9 +6,11 @@ public class Life : MonoBehaviour
     public Stats.Attribute life;
 
     bool destroyinh = false;
+    bool onEvent = false;
 
     public void OnDamage(Hitbox hitbox)
     {
+
         life.sub(hitbox.Damage);
 
         InteractiveObject _iObject = GetComponent<InteractiveObject>();
@@ -26,11 +28,13 @@ public class Life : MonoBehaviour
         }
     }
 
+
     public void OnHeal(int cure)
     {
         life.add(cure);
 
         if (life.isMax)
             transform.root.BroadcastMessage("OnPlentyLife");
+
     }
 }
