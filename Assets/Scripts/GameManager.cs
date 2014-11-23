@@ -24,7 +24,9 @@ public class GameManager : MonoBehaviour
     public Weapon DefaultWeapon;
     public ParticleSFX[] Particles;
 
-    public void CreateHitbox(Creature owner, float radius, int damage, Vector3 velocity)
+    public Transform playerTransform;
+
+    public void CreateHitbox(Creature owner, float radius, int damage, Vector3 velocity, float duration)
     {
         GameObject _obj = Instantiate(HitboxPrefab, owner.transform.position + (owner.transform.forward * 0.5f), Quaternion.identity) as GameObject;
         Hitbox _hitbox = _obj.GetComponent<Hitbox>();
@@ -32,9 +34,22 @@ public class GameManager : MonoBehaviour
         _hitbox.Owner = owner;
         _hitbox.Radius = radius;
         _hitbox.Damage = damage;
-        _hitbox.Duration = 1;
+        _hitbox.Duration = duration;
 
         _hitbox.SetVelocity(velocity);
+
+        _hitbox.Begin();
+    }
+
+    public void CreateHitbox(Transform origin, float radius, int damage, float duration)
+    {
+        GameObject _obj = Instantiate(HitboxPrefab, origin.position, Quaternion.identity) as GameObject;
+        Hitbox _hitbox = _obj.GetComponent<Hitbox>();
+
+        _hitbox.Owner = null;
+        _hitbox.Radius = radius;
+        _hitbox.Damage = damage;
+        _hitbox.Duration = duration;
 
         _hitbox.Begin();
     }
