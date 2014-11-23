@@ -18,8 +18,11 @@ public class PlayerLifeBehaviour : LifeBehaviour
 
         RespawnPoint = Respawn.FirstOrDefault();
 
-        if (RespawnPoint != null) OnRespawn();
+    }
 
+    void Start()
+    {
+        if (RespawnPoint != null) OnRespawn();
     }
 
     public override void OnDead() 
@@ -38,6 +41,8 @@ public class PlayerLifeBehaviour : LifeBehaviour
 
         Life.life.Regenerate();
         transform.root.GetComponent<Stats>().RamdomStats();
+
+        GetComponent<Creature>().EquipWeapon(GameManager.Instance.DefaultWeapon);
 
         //TODO: Quitar la Weapon y poner periodico
     }

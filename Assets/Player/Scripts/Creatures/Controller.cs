@@ -86,7 +86,7 @@ public class Controller : MonoBehaviour
         targetOrientation = Vector3.zero;
     }
 
-    void OnInputAxis(Vector3 direction)
+    public void OnInputAxis(Vector3 direction)
     {
         targetOrientation = direction;
     }

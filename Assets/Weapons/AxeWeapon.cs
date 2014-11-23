@@ -43,9 +43,7 @@ public class AxeWeapon : Weapon
 
     public override void updateAI()
     {
-        if(target == null) return;
-
-        if (Vector3.Distance(owner.transform.position, target.transform.position) > Range)
+        if (Vector3.Distance(owner.transform.position, GameManager.Instance.playerTransform.position) > Range)
         {
             move();
         }

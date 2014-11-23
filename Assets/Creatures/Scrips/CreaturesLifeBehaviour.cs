@@ -43,11 +43,13 @@ public class CreaturesLifeBehaviour : LifeBehaviour
         GameObject[] weapons = Resources.LoadAll<GameObject>("Weapons");
         GameObject choosen = weapons[Random.Range(0, weapons.Count())];
 
-        GameObject weaponFinal = GameObject.Instantiate(choosen) as GameObject;
+        GameObject weaponFinal = GameObject.Instantiate(choosen,Vector3.zero, Quaternion.identity) as GameObject;
         
         Creature creature = GetComponent<Creature>();
 
-        Debug.Log("creature " + creature);  
+        weaponFinal.transform.parent = transform.root;
+
+        Debug.Log("arma creada " + weaponFinal);  
 
         if(creature != null)
         {

@@ -22,9 +22,16 @@ public abstract class Weapon : MonoBehaviour
     public virtual void selectTarget()
     {
 
-        
-        NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(transform.position, GameManager.Instance.playerTransform.position, -1, path);
+
+        _currentPath = new NavMeshPath();
+        NavMesh.CalculatePath(transform.position, GameManager.Instance.playerTransform.position, -1, _currentPath);
+
+        foreach(Vector3 point in _currentPath.corners)
+        {
+
+            Debug.Log(point);
+        }
+
         /*
         if (!_iManager.nearInteractiveObjs.Contains(target))
         {
@@ -41,20 +48,23 @@ public abstract class Weapon : MonoBehaviour
             }
         }
         */
-        Invoke("selectTarget", 0.25f);
+        //Invoke("selectTarget", 1.0f);
         
     }
 
     public virtual void move()
     {
-        Vector3 direction = _currentPath.corners[_currentCorner] - transform.position;
-
+        Vector3 direction = _currentPath.corners[_currentCorner] - owner.transform.position;
         direction.y = 0;
+        //Debug.Log(_currentPath.corners[_currentCorner]);
 
-        if (direction.magnitude < 1.0)
-            direction = _currentPath.corners[++_currentCorner] - transform.position;
+        //Debug.DrawRay(owner.transform.position,direction);
 
-        //owner.GetComponent<Controller>().OnInputAxis(direction);
+       /* if (Vector3.Distance(_currentPath.corners[_currentCorner], transform.position) < 1.0)
+            direction = _currentPath.corners[++_currentCorner] - transform.position;*/
+
+        owner.GetComponent<Controller>().OnInputAxis(direction);
+
     }
 
     #region GET/SET
@@ -127,7 +137,7 @@ public abstract class Weapon : MonoBehaviour
     private int _range = 0;
 
     private GameObject _currentTarget = null;
-    private Creature _owner;
+    public Creature _owner;
 
     private int _currentCorner;
     private NavMeshPath _currentPath;
@@ -137,14 +147,12 @@ public abstract class Weapon : MonoBehaviour
 
     public void SetOwner(Creature newOwner)
     {
-        Debug.Log("SetOwner " + newOwner);
         _owner = newOwner;
         _iManager = _owner.gameObject.GetComponent<InteractionManager>();
     }
 
     public void SetMode(WeaponMode mode)
     {
-        Debug.Log("ejecutando SetMode " + mode);
-        _mode = mode;
+        weaponMode = mode;
     }
 }
