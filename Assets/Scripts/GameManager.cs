@@ -176,11 +176,16 @@ public class GameManager : MonoBehaviour
         //Arriba cortina
         FadeCurtain.Toggle(); yield return new WaitForSeconds(0.5f);
 
-        //letrerico de nivel por el que vas
+        //Letrerico de nivel por el que vas
         EnterLevelLabel.text = "Entering Level " + (level + 1);
+
         EnterLevelLabelTween.Toggle();
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(0.5f);
+
+        EnableInput(true);
+
+        yield return new WaitForSeconds(4f);
 
         _alreadyLoadingLevel = false;
     }
@@ -188,6 +193,8 @@ public class GameManager : MonoBehaviour
 
     public void WinCurrentLevel()
     {
+        EnableInput(false);
+
         int _levelToLoad = CurrentlyLoadedLevel + 1;
 
         if (_levelToLoad >= Levels.Length)
@@ -236,7 +243,7 @@ public class GameManager : MonoBehaviour
         float distance = 0.0f;
 
         GameObject goSpawn = null;
-        
+
         //todo 1
         //Disable input
         EnableInput(false);
@@ -251,7 +258,7 @@ public class GameManager : MonoBehaviour
         //Buscamos el punto seguro más cercano.
         List<GameObject> go = GameObject.FindGameObjectsWithTag("PuntoSeguro").ToList();
 
-        foreach(GameObject goAux in go)
+        foreach (GameObject goAux in go)
         {
             distance = Vector3.Distance(Player.transform.position, goAux.transform.position);
 
@@ -265,7 +272,7 @@ public class GameManager : MonoBehaviour
         //Trasladamos al player al pto seguro
         Player.transform.position = goSpawn.transform.position;
         //instanciamos el cadaver
-        Creature.Instantiate(Corpse,Player.transform.position, Player.transform.rotation);
+        Creature.Instantiate(Corpse, Player.transform.position, Player.transform.rotation);
 
         Corpse.transform.localScale = new Vector3(Defines.Scala01, Defines.Scala01, Defines.Scala01);
 
