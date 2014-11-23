@@ -15,17 +15,18 @@ public class CreaturesPool : MonoBehaviour {
 	// unspawning all of them at once, see UnspawnAll).
 	private ArrayList all;
 
-    private List<GameObject> burrows;
+    private Vector3 SpawnPoint;
         
 	// An optional function that will be called whenever a new object is instantiated.
 	// The newly instantiated object is passed to it, which allows users of the pool
 	// to do custom initialization.
 	//private var initializationFunction : Function;
-
-    private int initialCapacity = 50;
-
-    public int minDelay = 1;
-    public int maxDelay = 2;
+    [SerializeField]
+    int Capacity = 25;
+    [SerializeField]
+    int minDelay = 5;
+    [SerializeField]
+    int maxDelay = 20;
 
 	// Creates a pool.
 	// The initialCapacity is used to initialize the .NET collections, and determines
@@ -36,21 +37,24 @@ public class CreaturesPool : MonoBehaviour {
 	//function GameObjectPool(prefab : GameObject, initialCapacity : int, initializationFunction : Function, setActiveRecursively : boolean){
 	public void Start()
 	{
-		if(initialCapacity > 0){
-			this.available = new Stack(initialCapacity);
-			this.all = new ArrayList(initialCapacity);
+        if (prefab == null) 
+        {
+            Debug.Log("CreatureSpawnPoint " + transform.gameObject.name + " must have a prefab to Spawn");
+        }
+
+		if(Capacity > 0){
+			this.available = new Stack(Capacity);
+			this.all = new ArrayList(Capacity);
 		} else {
 			// Use the .NET defaults
 			this.available = new Stack();
 			this.all = new ArrayList();
 		}
 
-        burrows = GameObject.FindGameObjectsWithTag("CreatureSpanwPoint").ToList();
-
-        if (burrows.Count < 1) Debug.LogError("Must be almost one CreatureSpanwPoint in the scene");
+        SpawnPoint = this.transform.position;
 	}
 
-    public bool waiting = false;
+    bool waiting = false;
     public void Update()
     {
         if (waiting) return;
@@ -62,14 +66,8 @@ public class CreaturesPool : MonoBehaviour {
     IEnumerator DelaySpawn() 
     {
         yield return new WaitForSeconds(Random.Range(minDelay, maxDelay));
-        GameObject burrow = RamdomSpawnPoint();
-        Spawn(Noise(burrow.transform.position), burrow.transform.rotation);
+        Spawn(Noise(SpawnPoint), transform.rotation);
         waiting = false;
-    }
-
-    public GameObject RamdomSpawnPoint() 
-    {
-        return burrows[Random.Range(0, burrows.Count)];
     }
 
     public Vector3 Noise(Vector3 v) 

@@ -9,21 +9,6 @@ public class PlayerLifeBehaviour : PlayerLifeManager
     GameObject RespawnPoint;
     Life Life;
 
-    //<HACK>
-    //bool wait = false;
-    //public void Update()
-    //{
-    //    if (!wait) StartCoroutine(FalseLife());
-    //}
-    //IEnumerator FalseLife()
-    //{
-    //    wait = true;
-    //    yield return new WaitForSeconds(Random.Range(2, 5));
-    //    Life.OnDamage(20);
-    //    wait = false;
-    //}
-    //</HACK>
-
     public void Awake()
     {
         Life = GetComponent<Life>();
