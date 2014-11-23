@@ -17,6 +17,7 @@ public class Life : MonoBehaviour
             {
                 destroyinh = true;
                 transform.root.BroadcastMessage("OnDead");
+                destroyinh = false;
             }
         }
     }

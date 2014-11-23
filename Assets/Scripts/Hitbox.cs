@@ -7,7 +7,6 @@ public class Hitbox : MonoBehaviour
     [HideInInspector]
     public Creature Owner = null;
 
-    [HideInInspector]
     public int Damage = 1;
 
     public float Radius
