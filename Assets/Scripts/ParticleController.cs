@@ -4,17 +4,17 @@ using System.Collections.Generic;
 
 public class ParticleController : MonoBehaviour
 {
-    public int iRate = 10;
-    public bool bActEmisionIni = false;
-    public bool bActEmisionEnd = false;
     public Vector3 vScaleMin;
     public Vector3 vScaleMax;
     public float fTimeLife;
 
-    private ParticleSystem partSys;
+    public TweenScale tween;
+
     private List<ParticleSystem> lPartSysIni = new List<ParticleSystem>();
     private List<ParticleSystem> lPartSysEnd = new List<ParticleSystem>();
     private float lifeTime = 0;
+
+    private bool bActEmisionEnd = false;
 
 
     // Use this for initialization
@@ -28,6 +28,7 @@ public class ParticleController : MonoBehaviour
             if (pSys.tag == "PartSysIni")
             {
                 lPartSysIni.Add(pSys);
+                pSys.Play();
             }
 
             if (pSys.tag == "PartSysEnd")
@@ -36,79 +37,41 @@ public class ParticleController : MonoBehaviour
             }
         }
 
+        tween.from = vScaleMin;
+        tween.to = vScaleMax;
+        tween.duration = fTimeLife;
+
+        tween.enabled = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Ended()
     {
-        if (bActEmisionIni|| bActEmisionEnd)
-            lifeTime++;
-
-        //this.GetComponentInChildren<ParticleSystem>().enableEmission = true;
-        //this.GetComponentInChildren<ParticleSystem>().emissionRate = 10;
-        if (fTimeLife < lifeTime && bActEmisionIni)
+        if (bActEmisionEnd)
         {
-            bActEmisionIni = false;
-            ControlEmisionAndRate(iRate, bActEmisionIni, lPartSysIni);
-            lifeTime = 0;
-
-            bActEmisionEnd = true;
-            ControlEmisionAndRate(iRate, bActEmisionEnd, lPartSysEnd);
+            Destroy(gameObject);
+            return;
         }
 
-        if (fTimeLife < lifeTime && bActEmisionEnd)
-        {
-            lifeTime = 0;
-            bActEmisionEnd = false;
-            ControlEmisionAndRate(iRate, bActEmisionEnd, lPartSysEnd);
-        }
-
+        Invoke("ReLaunchTween", 0.5f);
     }
 
-    public void changeRate(GameObject go)
+    void ReLaunchTween()
     {
-        switch (go.name)
-        {
-            case "btnIncRate":
-                {
-                    iRate += 2;
-                    break;
-                }
-            case "btnDecRate":
-                {
-                    iRate -= 2;
-                    break;
-                }
-            default: break;
-        }
+        tween.from = vScaleMax;
+        tween.to = vScaleMin;
+        tween.duration = fTimeLife;
 
+        tween.ResetToBeginning();
 
-        ControlEmisionAndRate(iRate, true, lPartSysIni);
+        tween.PlayForward();
+
+        foreach (ParticleSystem pSys in lPartSysIni)
+            pSys.Stop();
+
+        foreach (ParticleSystem pSys in lPartSysEnd)
+            pSys.Play();
+
+        bActEmisionEnd = true;
     }
-
-    public void Control2velasnegras()
-    {
-        bActEmisionIni = !bActEmisionIni;
-        ControlEmisionAndRate(iRate, bActEmisionIni, lPartSysIni);
-
-    }
-
-    public void ControlEmisionAndRate(int iRate, bool bActEmision, List<ParticleSystem> aPartSys)
-    {
-
-        foreach (ParticleSystem partSys in aPartSys)
-        {
-            partSys.emissionRate = iRate;
-            partSys.enableEmission = bActEmision;
-
-
-            this.transform.localScale = Vector3.Lerp(vScaleMin, vScaleMax, Time.fixedDeltaTime);
-
-
-        }
-
-    }
-
-
 
 }

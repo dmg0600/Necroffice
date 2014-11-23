@@ -270,8 +270,6 @@ public class GameManager : MonoBehaviour
         //Trasladamos al player al pto seguro
         Player.transform.position = goSpawn.transform.position;
 
-        Debug.Log("Corpse");
-
         GameObject creature = GameObject.Instantiate(Corpse.gameObject, Player.transform.position, Player.transform.rotation) as GameObject;
         creature.transform.localScale = new Vector3(Defines.Scala01, Defines.Scala01, Defines.Scala01);
 

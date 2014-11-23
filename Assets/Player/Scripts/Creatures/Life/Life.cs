@@ -6,25 +6,32 @@ public class Life : MonoBehaviour
     public Stats.Attribute life;
 
     bool destroyinh = false;
+    bool onEvent = false;
 
     public void OnDamage(Hitbox hitbox)
     {
-        life.sub(hitbox.Damage);
-
         InteractiveObject _iObject = GetComponent<InteractiveObject>();
         if (_iObject != null)
             _iObject.DamagedByHitbox(hitbox);
+
+        OnDamage(hitbox.Damage);
+    }
+
+    public void OnDamage(int damage)
+    {
+        life.sub(damage);
 
         if (life.isLower)
         {
             if (!destroyinh)
             {
                 destroyinh = true;
-                transform.root.BroadcastMessage("OnDead");
+                transform.BroadcastMessage("OnDead");
                 destroyinh = false;
             }
         }
     }
+
 
     public void OnHeal(int cure)
     {
@@ -32,5 +39,6 @@ public class Life : MonoBehaviour
 
         if (life.isMax)
             transform.root.BroadcastMessage("OnPlentyLife");
+
     }
 }
