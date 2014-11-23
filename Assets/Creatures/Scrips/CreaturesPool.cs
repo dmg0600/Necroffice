@@ -66,13 +66,8 @@ public class CreaturesPool : MonoBehaviour {
     IEnumerator DelaySpawn() 
     {
         yield return new WaitForSeconds(Random.Range(minDelay, maxDelay));
-        Spawn(Noise(SpawnPoint), transform.rotation);
+        Spawn(SpawnPoint, transform.rotation);
         waiting = false;
-    }
-
-    public Vector3 Noise(Vector3 v) 
-    {
-        return v + new Vector3(Random.Range(0, 3), Random.Range(0, 3), 0);
     }
 
 	// Spawn a game object with the specified position/rotation.
@@ -173,4 +168,10 @@ public class CreaturesPool : MonoBehaviour {
 	private void SetActive(GameObject obj, bool val){
 			obj.SetActive(val);
 	}
+
+    private bool canSpawn() 
+    {
+        //Physics.CapsuleCast
+        return true;
+    }
 }

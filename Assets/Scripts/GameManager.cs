@@ -34,7 +34,6 @@ public class GameManager : MonoBehaviour
     public ParticleSFX[] Particles;
     public Level[] Levels;
 
-
     [HideInInspector]
     public int CurrentlyLoadedLevel = -1;
 
@@ -194,9 +193,13 @@ public class GameManager : MonoBehaviour
         }
         else
             LoadLevel(CurrentlyLoadedLevel + 1);
-
     }
 
+    public void EnableInput(bool isEnable)
+    {
+        Player.GetComponent<InputManager>().EnableInput(isEnable);
+        Camera.main.transform.GetComponent<PlayerCamera>().EnableInput(isEnable);
+    }
 
     void Update()
     {

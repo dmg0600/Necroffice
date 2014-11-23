@@ -42,13 +42,17 @@ public class CreaturesLifeBehaviour : LifeBehaviour
 
         GameObject[] weapons = Resources.LoadAll<GameObject>("Weapons");
         GameObject choosen = weapons[Random.Range(0, weapons.Count())];
+
+        GameObject weaponFinal = GameObject.Instantiate(choosen,Vector3.zero, Quaternion.identity) as GameObject;
         
         Creature creature = GetComponent<Creature>();
-        
+
+        weaponFinal.transform.parent = transform.root;
+
         if(creature != null)
         {
-            choosen.transform.root.BroadcastMessage("SetOwner", creature);
-            choosen.transform.root.BroadcastMessage("SetMode", WeaponMode.AI);
+            weaponFinal.BroadcastMessage("SetOwner", creature);
+            weaponFinal.BroadcastMessage("SetMode", WeaponMode.AI);
         }
     }
 }

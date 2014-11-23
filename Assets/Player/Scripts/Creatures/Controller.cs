@@ -55,6 +55,8 @@ public class Controller : MonoBehaviour
     {
         if (PauseMenu.isPaused) return;
 
+        
+        
         if (grounded)
         {
             // Calculate how fast we should be moving
@@ -86,7 +88,14 @@ public class Controller : MonoBehaviour
             float _angle = Vector3.Angle(targetOrientation, transform.forward);
 
             if (_angle < pivotAngleStop)
+            {
+                if (_Creature != null && _Creature._Weapon != null && _Creature._Weapon.weaponMode == WeaponMode.AI)
+                {
+                    Debug.Log("fuerza que le vamos a aplicar = " + targetOrientation);
+                }
                 rigidbody.AddForce(targetOrientation * movementSpeed, ForceMode.VelocityChange);
+            }
+                
         }
 
         // We apply gravity manually for more tuning control
@@ -96,7 +105,7 @@ public class Controller : MonoBehaviour
         targetOrientation = Vector3.zero;
     }
 
-    void OnInputAxis(Vector3 direction)
+    public void OnInputAxis(Vector3 direction)
     {
         targetOrientation = direction;
     }
@@ -105,7 +114,11 @@ public class Controller : MonoBehaviour
     {
         Vector3 objetive = (Vector3)o;
         if (objetive != null)
-            OnAttackStarts(objetive);
+        {
+            //Lo mismo de siempre, se puede cablear o hacerlo por evento con OnAttackStart, puede interesar
+            BroadcastMessage("OnAttackStart", objetive);
+            //OnAttackStart(objetive);
+        }
     }
 
     void LookAt(Vector3 direction, bool forze = false)
@@ -125,28 +138,23 @@ public class Controller : MonoBehaviour
         groundObject = other.gameObject;
     }
 
-    void OnAttackStarts(Vector3 objetive)
+    void OnAttackStart(Vector3 clickPoint)
     {
         attacking = true;
-        Vector3 objetiveDirection = objetive - transform.position;
+        Vector3 objetiveDirection = clickPoint - transform.position;
         objetiveDirection.y = 0;
 
         LookAt(objetiveDirection, true);
 
-        //<HACK>
-        StartCoroutine(Attacking());
-        //<//HACK>
+        //lo de siempre, es para enganchar algo mas cosas al
+        //evento de OnAttack. Tambien se llamar a pincho al de _Creature y ya
+
+        //_Creature.OnAttack(objetiveDirection);
+        BroadcastMessage("OnAttack", objetiveDirection);
     }
 
-    //<HACK>
-    IEnumerator Attacking() { yield return new WaitForSeconds(Random.Range(2, 4)); OnAttackEnds(); }
-    //<//HACK>
-
-    void OnAttackEnds()
+    void OnAttackEnd()
     {
         attacking = false;
     }
-
-
-
 }
