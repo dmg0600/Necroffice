@@ -23,6 +23,8 @@ public class PistolWeapon : Weapon
 
         clone.Begin();
         AudioSource.PlayClipAtPoint(audio, transform.position);
+
+        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", UnityEngine.Random.Range(0, 3));
     }
 
     public override bool canAttack()
@@ -33,6 +35,14 @@ public class PistolWeapon : Weapon
 
     void FixedUpdate()
     {
+        if (_attacking && !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("MeleeAtk_1") &&
+            !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("MeleeAtk_2") &&
+            !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("MeleeAtk_3"))
+        {
+            _attacking = false;
+            _owner.BroadcastMessage("OnAttackEnd");
+        }
+
         if (weaponMode == WeaponMode.AI)
             updateAI();
     }

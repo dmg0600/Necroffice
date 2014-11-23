@@ -22,13 +22,27 @@ public class FireWeapon : Weapon
         //</HACK>
 
         // Play Animacion
-        //todo
+        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", UnityEngine.Random.Range(3, 6));
         AudioSource.PlayClipAtPoint(audio[Random.Range(0, audio.Length)], transform.position);
     }
 
     public override bool canAttack()
     {
         return true;
+    }
+
+    void FixedUpdate()
+    {
+        if (_attacking && !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("MeleeAtk_1") &&
+            !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("MeleeAtk_2") &&
+            !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("MeleeAtk_3"))
+        {
+            _attacking = false;
+            _owner.BroadcastMessage("OnAttackEnd");
+        }
+
+        if (weaponMode == WeaponMode.AI)
+            updateAI();
     }
 
     public override void updateAI()

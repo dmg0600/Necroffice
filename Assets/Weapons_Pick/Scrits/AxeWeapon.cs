@@ -25,9 +25,9 @@ public class AxeWeapon : Weapon
         //</HACK>
 
         // Play Animacion
-        //todo
+        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", UnityEngine.Random.Range(3, 6));
 
-        AudioSource.PlayClipAtPoint(audio[Random.Range(0, audio.Length)], transform.position);
+        //AudioSource.PlayClipAtPoint(audio[Random.Range(0, audio.Length)], transform.position);
     }
 
     public override bool canAttack()
@@ -38,7 +38,9 @@ public class AxeWeapon : Weapon
 
     void FixedUpdate()
     {
-        if (_attacking && !owner.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName(""))
+        if (_attacking && !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("MeleeAtk_1") &&
+            !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("MeleeAtk_2") &&
+            !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("MeleeAtk_3"))
         {
             _attacking = false;
             _owner.BroadcastMessage("OnAttackEnd");

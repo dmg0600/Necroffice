@@ -109,13 +109,13 @@ public class Creature : MonoBehaviour
         {
             //Muere player 
             GameManager.Instance.CreateParticle("BloodSplat", gameObject.transform.position);
-            AudioSource.PlayClipAtPoint(DwarfDeadAudio, transform.position);
+            //AudioSource.PlayClipAtPoint(DwarfDeadAudio, transform.position);
         }
         else
         {
             //Muere enemigo
             GameManager.Instance.DestroyWithParticle("BloodSplat", gameObject);
-            AudioSource.PlayClipAtPoint(SkeletonDeadAudio, transform.position);
+            //AudioSource.PlayClipAtPoint(SkeletonDeadAudio, transform.position);
         }
     }
 
