@@ -14,12 +14,10 @@ public abstract class Weapon : MonoBehaviour
     [HideInInspector]
     public Transform DangerousPoint;
 
-    public Hitbox MeleeHitbox;
+    public Hitbox Hitbox;
 
     [HideInInspector]
     public bool _attacking;
-
-    public int DamageRanged = 0;
 
     public void Awake()
     {
@@ -157,6 +155,9 @@ public abstract class Weapon : MonoBehaviour
             return _agilityBonus;
         }
     }
+
+    public int DamageRanged = 0;
+    public int VelocityRanged = 0;
 
     public int Range
     {

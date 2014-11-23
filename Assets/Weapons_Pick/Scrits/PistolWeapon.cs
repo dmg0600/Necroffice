@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class PistolWeapon : Weapon
 {
@@ -9,8 +10,17 @@ public class PistolWeapon : Weapon
         if (!canAttack())
             yield break;
 
-       //GameManager.Instance.CreateHitbox
+        Hitbox clone = Instantiate(Hitbox, transform.position, transform.rotation) as Hitbox;
 
+        clone.Owner = this.owner;
+        clone.Damage = DamageRanged;
+        clone.Duration = VelocityRanged * Range;
+        clone.name = "Hitbox (" + this.name + " - " + this.owner.name + ")";
+        clone.Properties = this.Property.ToList();
+
+        clone.SetVelocity(owner.transform.forward * VelocityRanged);
+
+        clone.Begin();
     }
 
     public override bool canAttack()
