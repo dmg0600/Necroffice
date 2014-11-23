@@ -13,10 +13,13 @@ public abstract class Weapon : MonoBehaviour
 {
     [HideInInspector]
     public Transform DangerousPoint;
+
+    public Hitbox MeleeHitbox;
+
     [HideInInspector]
     public bool _attacking;
 
-    public int Damage = 0;
+    public int DamageRanged = 0;
 
     public void Awake()
     {
@@ -25,7 +28,7 @@ public abstract class Weapon : MonoBehaviour
 
     #region unimplemented methods
 
-    public IEnumerator atackHandler() 
+    public IEnumerator atackHandler()
     {
         _attacking = true;
         yield return StartCoroutine(attack());
@@ -47,6 +50,7 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void selectTarget()
     {
+
     }
 
     public virtual void move()
@@ -55,7 +59,7 @@ public abstract class Weapon : MonoBehaviour
 
         int layermask = ~(1 << LayerMask.NameToLayer("Creature"));
         if (Physics.Raycast(owner.transform.position, direction, _visionRange, layermask))
-            owner.BroadcastMessage("OnInputAxis", direction); 
+            owner.BroadcastMessage("OnInputAxis", direction);
     }
 
     public InteractiveObject.Properties[] Property;
@@ -131,19 +135,21 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField]
     private string _name;
     [SerializeField]
+    public Texture _icon;
+    [SerializeField]
     private int _powerBonus = 0;
     [SerializeField]
     private int _agilityBonus = 0;
     [SerializeField]
     private int _range = 0;
     [SerializeField]
-    public Texture _icon;
-    [SerializeField]
     private float _visionRange = 15.0f;
 
 
 
     private GameObject _currentTarget = null;
+
+    [HideInInspector]
     public Creature _owner;
 
     private int _currentCorner;

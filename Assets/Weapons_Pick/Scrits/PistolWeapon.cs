@@ -2,23 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class AxeWeapon : Weapon
+public class PistolWeapon : Weapon
 {
     public override IEnumerator attack()
     {
         if (!canAttack())
             yield break;
 
-        //Propiedades de hitbox
-        MeleeHitbox.Duration = 0;
-        MeleeHitbox.Damage = Mathf.Clamp(_owner._Stats.Power.value + Power, 1, 5);
-
-        //Habilitar hitbox
-        MeleeHitbox.gameObject.SetActive(true);
-        //todo: desactivar con animacion
-
-        // Play Animacion
-        //todo
+       //GameManager.Instance.CreateHitbox
 
     }
 
