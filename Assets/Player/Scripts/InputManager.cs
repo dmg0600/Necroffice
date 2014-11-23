@@ -12,6 +12,13 @@ public class InputManager : MonoBehaviour
 
     int floorLayer;
 
+    bool isInputEnable = true;
+
+    public void EnableInput(bool isEnable)
+    {
+        isInputEnable = isEnable;
+    }
+
     void Awake() 
     {
         Sujet = this.transform.root.gameObject;
@@ -22,25 +29,81 @@ public class InputManager : MonoBehaviour
     {
         if (PauseMenu.isPaused) return;
 
-        if (Input.GetButtonDown("Fire1"))
+        if (isInputEnable)
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayer))
+            if (Input.GetButtonDown("Fire1"))
             {
-                Sujet.BroadcastMessage("OnInputMouseClick", hit.point); 
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayer))
+                {
+                    Sujet.BroadcastMessage("OnInputMouseClick", hit.point);
+                }
+            }
+
+            Vector3 axis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+
+            if (axis != Vector3.zero)
+            {
+                Quaternion rotate = Quaternion.LookRotation(new Vector3(RotateRef.transform.forward.x, 0, RotateRef.transform.forward.z));
+                axis = rotate * axis;
+                Sujet.BroadcastMessage("OnInputAxis", axis);
             }
         }
+    }
 
-        Vector3 axis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+    // Default time in seconds for which to detect double clicking of a key.
+    public const float DefaultTimeThreshold = 0.5f;
 
-        if (axis != Vector3.zero)
+    private static string _multiClickAnchorKey;
+    private static float _multiClickAnchorTime;
+    private static int _multiClickCount;
+
+    public static void CancelMultiClick()
+    {
+        _multiClickAnchorKey = null;
+    }
+
+    public static int GetMultiClickKeyCount(string key, float timeThreshold)
+    {
+        if (Input.GetButtonDown(key))
         {
-            Quaternion rotate = Quaternion.LookRotation(new Vector3(RotateRef.transform.forward.x, 0, RotateRef.transform.forward.z));
-            axis = rotate * axis;
-            Sujet.BroadcastMessage("OnInputAxis", axis);
-        }
+            // Do we need to cancel the last multi-click operation for this key?
+            if (_multiClickAnchorKey == key)
+                if (Time.time - _multiClickAnchorTime > timeThreshold)
+                    CancelMultiClick();
 
+            _multiClickAnchorTime = Time.time;
+
+            // Has button been pressed for first time?
+            if (_multiClickAnchorKey != key)
+            {
+                _multiClickAnchorKey = key;
+                _multiClickCount = 1;
+            }
+            else
+            {
+                // Okay, so this is a multi-click operation!
+                ++_multiClickCount;
+            }
+            return _multiClickCount;
+        }
+        return 0;
+    }
+
+    public static int GetMultiClickKeyCount(string key)
+    {
+        return GetMultiClickKeyCount(key, DefaultTimeThreshold);
+    }
+
+    public static bool HasDoubleClickedKey(string key, float timeThreshold)
+    {
+        return GetMultiClickKeyCount(key, timeThreshold) == 2;
+    }
+
+    public static bool HasDoubleClickedKey(string key)
+    {
+        return HasDoubleClickedKey(key, DefaultTimeThreshold);
     }
 }

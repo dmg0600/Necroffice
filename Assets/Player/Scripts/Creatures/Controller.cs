@@ -148,7 +148,10 @@ public class Controller : MonoBehaviour
     }
 
     //<HACK>
-    IEnumerator Attacking() { yield return new WaitForSeconds(Random.Range(2, 4)); OnAttackEnds(); }
+    IEnumerator Attacking() 
+    { 
+        yield return new WaitForSeconds(Random.Range(2, 4)); OnAttackEnds(); 
+    }
     //<//HACK>
 
     void OnAttackEnds()
