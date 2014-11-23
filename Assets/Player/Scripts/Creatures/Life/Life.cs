@@ -16,7 +16,7 @@ public class Life : MonoBehaviour
             if (!destroyinh)
             {
                 destroyinh = true;
-                transform.root.BroadcastMessage("OnDead");
+                transform.BroadcastMessage("OnDead");
                 destroyinh = false;
             }
         }
