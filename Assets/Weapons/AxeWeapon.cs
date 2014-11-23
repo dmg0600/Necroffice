@@ -33,6 +33,8 @@ public class AxeWeapon : Weapon
 
     void FixedUpdate()
     {
+
+        
         if (weaponMode == WeaponMode.AI)
         {
             updateAI();
@@ -41,6 +43,8 @@ public class AxeWeapon : Weapon
 
     public override void updateAI()
     {
+        if(target == null) return;
+
         if (Vector3.Distance(owner.transform.position, target.transform.position) > Range)
         {
             move();

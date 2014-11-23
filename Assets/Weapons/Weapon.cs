@@ -21,10 +21,14 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void selectTarget()
     {
+
+        
         NavMeshPath path = new NavMeshPath();
-        if (!_targetList.Contains(target))
+        NavMesh.CalculatePath(transform.position, GameManager.Instance.gameObject.transform.position, -1, path);
+        /*
+        if (!_iManager.nearInteractiveObjs.Contains(target))
         {
-            foreach (GameObject pTarget in _targetList)
+            foreach (GameObject pTarget in _iManager.nearInteractiveObjs)
             {
                 NavMesh.CalculatePath(transform.position, pTarget.transform.position, -1, path);
 
@@ -32,11 +36,13 @@ public abstract class Weapon : MonoBehaviour
                 {
                     _currentPath = path;
                     _currentCorner = 0;
+                    target = pTarget;
                 }
             }
         }
-
-        Invoke("selectTarget", 1.0f);
+        */
+        Invoke("selectTarget", 0.25f);
+        
     }
 
     public virtual void move()
@@ -122,20 +128,23 @@ public abstract class Weapon : MonoBehaviour
 
     private GameObject _currentTarget = null;
     private Creature _owner;
-    protected List<GameObject> _targetList;
-
 
     private int _currentCorner;
     private NavMeshPath _currentPath;
+
+    private InteractionManager _iManager;
     private WeaponMode _mode = WeaponMode.CONTROLLED;
 
     public void SetOwner(Creature newOwner)
     {
+        Debug.Log("SetOwner " + newOwner);
         _owner = newOwner;
+        _iManager = _owner.gameObject.GetComponent<InteractionManager>();
     }
 
     public void SetMode(WeaponMode mode)
     {
+        Debug.Log("ejecutando SetMode " + mode);
         _mode = mode;
     }
 }
