@@ -9,17 +9,17 @@ public class AxeWeapon : Weapon
         if (!canAttack())
             yield break;
 
-        //Animación
+        //Propiedades de hitbox
+        MeleeHitbox.Duration = 0;
+        MeleeHitbox.Damage = Mathf.Clamp(_owner._Stats.Power.value + Power, 1, 5);
+
+        //Habilitar hitbox
+        MeleeHitbox.gameObject.SetActive(true);
+        //todo: desactivar con animacion
+
+        // Play Animacion
         //todo
 
-        //Ataque
-        Vector3 _attackingDirection = owner.transform.forward;
-        _attackingDirection.y = 0;
-        _attackingDirection *= 8;
-
-        Creature _creatureOwner = owner.GetComponent<Creature>();
-
-        GameManager.Instance.CreateHitbox(this, 1, 1, _attackingDirection, 1f);
     }
 
     public override bool canAttack()
@@ -36,13 +36,18 @@ public class AxeWeapon : Weapon
 
     public override void updateAI()
     {
+        //Debug.Log(Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position));
         if (Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position) > Range)
         {
             move();
         }
-        else
+        else 
         {
-            attack();
+            if (!_attacking)
+            {
+                StartCoroutine(atackHandler());
+            }
+            
         }
     }
 }

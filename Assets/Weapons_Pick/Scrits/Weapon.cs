@@ -13,10 +13,13 @@ public abstract class Weapon : MonoBehaviour
 {
     [HideInInspector]
     public Transform DangerousPoint;
+
+    public Hitbox MeleeHitbox;
+
     [HideInInspector]
     public bool _attacking;
 
-    public int Damage = 0;
+    public int DamageRanged = 0;
 
     public void Awake()
     {
@@ -25,7 +28,7 @@ public abstract class Weapon : MonoBehaviour
 
     #region unimplemented methods
 
-    public IEnumerator atackHandler() 
+    public IEnumerator atackHandler()
     {
         _attacking = true;
         yield return StartCoroutine(attack());
@@ -47,15 +50,49 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void selectTarget()
     {
+
+    }
+
+    void Start()
+    {
+        if(_range == 0)
+        {
+            Debug.LogError("ERROR!!! ARMA CON RANGO 0, ESTO ESTA PROHIBIDO POR DISEÑO! CACA! FUERAAAAAA");
+        }
     }
 
     public virtual void move()
     {
+        
         Vector3 direction = (GameManager.Instance.Player.transform.position - owner.transform.position).normalized;
 
+<<<<<<< HEAD
         int layermask = ~(1 << LayerMask.NameToLayer("Creature"));
         if (Physics.Raycast(owner.transform.position, direction, _visionRange, layermask))
+            owner.BroadcastMessage("OnInputAxis", direction);
+=======
+        int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
+
+        
+
+        float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);
+/*
+
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(owner.transform.position, direction, (_visionRange > distance) ? distance : _visionRange, layermask);
+        int i = 0;
+        while (i < hits.Length)
+        {
+            RaycastHit hit = hits[i];
+            Debug.Log(hit.collider.gameObject.name);
+            i++;
+        }
+        Debug.Log("----------------------------------------- ");
+*/
+
+        if (!Physics.Raycast(owner.transform.position, direction, (_visionRange > distance) ? distance: _visionRange , layermask))
             owner.BroadcastMessage("OnInputAxis", direction); 
+>>>>>>> a6284bdd96e70ce987ba79e3fc84dd707d554ae6
     }
 
     public InteractiveObject.Properties[] Property;
@@ -96,6 +133,8 @@ public abstract class Weapon : MonoBehaviour
         set
         {
             _owner = value;
+            _iManager = _owner.gameObject.GetComponent<InteractionManager>();
+            _range += 1;
         }
         get
         {
@@ -131,19 +170,21 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField]
     private string _name;
     [SerializeField]
+    public Texture _icon;
+    [SerializeField]
     private int _powerBonus = 0;
     [SerializeField]
     private int _agilityBonus = 0;
     [SerializeField]
     private int _range = 0;
     [SerializeField]
-    public Texture _icon;
-    [SerializeField]
     private float _visionRange = 15.0f;
 
 
 
     private GameObject _currentTarget = null;
+
+    [HideInInspector]
     public Creature _owner;
 
     private int _currentCorner;
@@ -154,8 +195,8 @@ public abstract class Weapon : MonoBehaviour
 
     public void SetOwner(Creature newOwner)
     {
-        _owner = newOwner;
-        _iManager = _owner.gameObject.GetComponent<InteractionManager>();
+        owner = newOwner;
+        
     }
 
     public void SetMode(WeaponMode mode)

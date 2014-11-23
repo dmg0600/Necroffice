@@ -3,12 +3,18 @@ using System.Collections;
 
 public class FireWeapon : Weapon 
 {
+    public void Start()
+    {
+        GameManager.Instance.ConvertMeeleWeapon(this, 5.0f, DamageRanged, name);
+    }
+
     public override IEnumerator attack()
     {
         if (!canAttack())
             yield break;
 
         //Animación
+        //todo
 
         //Ataque
 
