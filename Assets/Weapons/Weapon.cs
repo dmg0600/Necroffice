@@ -24,7 +24,7 @@ public abstract class Weapon : MonoBehaviour
 
         
         NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(transform.position, GameManager.Instance.gameObject.transform.position, -1, path);
+        NavMesh.CalculatePath(transform.position, GameManager.Instance.playerTransform.position, -1, path);
         /*
         if (!_iManager.nearInteractiveObjs.Contains(target))
         {
