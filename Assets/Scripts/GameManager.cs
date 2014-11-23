@@ -249,7 +249,7 @@ public class GameManager : MonoBehaviour
 
 
         //Buscamos el punto seguro más cercano.
-        List<GameObject> go = GameObject.FindGameObjectsWithTag("PuntoSeguro").ToList();
+        List<GameObject> go = GameObject.FindGameObjectsWithTag(Defines.PuntoSeguro).ToList();
 
         foreach(GameObject goAux in go)
         {
@@ -264,13 +264,16 @@ public class GameManager : MonoBehaviour
 
         //Trasladamos al player al pto seguro
         Player.transform.position = goSpawn.transform.position;
+        Debug.Log("Trasladamos al player al pto seguro");
         //instanciamos el cadaver
         Creature.Instantiate(Corpse,Player.transform.position, Player.transform.rotation);
+        Debug.Log("instanciamos el cadaver");
 
         Corpse.transform.localScale = new Vector3(Defines.Scala01, Defines.Scala01, Defines.Scala01);
 
         //instanciamos las partículas de muerte
         ParticleSFX _particleFire = GameManager.Instance.Particles.FirstOrDefault(x => x.name == Defines.ParticleDeath);
+        Debug.Log("instanciamos las partículas de muerte");
 
         Vector3.Lerp(Corpse.transform.localScale, Vector3.one, Time.fixedDeltaTime);
 
@@ -278,7 +281,9 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(1);
 
-        LoadLevel(CurrentlyLoadedLevel);
+        LoadLevel(0);
+
+        yield return 0;
     }
 }
 

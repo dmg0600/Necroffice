@@ -14,4 +14,6 @@ public class Defines : MonoBehaviour
     public static string ParticleDeath = "Death";
 
     public static string ParticleDustExplosion = "DustExplosion";
+
+    public static string PuntoSeguro = "PuntoSeguro";
 }
