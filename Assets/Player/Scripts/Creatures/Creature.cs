@@ -80,6 +80,8 @@ public class Creature : MonoBehaviour
 
         Destroy(_Weapon.gameObject);
 
+        GameObject.Instantiate(_Weapon._weaponPickeable, transform.position - Vector3.back, transform.rotation);
+
         _Weapon = null;
     }
 
@@ -107,13 +109,13 @@ public class Creature : MonoBehaviour
         {
             //Muere player 
             GameManager.Instance.CreateParticle("BloodSplat", gameObject.transform.position);
-            AudioSource.PlayClipAtPoint(DwarfDeadAudio, transform.position);
+            //AudioSource.PlayClipAtPoint(DwarfDeadAudio, transform.position);
         }
         else
         {
             //Muere enemigo
             GameManager.Instance.DestroyWithParticle("BloodSplat", gameObject);
-            AudioSource.PlayClipAtPoint(SkeletonDeadAudio, transform.position);
+            //AudioSource.PlayClipAtPoint(SkeletonDeadAudio, transform.position);
         }
     }
 

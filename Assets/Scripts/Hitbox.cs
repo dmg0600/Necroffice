@@ -49,16 +49,17 @@ public class Hitbox : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        if (Owner == null) return;
         Life _life = other.GetComponent<Life>();
         if (_life != null)
         {
             Creature _creature = other.GetComponent<Creature>();
             if (_creature != null)
             {
-                if (_creature == Owner)
+                if (_creature.gameObject == Owner.gameObject)
                     return;
             }
-
+            Debug.Log(_creature.name + " es pegado por " + (_creature.Equals(Owner)));
             other.SendMessage("OnDamage", this);
         }
     }
