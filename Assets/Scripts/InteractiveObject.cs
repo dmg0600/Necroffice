@@ -39,7 +39,6 @@ public class InteractiveObject : MonoBehaviour
     public void OnDead()
     {
         //Se destruye
-        Debug.Log("Se destruye objeto " + gameObject.name);
 
         //Explosión
         ExplodeBehaviour _explosion = GetComponent<ExplodeBehaviour>();
@@ -51,6 +50,7 @@ public class InteractiveObject : MonoBehaviour
 
         //Destruir genérico
         GameManager.Instance.DestroyWithParticle(Defines.ParticleDustExplosion, gameObject);
+
     }
 
 

@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour
         if (CurrentlyLoadedLevel >= 0)
         {
             //Desactivar nivel previo
-            //todo
+            Levels[CurrentlyLoadedLevel].gameObject.SetActive(false);
         }
 
         //Comprobar entrada
@@ -162,9 +162,8 @@ public class GameManager : MonoBehaviour
         Player.transform.rotation = Levels[level].Start.rotation;
 
         //Cámara
-        Camera.main.transform.position = Player.transform.position;
-        Camera.main.transform.position -= Camera.main.transform.forward * 25;
-
+        Camera.main.transform.position = Levels[CurrentlyLoadedLevel].CameraStartingPosition.position;
+        Camera.main.transform.rotation = Levels[CurrentlyLoadedLevel].CameraStartingPosition.rotation;
 
         yield return new WaitForSeconds(0.5f);
 
@@ -236,7 +235,7 @@ public class GameManager : MonoBehaviour
         float distance = 0.0f;
 
         GameObject goSpawn = null;
-        
+
         //todo 1
         //Disable input
         EnableInput(false);
@@ -251,7 +250,7 @@ public class GameManager : MonoBehaviour
         //Buscamos el punto seguro más cercano.
         List<GameObject> go = GameObject.FindGameObjectsWithTag(Defines.PuntoSeguro).ToList();
 
-        foreach(GameObject goAux in go)
+        foreach (GameObject goAux in go)
         {
             distance = Vector3.Distance(Player.transform.position, goAux.transform.position);
 
@@ -266,7 +265,7 @@ public class GameManager : MonoBehaviour
         Player.transform.position = goSpawn.transform.position;
         Debug.Log("Trasladamos al player al pto seguro");
         //instanciamos el cadaver
-        Creature.Instantiate(Corpse,Player.transform.position, Player.transform.rotation);
+        Creature.Instantiate(Corpse, Player.transform.position, Player.transform.rotation);
         Debug.Log("instanciamos el cadaver");
 
         Corpse.transform.localScale = new Vector3(Defines.Scala01, Defines.Scala01, Defines.Scala01);

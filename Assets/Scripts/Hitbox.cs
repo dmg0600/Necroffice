@@ -50,24 +50,29 @@ public class Hitbox : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        Creature _creature = other.transform.root.GetComponent<Creature>();
-        if (_creature != null)
+        Life _life = other.GetComponent<Life>();
+        if (_life != null)
         {
-            if (_creature == Owner)
-                return;
-            else
-                _creature.SendMessage("OnDamage", this);
-        }
-        else
-        {
-            InteractiveObject _iObject = other.transform.GetComponent<InteractiveObject>();
-            if (_iObject == null)
-                return;
-            else
+            Creature _creature = other.GetComponent<Creature>();
+            if (_creature != null)
             {
-                //Debug.Log("Envio OnDamage a " + other.name);
-                _iObject.SendMessage("OnDamage", this);
+                if (_creature == Owner)
+                    return;
             }
+
+            other.SendMessage("OnDamage", this);
         }
+
+
+        //else
+        //{
+        //    InteractiveObject _iObject = other.transform.GetComponent<InteractiveObject>();
+        //    if (_iObject == null)
+        //        return;
+        //    else
+        //    {
+        //        _iObject.SendMessage("OnDamage", this);
+        //    }
+        //}
     }
 }
