@@ -44,18 +44,5 @@ public class AxeWeapon : Weapon
         {
             attack();
         }
-
     }
-
-    ///**
-    // * Controla la colision del arma cuando esta atacando
-    // * 
-    //*/
-    //void OnCollisionEnter(Collision collision)
-    //{
-    //    if(_attacking && !_damagedEntities.Contains(collision.gameObject))
-    //    {
-    //        //collision.gameObject.GetComponent<Life>().damage(1 + Power);
-    //    }
-    //}
 }
