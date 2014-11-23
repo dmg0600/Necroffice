@@ -27,7 +27,9 @@ public class PlayerLifeBehaviour : LifeBehaviour
 
     public override IEnumerator OnDead() 
     {
-        Debug.Log("OnDead");
+        if (imDead) yield break;
+        imDead = true;
+
         //Corrutina de la muerte
         yield return StartCoroutine(GameManager.Instance.CorrutinaDeLaMuerte());
 
@@ -37,6 +39,9 @@ public class PlayerLifeBehaviour : LifeBehaviour
 
     public override IEnumerator OnRespawn()
     {
+        if (!imDead) yield break;
+        imDead = false;
+
         if (RespawnPoint != null)
             transform.root.position = RespawnPoint.transform.position;
 

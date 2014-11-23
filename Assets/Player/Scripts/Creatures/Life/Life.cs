@@ -6,6 +6,16 @@ public class Life : MonoBehaviour
     public Stats.Attribute life;
 
     bool destroyinh = false;
+    bool onEvent = false;
+
+    public void OnDamage(Hitbox hitbox)
+    {
+        InteractiveObject _iObject = GetComponent<InteractiveObject>();
+        if (_iObject != null)
+            _iObject.DamagedByHitbox(hitbox);
+
+        OnDamage(hitbox.Damage);
+    }
 
     public void OnDamage(int damage)
     {
@@ -22,14 +32,6 @@ public class Life : MonoBehaviour
         }
     }
 
-    public void OnDamage(Hitbox hitbox)
-    {
-        InteractiveObject _iObject = GetComponent<InteractiveObject>();
-        if (_iObject != null)
-            _iObject.DamagedByHitbox(hitbox);
-
-        OnDamage(hitbox.Damage);
-    }
 
     public void OnHeal(int cure)
     {
@@ -37,5 +39,6 @@ public class Life : MonoBehaviour
 
         if (life.isMax)
             transform.root.BroadcastMessage("OnPlentyLife");
+
     }
 }
