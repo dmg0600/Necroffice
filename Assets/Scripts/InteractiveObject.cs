@@ -34,12 +34,14 @@ public class InteractiveObject : MonoBehaviour
             rigidbody.useGravity = false;
         }
 
+        if (_Properties.Contains(Properties.CanBurn))
+            InvokeRepeating("DamageByFire", 0f, 2f);
+
     }
 
     public void OnDead()
     {
         //Se destruye
-        Debug.Log("Se destruye objeto " + gameObject.name);
 
         //Explosión
         ExplodeBehaviour _explosion = GetComponent<ExplodeBehaviour>();
@@ -51,6 +53,7 @@ public class InteractiveObject : MonoBehaviour
 
         //Destruir genérico
         GameManager.Instance.DestroyWithParticle(Defines.ParticleDustExplosion, gameObject);
+
     }
 
 
@@ -62,8 +65,28 @@ public class InteractiveObject : MonoBehaviour
             onFire = true;
 
             ParticleSFX _particleFire = GameManager.Instance.Particles.FirstOrDefault(x => x.name == Defines.ParticleFire);
-            ParticleController _pcontroller = _particleFire.GetComponent<ParticleController>();
-            _pcontroller.Control2velasnegras();
+            GameObject go = Instantiate(_particleFire.gameObject, transform.position, Quaternion.identity) as GameObject;
+
+            go.transform.parent = transform;
+
+            ParticleController pc = go.GetComponent<ParticleController>();
+            pc.vScaleMin = transform.localScale;
+            pc.vScaleMax = transform.localScale*1.1f;
+            pc.fTimeLife = Defines.burningTime;
+            Invoke("QuitBurning", Defines.burningTime);
         }
+    }
+
+    void QuitBurning()
+    {
+        onFire = false;
+    }
+
+    void DamageByFire()
+    {
+        if (!onFire)
+            return;
+
+        GetComponent<Life>().OnDamage(1);
     }
 }
