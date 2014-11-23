@@ -20,6 +20,7 @@ public class Life : MonoBehaviour
     public void OnDamage(int damage)
     {
         life.sub(damage);
+        GetComponent<Controller>()._Animator.SetBool("Damaged", false);
 
         if (life.isLower)
         {
@@ -27,8 +28,13 @@ public class Life : MonoBehaviour
             {
                 destroyinh = true;
                 transform.BroadcastMessage("OnDead");
+                GetComponent<Controller>()._Animator.SetBool("Death", true);
                 destroyinh = false;
             }
+        }
+        else
+        {
+            GetComponent<Controller>()._Animator.SetBool("Damaged", true);
         }
     }
 
