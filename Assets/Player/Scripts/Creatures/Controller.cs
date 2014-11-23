@@ -105,7 +105,11 @@ public class Controller : MonoBehaviour
     {
         Vector3 objetive = (Vector3)o;
         if (objetive != null)
-            OnAttackStarts(objetive);
+        {
+            //Lo mismo de siempre, se puede cablear o hacerlo por evento con OnAttackStart, puede interesar
+            BroadcastMessage("OnAttackStart", objetive);
+            //OnAttackStart(objetive);
+        }
     }
 
     void LookAt(Vector3 direction, bool forze = false)
@@ -125,31 +129,23 @@ public class Controller : MonoBehaviour
         groundObject = other.gameObject;
     }
 
-    void OnAttackStarts(Vector3 objetive)
+    void OnAttackStart(Vector3 clickPoint)
     {
         attacking = true;
-        Vector3 objetiveDirection = objetive - transform.position;
+        Vector3 objetiveDirection = clickPoint - transform.position;
         objetiveDirection.y = 0;
 
         LookAt(objetiveDirection, true);
 
-        //<HACK>
-        StartCoroutine(Attacking());
-        //<//HACK>
+        //lo de siempre, es para enganchar algo mas cosas al
+        //evento de OnAttack. Tambien se llamar a pincho al de _Creature y ya
+
+        //_Creature.OnAttack(objetiveDirection);
+        BroadcastMessage("OnAttack", objetiveDirection);
     }
 
-    //<HACK>
-    IEnumerator Attacking() 
-    { 
-        yield return new WaitForSeconds(Random.Range(2, 4)); OnAttackEnds(); 
-    }
-    //<//HACK>
-
-    void OnAttackEnds()
+    void OnAttackEnd()
     {
         attacking = false;
     }
-
-
-
 }
