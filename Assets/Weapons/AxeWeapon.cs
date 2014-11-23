@@ -22,7 +22,7 @@ public class AxeWeapon : Weapon
 
         Creature _creatureOwner = owner.GetComponent<Creature>();
 
-        GameManager.Instance.CreateHitbox(_creatureOwner, 1, 1, _attackingDirection);
+        GameManager.Instance.CreateHitbox(_creatureOwner, 1, 1, _attackingDirection, 1f);
     }
 
     public override bool canAttack()
