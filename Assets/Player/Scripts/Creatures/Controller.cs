@@ -91,7 +91,7 @@ public class Controller : MonoBehaviour
             {
                 if (_Creature != null && _Creature._Weapon != null && _Creature._Weapon.weaponMode == WeaponMode.AI)
                 {
-                    Debug.Log("fuerza que le vamos a aplicar = " + targetOrientation);
+                    //Debug.Log("fuerza que le vamos a aplicar = " + targetOrientation);
                 }
                 rigidbody.AddForce(targetOrientation * movementSpeed, ForceMode.VelocityChange);
             }

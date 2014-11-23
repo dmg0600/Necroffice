@@ -15,5 +15,5 @@ public class Defines : MonoBehaviour
 
     public static string ParticleDustExplosion = "DustExplosion";
 
-    public static string PuntoSeguro = "PuntoSeguro";
+    public static string PuntoSeguro = "SafePoint";
 }

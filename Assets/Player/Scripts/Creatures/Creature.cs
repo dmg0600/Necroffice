@@ -103,8 +103,6 @@ public class Creature : MonoBehaviour
             //Muere player 
             GameManager.Instance.DestroyWithParticle("BloodSplat", gameObject);
 
-            //Corrutina de la muerte
-            StartCoroutine(GameManager.Instance.CorrutinaDeLaMuerte());
         }
         else
         {
