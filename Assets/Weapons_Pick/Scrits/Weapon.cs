@@ -93,7 +93,7 @@ public abstract class Weapon : MonoBehaviour
 
         float maxDistance = 0;
         Vector3 direction;
-        Vector3 currentDir;
+        Vector3 currentDir = Vector3.zero;
 
         RaycastHit hit;
         while (true)
@@ -150,7 +150,7 @@ public abstract class Weapon : MonoBehaviour
             break;
         }
 
-        owner.BroadcastMessage("OnInputAxis", direction);
+        owner.BroadcastMessage("OnInputAxis", currentDir);
 
         Invoke("selectObjective", 5.0f);
     }
