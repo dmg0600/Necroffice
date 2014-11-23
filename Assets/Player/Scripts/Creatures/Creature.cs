@@ -82,11 +82,7 @@ public class Creature : MonoBehaviour
     public void OnAttack(Vector3 clickPoint)
     {
         if (_Weapon != null)
-            _Weapon.attack();
-
-        //Aqui pasa igual que el OnAttack y OnAttackStart en contoller, 
-        //pero interesa que varias cosas reciban este evento, beach
-        BroadcastMessage("OnAttackEnd");
+            StartCoroutine(_Weapon.atackHandler());
     }
 
     public bool IsPlayer()
@@ -114,10 +110,10 @@ public class Creature : MonoBehaviour
     public string GenerateDwarvenName()
     {
         //Nombres
-        string[] _names = new string[] { "Ulan", "Fikden", "Iolkhan", "Gegdo", "Glorirgoid ", "Groornuki ", "Snavromi ", "Brufirlum ", "Dumroir ", "Mogis" };
+        string[] _names = new string[] { "Ulan", "Fikden", "Iolkhan", "Gegdo", "Glorirgoid ", "Groornuki ", "Snavromi ", "Brufirlum ", "Dumroir ", "Mogis", "Galtharm", "Huriuryl", "Kramohm", "Bandrus", "Sogthorm", "Karahrgrum", "Muirihrgrun", "Grunni", "Amkahm", "Beldur", "Toriamand", "Urmohan", "Orimiggs", "Bramoumiir", "Harthran", "Grenahgrom"};
 
         //Apellidos
-        string[] _surnames = new string[] { "Trollrock", "Flaskmaker", "Brickarmour", "Chainflayer", "Axerock", "Chaosbreaker", "Pebblehorn", "Boneforged", "Koboldbelly", "Honorcloak" };
+        string[] _surnames = new string[] { "Trollrock", "Flaskmaker", "Brickarmour", "Chainflayer", "Axerock", "Chaosbreaker", "Pebblehorn", "Boneforged", "Koboldbelly", "Honorcloak", "Cliffbeard", "Marblebranch", "Marbledust", "Coldbreaker", "Stormbranch", "Palegem", "Palebelly", "Bronzesteel", "Highbraid", "Thunderroar", "Barleybreaker", "Blackbreaker", "Deepaxe", "Marblebeard", "Mountainbelly", "Ironriver" };
 
 
         string _fName = _names[UnityEngine.Random.Range(0, _names.Length)];
@@ -128,7 +124,7 @@ public class Creature : MonoBehaviour
     public void GeneratePlayerDwarf()
     {
         Name = GenerateDwarvenName();
-        Debug.Log("Generado nombre");
+        //Debug.Log("Generado nombre");
 
         int _maxLife = Random.Range(40, 45);
 

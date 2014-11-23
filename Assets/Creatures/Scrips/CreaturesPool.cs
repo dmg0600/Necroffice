@@ -176,7 +176,7 @@ public class CreaturesPool : MonoBehaviour {
         {
             int Layer = 1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player");
             RaycastHit creatureHit;
-            if (Physics.SphereCast(transform.position, 5.0f, transform.forward, out creatureHit, 0.1f, Layer))
+            if (Physics.SphereCast(transform.position, 8.0f, transform.forward, out creatureHit, 0.1f, Layer))
                 return false;
             return true;
         }

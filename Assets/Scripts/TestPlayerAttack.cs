@@ -9,11 +9,11 @@ public class TestPlayerAttack : MonoBehaviour
         //Vector3 _hitboxSpawnPoint = transform.position + (GetDirectionFromClick(clickPoint) * _distance);
         //_hitboxSpawnPoint.y = transform.position.y;
 
-        Vector3 _attackingDirection = transform.forward;
-        _attackingDirection.y = 0;
-        _attackingDirection *= 8;
+        //Vector3 _attackingDirection = transform.forward;
+        //_attackingDirection.y = 0;
+        //_attackingDirection *= 8;
 
-        GameManager.Instance.CreateHitbox(GetComponent<Creature>(), 1, 1, _attackingDirection, 1f);
+        //GameManager.Instance.CreateHitbox(GetComponent<Creature>(), 1, 1, _attackingDirection, 1f);
     }
 
    //public static Vector3 GetDirectionFromClick(Vector3 clickPoint)
