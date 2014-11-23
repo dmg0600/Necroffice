@@ -55,6 +55,8 @@ public class Controller : MonoBehaviour
     {
         if (PauseMenu.isPaused) return;
 
+        
+        
         if (grounded)
         {
             // Calculate how fast we should be moving
@@ -86,7 +88,14 @@ public class Controller : MonoBehaviour
             float _angle = Vector3.Angle(targetOrientation, transform.forward);
 
             if (_angle < pivotAngleStop)
+            {
+                if (_Creature != null && _Creature._Weapon != null && _Creature._Weapon.weaponMode == WeaponMode.AI)
+                {
+                    Debug.Log("fuerza que le vamos a aplicar = " + targetOrientation);
+                }
                 rigidbody.AddForce(targetOrientation * movementSpeed, ForceMode.VelocityChange);
+            }
+                
         }
 
         // We apply gravity manually for more tuning control
@@ -96,7 +105,7 @@ public class Controller : MonoBehaviour
         targetOrientation = Vector3.zero;
     }
 
-    void OnInputAxis(Vector3 direction)
+    public void OnInputAxis(Vector3 direction)
     {
         targetOrientation = direction;
     }

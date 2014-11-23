@@ -43,7 +43,7 @@ public class Creature : MonoBehaviour
         EquipWeapon(GameManager.Instance.DefaultWeapon);
     }
 
-    void EquipWeapon(Weapon newWeapon)
+    public void EquipWeapon(Weapon newWeapon)
     {
         if (_Weapon != null && _Weapon != GameManager.Instance.DefaultWeapon)
         {
