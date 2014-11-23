@@ -7,6 +7,8 @@ public class ExplodeBehaviour : LifeBehaviour {
     public float force = 50f;
     public float radius = 10f;
 
+    public override void OnRespawn() { }
+
     public override void OnDead()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);

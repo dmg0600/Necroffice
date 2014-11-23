@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 [RequireComponent(typeof(Life))]
-public class CreaturesLifeBehaviour : PlayerLifeManager
+public class CreaturesLifeBehaviour : LifeBehaviour
 {
     Life Life;
 
