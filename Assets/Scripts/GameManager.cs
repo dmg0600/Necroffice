@@ -281,4 +281,4 @@ public class GameManager : MonoBehaviour
         LoadLevel(CurrentlyLoadedLevel);
     }
 }
-}
+
