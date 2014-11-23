@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public enum WeaponMode
 {
@@ -21,50 +22,15 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void selectTarget()
     {
-
-
-        _currentPath = new NavMeshPath();
-        NavMesh.CalculatePath(transform.position, GameManager.Instance.Player.transform.position, -1, _currentPath);
-
-        foreach(Vector3 point in _currentPath.corners)
-        {
-
-            Debug.Log(point);
-        }
-
-        /*
-        if (!_iManager.nearInteractiveObjs.Contains(target))
-        {
-            foreach (GameObject pTarget in _iManager.nearInteractiveObjs)
-            {
-                NavMesh.CalculatePath(transform.position, pTarget.transform.position, -1, path);
-
-                if (path.corners.Length < _currentPath.corners.Length && path.status != NavMeshPathStatus.PathInvalid)
-                {
-                    _currentPath = path;
-                    _currentCorner = 0;
-                    target = pTarget;
-                }
-            }
-        }
-        */
-        //Invoke("selectTarget", 1.0f);
-        
     }
 
     public virtual void move()
     {
-        Vector3 direction = _currentPath.corners[_currentCorner] - owner.transform.position;
-        direction.y = 0;
-        //Debug.Log(_currentPath.corners[_currentCorner]);
+        Vector3 direction = (GameManager.Instance.Player.transform.position - owner.transform.position).normalized;
 
-        //Debug.DrawRay(owner.transform.position,direction);
-
-       /* if (Vector3.Distance(_currentPath.corners[_currentCorner], transform.position) < 1.0)
-            direction = _currentPath.corners[++_currentCorner] - transform.position;*/
-
-        owner.GetComponent<Controller>().OnInputAxis(direction);
-
+        int layermask = ~(1 << LayerMask.NameToLayer("Creature"));
+        if (Physics.Raycast(owner.transform.position, direction, _visionRange, layermask))
+            owner.BroadcastMessage("OnInputAxis", direction); 
     }
 
     public InteractiveObject.Properties[] Property;
@@ -80,7 +46,7 @@ public abstract class Weapon : MonoBehaviour
             this._mode = value;
 
             if (this._mode == WeaponMode.AI)
-                selectTarget();
+                Invoke("selectTarget", 2.0f);
         }
         get
         {
@@ -147,7 +113,8 @@ public abstract class Weapon : MonoBehaviour
     private int _range = 0;
     [SerializeField]
     public Texture _icon;
-
+    [SerializeField]
+    private float _visionRange = 15.0f;
 
 
 

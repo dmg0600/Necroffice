@@ -49,8 +49,6 @@ public class CreaturesLifeBehaviour : LifeBehaviour
 
         weaponFinal.transform.parent = transform.root;
 
-        Debug.Log("arma creada " + weaponFinal);  
-
         if(creature != null)
         {
             weaponFinal.BroadcastMessage("SetOwner", creature);
