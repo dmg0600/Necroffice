@@ -29,6 +29,7 @@ public class PlayerLifeBehaviour : LifeBehaviour
     {
         //Corrutina de la muerte
         StartCoroutine(GameManager.Instance.CorrutinaDeLaMuerte());
+
         //Respawn Player
         OnRespawn();
 
