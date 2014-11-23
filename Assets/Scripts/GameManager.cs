@@ -23,9 +23,16 @@ public class GameManager : MonoBehaviour
 
     public GameObject HitboxPrefab;
     public Weapon DefaultWeapon;
-    public ParticleSFX[] Particles;
+    public Creature Player;
 
-    public Transform playerTransform;
+    public TweenAlpha FadeCurtain;
+
+    public ParticleSFX[] Particles;
+    public Level[] Levels;
+
+
+    [HideInInspector]
+    public int CurrentlyLoadedLevel = -1;
 
 
     public void CreateHitbox(Weapon ownerWeapon, float radius, int damage, Vector3 velocity, float duration, string nameOfHitbox = null)
@@ -95,4 +102,101 @@ public class GameManager : MonoBehaviour
         ParticleSFX _sfxP = _obj.GetComponent<ParticleSFX>();
         _sfxP.ObjectToDestroy = ObjectToDestroy;
     }
+
+    void Start()
+    {
+        FirstLevel();
+    }
+
+    void FirstLevel()
+    {
+        LoadLevel(0);
+    }
+
+    public void LoadLevel(int level)
+    {
+        if (_alreadyLoadingLevel)
+            return;
+
+        if (level < 0 || level >= Levels.Length)
+        {
+            Debug.LogError("Has pedido cargar el nivel " + level + " cuando sólo hay " + Levels.Length);
+            return;
+        }
+
+        StartCoroutine(LoadLevelCoroutine(level));
+    }
+
+    static bool _alreadyLoadingLevel = false;
+    IEnumerator LoadLevelCoroutine(int level)
+    {
+        _alreadyLoadingLevel = true;
+
+        //Baja cortina
+        FadeCurtain.Toggle(); yield return new WaitForSeconds(0.5f);
+
+        if (CurrentlyLoadedLevel >= 0)
+        {
+            //Desactivar nivel previo
+            //todo
+        }
+
+        //Comprobar entrada
+        if (Levels[level].Start == null)
+        {
+            Debug.LogError("No has asignado el punto de entrada del nivel " + level + ":" + Levels[level].name);
+            yield break;
+        }
+
+        //Cargar el nivel pedido
+        Levels[level].gameObject.SetActive(true);
+        CurrentlyLoadedLevel = level;
+
+        //Player al punto de salida
+        Player.transform.position = Levels[level].Start.position;
+        Player.transform.rotation = Levels[level].Start.rotation;
+
+        //Cámara
+        Camera.main.transform.position = Player.transform.position;
+        Camera.main.transform.position -= Camera.main.transform.forward * 25;
+
+
+        yield return new WaitForSeconds(0.5f);
+
+        //Otras cosas al principio del nivel
+        //...
+
+        //Arriba cortina
+        FadeCurtain.Toggle(); yield return new WaitForSeconds(0.5f);
+        _alreadyLoadingLevel = false;
+
+        //todo: letrerico de nivel por el que vas
+    }
+
+
+    public void WinCurrentLevel()
+    {
+        int _levelToLoad = CurrentlyLoadedLevel + 1;
+
+        if (_levelToLoad >= Levels.Length)
+        {
+            Defines.GameWin = true;
+            Application.LoadLevel("Credits");
+        }
+        else
+            LoadLevel(CurrentlyLoadedLevel + 1);
+
+    }
+
+
+    //<HACK> CHetos!
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            WinCurrentLevel();
+        }
+    }
+
+
 }

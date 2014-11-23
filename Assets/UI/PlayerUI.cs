@@ -29,8 +29,6 @@ public class PlayerUI : MonoBehaviour
         WeaponTexture.mainTexture = Data._Weapon._icon;
 
         HealthSlider.value = Data._Life.life.Get01Value();
-
-        Debug.Log("VIDA: " + Data._Life.life.Get01Value());
     }
 
     void DrawPower(int innate, int bonus)
