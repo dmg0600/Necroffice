@@ -13,10 +13,11 @@ public abstract class Weapon : MonoBehaviour
 {
     [HideInInspector]
     public Transform DangerousPoint;
+
+    public Hitbox Hitbox;
+
     [HideInInspector]
     public bool _attacking;
-
-    public int Damage = 0;
 
     public void Awake()
     {
@@ -25,7 +26,7 @@ public abstract class Weapon : MonoBehaviour
 
     #region unimplemented methods
 
-    public IEnumerator atackHandler() 
+    public IEnumerator atackHandler()
     {
         _attacking = true;
         yield return StartCoroutine(attack());
@@ -47,11 +48,12 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void selectTarget()
     {
+
     }
 
     void Start()
     {
-        if(_range == 0)
+        if (_range == 0)
         {
             Debug.LogError("ERROR!!! ARMA CON RANGO 0, ESTO ESTA PROHIBIDO POR DISEÑO! CACA! FUERAAAAAA");
         }
@@ -59,17 +61,16 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void move()
     {
-        
+
         Vector3 direction = (GameManager.Instance.Player.transform.position - owner.transform.position).normalized;
 
         int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
 
-        
+        float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);   Debug.Log("----------------------------------------- ");
 
-        float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);
+        if (!Physics.Raycast(owner.transform.position, direction, (_visionRange > distance) ? distance : _visionRange, layermask))
+            owner.BroadcastMessage("OnInputAxis", direction);
 
-        if (!Physics.Raycast(owner.transform.position, direction, (_visionRange > distance) ? distance: _visionRange , layermask))
-            owner.BroadcastMessage("OnInputAxis", direction); 
     }
 
 
@@ -215,6 +216,9 @@ public abstract class Weapon : MonoBehaviour
         }
     }
 
+    public int DamageRanged = 0;
+    public int VelocityRanged = 0;
+
     public int Range
     {
         get
@@ -239,19 +243,21 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField]
     private string _name;
     [SerializeField]
+    public Texture _icon;
+    [SerializeField]
     private int _powerBonus = 0;
     [SerializeField]
     private int _agilityBonus = 0;
     [SerializeField]
     private int _range = 0;
     [SerializeField]
-    public Texture _icon;
-    [SerializeField]
     private float _visionRange = 15.0f;
 
 
 
     private GameObject _currentTarget = null;
+
+    [HideInInspector]
     public Creature _owner;
 
     private int _currentCorner;
@@ -259,9 +265,6 @@ public abstract class Weapon : MonoBehaviour
 
     private InteractionManager _iManager;
     private WeaponMode _mode = WeaponMode.CONTROLLED;
-
-
-
 
     private Vector3 objective = Vector3.zero;
 
