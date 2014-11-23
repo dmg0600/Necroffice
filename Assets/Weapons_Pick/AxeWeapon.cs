@@ -30,12 +30,8 @@ public class AxeWeapon : Weapon
 
     void FixedUpdate()
     {
-
-        
         if (weaponMode == WeaponMode.AI)
-        {
             updateAI();
-        }
     }
 
     public override void updateAI()

@@ -7,22 +7,28 @@ public class Life : MonoBehaviour
 
     bool destroyinh = false;
 
-    public void OnDamage(Hitbox hitbox)
+    public void OnDamage(int damage)
     {
-        life.sub(hitbox.Damage);
-
-        InteractiveObject _iObject = GetComponent<InteractiveObject>();
-        if (_iObject != null)
-            _iObject.DamagedByHitbox(hitbox);
+        life.sub(damage);
 
         if (life.isLower)
         {
             if (!destroyinh)
             {
                 destroyinh = true;
-                transform.BroadcastMessage("OnDead");
+                transform.root.BroadcastMessage("OnDead");
+                destroyinh = false;
             }
         }
+    }
+
+    public void OnDamage(Hitbox hitbox)
+    {
+        InteractiveObject _iObject = GetComponent<InteractiveObject>();
+        if (_iObject != null)
+            _iObject.DamagedByHitbox(hitbox);
+
+        OnDamage(hitbox.Damage);
     }
 
     public void OnHeal(int cure)

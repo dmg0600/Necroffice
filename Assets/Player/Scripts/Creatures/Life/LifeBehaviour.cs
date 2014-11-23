@@ -3,6 +3,6 @@ using System.Collections;
 
 public abstract class LifeBehaviour : MonoBehaviour 
 {
-    public abstract void OnDead();
-    public abstract void OnRespawn();
+    public abstract IEnumerator OnDead();
+    public abstract IEnumerator OnRespawn();
 }
