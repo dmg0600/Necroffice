@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class NewspaperWeapon : Weapon
 {
-
     public override IEnumerator attack()
     {
         _attacking = true;
@@ -17,8 +16,6 @@ public class NewspaperWeapon : Weapon
     {
         return true;
     }
-
-
 
 	// Use this for initialization
 	void Start () {

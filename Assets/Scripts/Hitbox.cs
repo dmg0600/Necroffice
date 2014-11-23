@@ -61,17 +61,5 @@ public class Hitbox : MonoBehaviour
 
             other.SendMessage("OnDamage", this);
         }
-
-
-        //else
-        //{
-        //    InteractiveObject _iObject = other.transform.GetComponent<InteractiveObject>();
-        //    if (_iObject == null)
-        //        return;
-        //    else
-        //    {
-        //        _iObject.SendMessage("OnDamage", this);
-        //    }
-        //}
     }
 }

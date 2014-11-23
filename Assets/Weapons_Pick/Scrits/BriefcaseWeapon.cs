@@ -1,18 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BriefcaseWeapon : Weapon {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
+public class BriefcaseWeapon : Weapon 
+{
     override public IEnumerator attack()
     {
         //Quitar si no hace falta
@@ -27,5 +17,4 @@ public class BriefcaseWeapon : Weapon {
     override public void updateAI()
     {
     }
-
 }
