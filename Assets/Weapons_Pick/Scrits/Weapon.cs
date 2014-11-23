@@ -87,6 +87,7 @@ public abstract class Weapon : MonoBehaviour
             selectObjective();
         }
     }
+
     protected void selectObjective()
     {
         int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
@@ -227,7 +228,6 @@ public abstract class Weapon : MonoBehaviour
         }
     }
     #endregion
-
 
     public void SetOwner(Creature newOwner)
     {

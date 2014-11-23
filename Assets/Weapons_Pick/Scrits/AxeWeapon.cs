@@ -18,6 +18,7 @@ public class AxeWeapon : Weapon
         //Habilitar hitbox
         Hitbox.gameObject.SetActive(true);
 
+
         //todo: desactivar con animacion
 
         //<HACK>
