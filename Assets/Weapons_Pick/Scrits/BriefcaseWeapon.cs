@@ -3,6 +3,7 @@ using System.Collections;
 
 public class BriefcaseWeapon : Weapon 
 {
+    public AudioClip audio;
     public override IEnumerator attack()
     {
         if (!canAttack())
@@ -22,6 +23,7 @@ public class BriefcaseWeapon : Weapon
 
         // Play Animacion
         //todo
+        AudioSource.PlayClipAtPoint(audio, transform.position);
     }
 
     public override bool canAttack()

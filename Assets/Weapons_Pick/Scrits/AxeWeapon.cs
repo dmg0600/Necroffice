@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class AxeWeapon : Weapon
 {
+    public AudioClip[] audio;
+
     public override IEnumerator attack()
     {
         if (!canAttack())
@@ -15,6 +17,7 @@ public class AxeWeapon : Weapon
 
         //Habilitar hitbox
         Hitbox.gameObject.SetActive(true);
+
         //todo: desactivar con animacion
 
         //<HACK>
@@ -23,6 +26,8 @@ public class AxeWeapon : Weapon
 
         // Play Animacion
         //todo
+
+        AudioSource.PlayClipAtPoint(audio[Random.Range(0, audio.Length)], transform.position);
     }
 
     public override bool canAttack()
@@ -52,7 +57,7 @@ public class AxeWeapon : Weapon
         {
             move();
         }
-        else  if (!dead)
+        else if (!dead)
         {
             if (!_attacking)
             {

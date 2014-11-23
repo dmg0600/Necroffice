@@ -29,7 +29,7 @@ public abstract class Weapon : MonoBehaviour
     public IEnumerator atackHandler()
     {
 
-        owner.GetComponent<Animator>().SetInteger("Atttack", UnityEngine.Random.Range(3, 6));
+        owner.GetComponent<Controller>()._Animator.SetInteger("Atttack", UnityEngine.Random.Range(3, 6));
 
         _attacking = true;
         yield return StartCoroutine(attack());

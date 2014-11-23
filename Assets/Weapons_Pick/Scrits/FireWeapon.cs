@@ -3,6 +3,7 @@ using System.Collections;
 
 public class FireWeapon : Weapon 
 {
+    public AudioClip[] audio;
     public override IEnumerator attack()
     {
         if (!canAttack())
@@ -22,6 +23,7 @@ public class FireWeapon : Weapon
 
         // Play Animacion
         //todo
+        AudioSource.PlayClipAtPoint(audio[Random.Range(0, audio.Length)], transform.position);
     }
 
     public override bool canAttack()

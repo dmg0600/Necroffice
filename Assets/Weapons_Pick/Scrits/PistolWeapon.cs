@@ -5,6 +5,7 @@ using System.Linq;
 
 public class PistolWeapon : Weapon
 {
+    public AudioClip audio;
     public override IEnumerator attack()
     {
         if (!canAttack())
@@ -21,6 +22,7 @@ public class PistolWeapon : Weapon
         clone.SetVelocity(owner.transform.forward * VelocityRanged);
 
         clone.Begin();
+        AudioSource.PlayClipAtPoint(audio, transform.position);
     }
 
     public override bool canAttack()

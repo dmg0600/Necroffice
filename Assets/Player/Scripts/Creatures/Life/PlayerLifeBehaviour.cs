@@ -24,13 +24,13 @@ public class PlayerLifeBehaviour : LifeBehaviour
     {
         if (RespawnPoint != null) OnRespawn();
     }
-
+    public AudioClip deadSound;
     public override IEnumerator OnDead() 
     {
         if (imDead) yield break;
 
         imDead = true;
-
+        AudioSource.PlayClipAtPoint(deadSound, transform.position);
         //Corrutina de la muerte
         yield return StartCoroutine(GameManager.Instance.CorrutinaDeLaMuerte());
 
