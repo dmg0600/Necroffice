@@ -53,10 +53,10 @@ public class AxeWeapon : Weapon
                 StartCoroutine(atackHandler());
             }
         }
-        else
+        /*else
         {
             idle();
-        }
+        }*/
     }
 
 }
