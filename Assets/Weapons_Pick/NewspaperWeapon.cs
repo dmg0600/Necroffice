@@ -4,10 +4,13 @@ using System.Collections.Generic;
 
 public class NewspaperWeapon : Weapon
 {
-    
-    public override void attack()
+
+    public override IEnumerator attack()
     {
         _attacking = true;
+
+        //Quitar si no hace falta
+        yield break;
     }
 
     public override bool canAttack()
