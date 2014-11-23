@@ -17,10 +17,15 @@ public class Creature : MonoBehaviour
     [HideInInspector]
     public Stats _Stats;
 
+    bool isPlayer = false;
+
+
     void Awake()
     {
         _Control = GetComponent<Controller>();
         _Stats = GetComponent<Stats>();
+        if (GetComponent<InputManager>() != null)
+            isPlayer = true;
     }
 
     void Start()
@@ -79,7 +84,7 @@ public class Creature : MonoBehaviour
 
     public bool IsPlayer()
     {
-        return true;
+        return isPlayer;
     }
 
     public void OnDead()
