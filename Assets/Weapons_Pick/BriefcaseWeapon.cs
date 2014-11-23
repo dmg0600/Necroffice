@@ -13,8 +13,10 @@ public class BriefcaseWeapon : Weapon {
 	
 	}
 
-    override public void attack()
+    override public IEnumerator attack()
     {
+        //Quitar si no hace falta
+        yield break;
     }
 
     override public bool canAttack()
