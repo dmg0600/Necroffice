@@ -11,7 +11,7 @@ public enum WeaponMode
 
 public abstract class Weapon : MonoBehaviour
 {
-    private bool _attacking;
+    protected bool _attacking;
 
     #region unimplemented methods
 
@@ -37,6 +37,14 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void selectTarget()
     {
+    }
+
+    void Start()
+    {
+        if(_range == 0)
+        {
+            Debug.LogError("ERROR!!! ARMA CON RANGO 0, ESTO ESTA PROHIBIDO POR DISEÑO! CACA! FUERAAAAAA");
+        }
     }
 
     public virtual void move()
@@ -86,6 +94,8 @@ public abstract class Weapon : MonoBehaviour
         set
         {
             _owner = value;
+            _iManager = _owner.gameObject.GetComponent<InteractionManager>();
+            _range += 3;
         }
         get
         {
@@ -144,8 +154,8 @@ public abstract class Weapon : MonoBehaviour
 
     public void SetOwner(Creature newOwner)
     {
-        _owner = newOwner;
-        _iManager = _owner.gameObject.GetComponent<InteractionManager>();
+        owner = newOwner;
+        
     }
 
     public void SetMode(WeaponMode mode)

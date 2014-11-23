@@ -36,15 +36,19 @@ public class AxeWeapon : Weapon
 
     public override void updateAI()
     {
+        
         if (Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position) > Range)
         {
             move();
         }
-        else
+        else 
         {
-            attack();
+            if(!_attacking)
+            {
+                StartCoroutine(atackHandler());
+            }
+            
         }
-
     }
 
     ///**

@@ -92,15 +92,18 @@ public class Creature : MonoBehaviour
 
     public void OnDead()
     {
+        Debug.Log("Se muere " + name);
+
         if (IsPlayer())
         {
             //Muere player 
-            GameManager.Instance.CreateParticle("BloodSplat", gameObject.transform.position);
+            GameManager.Instance.DestroyWithParticle("BloodSplat", gameObject);
+
         }
         else
         {
             //Muere enemigo
-            GameManager.Instance.CreateParticle("BloodSplat", gameObject.transform.position);
+            GameManager.Instance.DestroyWithParticle("BloodSplat", gameObject);
         }
     }
 
