@@ -17,6 +17,7 @@ public class AxeWeapon : Weapon
 
         //Habilitar hitbox
         Hitbox.gameObject.SetActive(true);
+
         //todo: desactivar con animacion
 
         //<HACK>
@@ -50,7 +51,7 @@ public class AxeWeapon : Weapon
         {
             move();
         }
-        else  if (!dead)
+        else if (!dead)
         {
             if (!_attacking)
             {

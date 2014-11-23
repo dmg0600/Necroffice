@@ -27,6 +27,7 @@ public class Life : MonoBehaviour
         else if (owner._Weapon.weaponMode == WeaponMode.CONTROLLED) AudioSource.PlayClipAtPoint(SkeDamage[Random.Range(0, SkeDamage.Length)], transform.position);
 
         life.sub(damage);
+        GetComponent<Controller>()._Animator.SetBool("Damaged", false);
 
         if (life.isLower)
         {
@@ -34,8 +35,13 @@ public class Life : MonoBehaviour
             {
                 destroyinh = true;
                 transform.BroadcastMessage("OnDead");
+                GetComponent<Controller>()._Animator.SetBool("Death", true);
                 destroyinh = false;
             }
+        }
+        else
+        {
+            GetComponent<Controller>()._Animator.SetBool("Damaged", true);
         }
     }
 
