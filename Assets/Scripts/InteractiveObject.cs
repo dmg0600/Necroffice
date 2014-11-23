@@ -8,11 +8,15 @@ public class InteractiveObject : MonoBehaviour
 {
     public enum Properties { Invisible = 0, Kinematic, Levitate, Fire, CanBurn, Immortal };
 
-    public List<Properties> myProperties = new List<Properties>();
+    public List<Properties> _Properties = new List<Properties>();
+
+
+
+    public bool onFire = false;
 
     public void Start()
     {
-        if (myProperties.Contains(Properties.Invisible))
+        if (_Properties.Contains(Properties.Invisible))
         {
             foreach (var _component in GetComponentsInChildren<Renderer>())
             {
@@ -20,12 +24,12 @@ public class InteractiveObject : MonoBehaviour
             }
         }
 
-        if (myProperties.Contains(Properties.Kinematic))
+        if (_Properties.Contains(Properties.Kinematic))
         {
             rigidbody.isKinematic = true;
         }
 
-        if (myProperties.Contains(Properties.Levitate))
+        if (_Properties.Contains(Properties.Levitate))
         {
             rigidbody.useGravity = false;
         }
@@ -49,17 +53,17 @@ public class InteractiveObject : MonoBehaviour
         GameManager.Instance.DestroyWithParticle("DustExplosion", gameObject);
     }
 
-    void OnCollisionEnter(Collision collision)
+
+    public void DamagedByHitbox(Hitbox hitbox)
     {
-        InteractiveObject _iObject = collision.gameObject.GetComponent<InteractiveObject>();
-        if (_iObject == null)
-            return;
-
-        if (_iObject.myProperties.Contains(Properties.Fire) &&
-            myProperties.Contains(Properties.CanBurn))
+        //Set on fire
+        if (_Properties.Contains(Properties.CanBurn) && hitbox.Properties.Contains(Properties.Fire) && !onFire)
         {
-            GameManager.Instance.CreateParticle("Fire", this.transform.position);
-        }
+            onFire = true;
 
+            ParticleSFX _particleFire = GameManager.Instance.Particles.FirstOrDefault(x => x.name == "Fire");
+            ParticleController _pcontroller = _particleFire.GetComponent<ParticleController>();
+            _pcontroller.Control2velasnegras();
+        }
     }
 }

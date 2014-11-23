@@ -22,8 +22,7 @@ public class ExplodeBehaviour : MonoBehaviour
 
                     col.rigidbody.AddExplosionForce(force, transform.position, radius);
 
-                    //todo: meter particula de explosion
-
+                    GameManager.Instance.DestroyWithParticle("Explosion", col.gameObject);
                 }
             }
         }

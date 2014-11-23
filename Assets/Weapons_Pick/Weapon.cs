@@ -51,6 +51,8 @@ public abstract class Weapon : MonoBehaviour
         //owner.GetComponent<Controller>().OnInputAxis(direction);
     }
 
+    public InteractiveObject.Properties[] Property;
+
     #region GET/SET
     ///////////////////////////////////////////////////////////////
     ////////////////////// GETTERS Y SETTERS //////////////////////

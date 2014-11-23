@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 public class GameManager : MonoBehaviour
@@ -26,6 +27,24 @@ public class GameManager : MonoBehaviour
 
     public Transform playerTransform;
 
+
+    public void CreateHitbox(Weapon ownerWeapon, float radius, int damage, Vector3 velocity, float duration, string nameOfHitbox = null)
+    {
+        GameObject _obj = Instantiate(HitboxPrefab, ownerWeapon.owner.transform.position + (ownerWeapon.owner.transform.forward * 0.5f), Quaternion.identity) as GameObject;
+        Hitbox _hitbox = _obj.GetComponent<Hitbox>();
+
+        _hitbox.Owner = ownerWeapon.owner;
+        _hitbox.Radius = radius;
+        _hitbox.Damage = damage;
+        _hitbox.Duration = duration;
+        _hitbox.name = nameOfHitbox ?? "Hitbox (" + ownerWeapon.owner.name + ")";
+        _hitbox.Properties = ownerWeapon.Property.ToList();
+
+        _hitbox.SetVelocity(velocity);
+
+        _hitbox.Begin();
+    }
+
     public void CreateHitbox(Creature owner, float radius, int damage, Vector3 velocity, float duration, string nameOfHitbox = null)
     {
         GameObject _obj = Instantiate(HitboxPrefab, owner.transform.position + (owner.transform.forward * 0.5f), Quaternion.identity) as GameObject;
@@ -36,7 +55,6 @@ public class GameManager : MonoBehaviour
         _hitbox.Damage = damage;
         _hitbox.Duration = duration;
         _hitbox.name = nameOfHitbox ?? "Hitbox (" + owner.name + ")";
-
 
         _hitbox.SetVelocity(velocity);
 

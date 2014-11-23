@@ -11,11 +11,17 @@ public class Life : MonoBehaviour
     {
         life.sub(hitbox.Damage);
 
-        if (life.isLower && !destroyinh)
+        InteractiveObject _iObject = GetComponent<InteractiveObject>();
+        if (_iObject != null)
+            _iObject.DamagedByHitbox(hitbox);
+
+        if (life.isLower)
         {
-            destroyinh = true;
-            Debug.Log("se llama al OnDead");
-            transform.root.BroadcastMessage("OnDead");
+            if (!destroyinh)
+            {
+                destroyinh = true;
+                transform.root.BroadcastMessage("OnDead");
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Hitbox : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class Hitbox : MonoBehaviour
 
     [HideInInspector]
     public float Duration = -1;
+
+    public List<InteractiveObject.Properties> Properties = new List<InteractiveObject.Properties>();
 
 
     public void SetVelocity(Vector3 velocity)
