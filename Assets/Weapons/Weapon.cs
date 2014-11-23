@@ -129,4 +129,13 @@ public abstract class Weapon : MonoBehaviour
     private NavMeshPath _currentPath;
     private WeaponMode _mode = WeaponMode.CONTROLLED;
 
+    public void SetOwner(Creature newOwner)
+    {
+        _owner = newOwner;
+    }
+
+    public void SetMode(WeaponMode mode)
+    {
+        _mode = mode;
+    }
 }
