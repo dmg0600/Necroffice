@@ -49,10 +49,27 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void move()
     {
+        
         Vector3 direction = (GameManager.Instance.Player.transform.position - owner.transform.position).normalized;
 
-        int layermask = ~(1 << LayerMask.NameToLayer("Creature"));
-        if (Physics.Raycast(owner.transform.position, direction, _visionRange, layermask))
+        int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
+
+        
+
+        float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);
+
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(owner.transform.position, direction, (_visionRange > distance) ? distance : _visionRange, layermask);
+        int i = 0;
+        while (i < hits.Length)
+        {
+            RaycastHit hit = hits[i];
+            Debug.Log(hit.collider.gameObject.name);
+            i++;
+        }
+        Debug.Log("----------------------------------------- ");
+
+        if (!Physics.Raycast(owner.transform.position, direction, (_visionRange > distance) ? distance: _visionRange , layermask))
             owner.BroadcastMessage("OnInputAxis", direction); 
     }
 
@@ -95,7 +112,7 @@ public abstract class Weapon : MonoBehaviour
         {
             _owner = value;
             _iManager = _owner.gameObject.GetComponent<InteractionManager>();
-            _range += 3;
+            _range += 1;
         }
         get
         {

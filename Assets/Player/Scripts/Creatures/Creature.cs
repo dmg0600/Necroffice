@@ -90,6 +90,11 @@ public class Creature : MonoBehaviour
         return (tag == "Player");
     }
 
+    void OnDestroy()
+    {
+        Debug.Log("me estan destruyendo" + gameObject.name);
+    }
+
     public void OnDead()
     {
         Debug.Log("Se muere " + name);
