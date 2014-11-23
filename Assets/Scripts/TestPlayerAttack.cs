@@ -13,7 +13,7 @@ public class TestPlayerAttack : MonoBehaviour
         _attackingDirection.y = 0;
         _attackingDirection *= 8;
 
-        GameManager.Instance.CreateHitbox(GetComponent<Creature>(), 1, 1, _attackingDirection);
+        GameManager.Instance.CreateHitbox(GetComponent<Creature>(), 1, 1, _attackingDirection, 1f);
     }
 
    //public static Vector3 GetDirectionFromClick(Vector3 clickPoint)
