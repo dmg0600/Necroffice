@@ -43,7 +43,7 @@ public class Creature : MonoBehaviour
         EquipWeapon(GameManager.Instance.DefaultWeapon);
     }
 
-    void EquipWeapon(Weapon newWeapon)
+    public void EquipWeapon(Weapon newWeapon)
     {
         if (_Weapon != null && _Weapon != GameManager.Instance.DefaultWeapon)
         {
@@ -79,17 +79,14 @@ public class Creature : MonoBehaviour
         _Weapon = null;
     }
 
-    void OnInputMouseClick(Vector3 clickPoint)
+    public void OnAttack(Vector3 clickPoint)
     {
         if (_Weapon != null)
             _Weapon.attack();
 
-
-        //    Vector3 _attackingDirection = transform.forward;
-        //    _attackingDirection.y = 0;
-        //    _attackingDirection *= 8;
-
-        //    GameManager.Instance.CreateHitbox(GetComponent<Creature>(), 1, 1, _attackingDirection);
+        //Aqui pasa igual que el OnAttack y OnAttackStart en contoller, 
+        //pero interesa que varias cosas reciban este evento, beach
+        BroadcastMessage("OnAttackEnd");
     }
 
     public bool IsPlayer()

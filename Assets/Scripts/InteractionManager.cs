@@ -188,6 +188,7 @@ public class InteractionManager : MonoBehaviour
         m_InteractiveObjs.Clear();
 
         Stats[] objects = FindObjectsOfType(typeof(Stats)) as Stats[];
+
         foreach (Stats prop in objects)
         {
             //if (prop.m_Usable)

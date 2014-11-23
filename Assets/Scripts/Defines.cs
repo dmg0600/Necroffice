@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Defines : MonoBehaviour 
 {
-    public static float Gravity = 9.8f;
+    public static float Gravity = 20f;
 
     public static float Scala01 = 0.1f;
 
