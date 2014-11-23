@@ -8,6 +8,7 @@ public class Controller : MonoBehaviour
 {
     public Creature _Creature = null;
     public AnimationCurve AgilityToSpeed;
+    public Animator _Animator;
 
     //Parametrization
     float movementSpeed = 1;
@@ -48,7 +49,22 @@ public class Controller : MonoBehaviour
         if (PauseMenu.isPaused) return;
 
         RefreshVariables();
+
         RefreshUI();
+
+        RefreshAnimation();
+    }
+
+    void RefreshAnimation()
+    {
+
+        if (Mathf.Abs(rigidbody.velocity.z) > 0.2f && grounded)
+        {
+            _Animator.SetBool("StartWalking", true);
+        }
+        else
+            _Animator.SetBool("StartWalking", false);
+
     }
 
     void FixedUpdate()
