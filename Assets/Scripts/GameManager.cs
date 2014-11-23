@@ -44,22 +44,20 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void ConvertMeeleWeapon(Weapon Weapon, float radius, int damage, string nameOfHitbox = null) 
-    {
-        GameObject _obj = Instantiate(HitboxPrefab, Weapon.DangerousPoint.position, Quaternion.identity) as GameObject;
-        Hitbox _hitbox = _obj.GetComponent<Hitbox>();
+    //public void ConvertMeeleWeapon(Weapon Weapon, float radius, int damage, string nameOfHitbox = null) 
+    //{
+    //    GameObject _obj = Instantiate(HitboxPrefab, Weapon.DangerousPoint.position, Quaternion.identity) as GameObject;
+    //    Hitbox _hitbox = _obj.GetComponent<Hitbox>();
 
-        _hitbox.Owner = Weapon.owner;
-        _hitbox.Radius = radius;
-        _hitbox.Damage = damage;
-        _hitbox.name = nameOfHitbox ?? "Hitbox (" + Weapon.owner.name + ")";
-        _hitbox.Properties = Weapon.Property.ToList();
+    //    _hitbox.Owner = Weapon.owner;
+    //    _hitbox.Radius = radius;
+    //    _hitbox.Damage = damage;
+    //    _hitbox.name = nameOfHitbox ?? "Hitbox (" + Weapon.owner.name + ")";
+    //    _hitbox.Properties = Weapon.Property.ToList();
 
-        _hitbox.Begin();
-
-        //Duration depends in meele attack
-        _obj.transform.parent = Weapon.DangerousPoint;
-    }
+    //    //Duration depends in meele attack
+    //    _obj.transform.parent = Weapon.DangerousPoint;
+    //}
 
     public void CreateHitbox(Weapon ownerWeapon, float radius, int damage, Vector3 velocity, float duration, string nameOfHitbox = null)
     {
