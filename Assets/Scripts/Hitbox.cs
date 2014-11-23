@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Hitbox : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class Hitbox : MonoBehaviour
 
     [HideInInspector]
     public float Duration = -1;
+
+    public List<InteractiveObject.Properties> Properties = new List<InteractiveObject.Properties>();
 
 
     public void SetVelocity(Vector3 velocity)
@@ -57,11 +60,14 @@ public class Hitbox : MonoBehaviour
         }
         else
         {
-            InteractiveObject _iObject = other.transform.root.GetComponent<InteractiveObject>();
+            InteractiveObject _iObject = other.transform.GetComponent<InteractiveObject>();
             if (_iObject == null)
                 return;
             else
+            {
+                //Debug.Log("Envio OnDamage a " + other.name);
                 _iObject.SendMessage("OnDamage", this);
+            }
         }
     }
 }

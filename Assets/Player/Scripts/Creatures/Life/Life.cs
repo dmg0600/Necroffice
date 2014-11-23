@@ -5,12 +5,24 @@ public class Life : MonoBehaviour
 {
     public Stats.Attribute life;
 
+    bool destroyinh = false;
+
     public void OnDamage(Hitbox hitbox)
     {
         life.sub(hitbox.Damage);
 
+        InteractiveObject _iObject = GetComponent<InteractiveObject>();
+        if (_iObject != null)
+            _iObject.DamagedByHitbox(hitbox);
+
         if (life.isLower)
-            transform.root.BroadcastMessage("OnDead");
+        {
+            if (!destroyinh)
+            {
+                destroyinh = true;
+                transform.root.BroadcastMessage("OnDead");
+            }
+        }
     }
 
     public void OnHeal(int cure)

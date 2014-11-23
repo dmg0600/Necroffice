@@ -55,7 +55,7 @@ public class Stats : MonoBehaviour
     }
     #endregion
 
-    public void RamdomStats() 
+    public void RamdomStats()
     {
         Agility.ramdomValue();
         Power.ramdomValue();
@@ -77,6 +77,7 @@ public class Stats : MonoBehaviour
         {
             upper = maxValue;
             lower = minValue;
+            max = upper;
             Regenerate();
         }
 
@@ -120,7 +121,7 @@ public class Stats : MonoBehaviour
 
         public float Get01Value()
         {
-            return (value * 1f / upper);
+            return (value * 1f / max);
         }
 
         public void sub(int i)

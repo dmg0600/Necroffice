@@ -22,7 +22,7 @@ public class AxeWeapon : Weapon
 
         Creature _creatureOwner = owner.GetComponent<Creature>();
 
-        GameManager.Instance.CreateHitbox(_creatureOwner, 1, 1, _attackingDirection, 1f);
+        GameManager.Instance.CreateHitbox(this, 1, 1, _attackingDirection, 1f);
     }
 
     public override bool canAttack()
@@ -43,7 +43,7 @@ public class AxeWeapon : Weapon
 
     public override void updateAI()
     {
-        if (Vector3.Distance(owner.transform.position, GameManager.Instance.playerTransform.position) > Range)
+        if (Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position) > Range)
         {
             move();
         }

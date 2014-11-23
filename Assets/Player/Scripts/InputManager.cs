@@ -20,6 +20,8 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
+        if (PauseMenu.isPaused) return;
+
         if (Input.GetButtonDown("Fire1"))
         {
             RaycastHit hit;

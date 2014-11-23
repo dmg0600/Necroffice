@@ -24,7 +24,7 @@ public abstract class Weapon : MonoBehaviour
 
 
         _currentPath = new NavMeshPath();
-        NavMesh.CalculatePath(transform.position, GameManager.Instance.playerTransform.position, -1, _currentPath);
+        NavMesh.CalculatePath(transform.position, GameManager.Instance.Player.transform.position, -1, _currentPath);
 
         foreach(Vector3 point in _currentPath.corners)
         {
@@ -66,6 +66,8 @@ public abstract class Weapon : MonoBehaviour
         owner.GetComponent<Controller>().OnInputAxis(direction);
 
     }
+
+    public InteractiveObject.Properties[] Property;
 
     #region GET/SET
     ///////////////////////////////////////////////////////////////
@@ -118,6 +120,14 @@ public abstract class Weapon : MonoBehaviour
         }
     }
 
+    public int Agility
+    {
+        get
+        {
+            return _agilityBonus;
+        }
+    }
+
     public int Range
     {
         get
@@ -135,6 +145,11 @@ public abstract class Weapon : MonoBehaviour
     private int _agilityBonus = 0;
     [SerializeField]
     private int _range = 0;
+    [SerializeField]
+    public Texture _icon;
+
+
+
 
     private GameObject _currentTarget = null;
     public Creature _owner;
