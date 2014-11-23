@@ -11,8 +11,23 @@ public enum WeaponMode
 
 public abstract class Weapon : MonoBehaviour
 {
+    private bool _attacking;
+
     #region unimplemented methods
-    abstract public void attack();
+
+    public IEnumerator atackHandler() 
+    {
+        _attacking = true;
+        yield return StartCoroutine(attack());
+        _attacking = false;
+
+        //Esto se pone aqui para no ponerse al final de cada attack
+        //Aqui pasa igual que el OnAttack y OnAttackStart en contoller, 
+        //pero interesa que varias cosas reciban este evento, beach
+        _owner.BroadcastMessage("OnAttackEnd");
+    }
+
+    abstract public IEnumerator attack();
     abstract public bool canAttack();
 
     //IA METHODS

@@ -4,16 +4,13 @@ using System.Collections.Generic;
 
 public class AxeWeapon : Weapon
 {
-    public override void attack()
+    public override IEnumerator attack()
     {
         if (!canAttack())
-            return;
-
-        _attacking = true;
+            yield break;
 
         //Animación
         //todo
-
 
         //Ataque
         Vector3 _attackingDirection = owner.transform.forward;
@@ -65,9 +62,4 @@ public class AxeWeapon : Weapon
     //        //collision.gameObject.GetComponent<Life>().damage(1 + Power);
     //    }
     //}
-
-    //private List<GameObject> _damagedEntities;
-
-    private bool _attacking;
-
 }
