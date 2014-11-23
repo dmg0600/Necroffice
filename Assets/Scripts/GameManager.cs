@@ -26,6 +26,10 @@ public class GameManager : MonoBehaviour
     public Creature Player;
 
     public TweenAlpha FadeCurtain;
+    public UILabel EnterLevelLabel;
+    public TweenPosition EnterLevelLabelTween;
+
+    public PauseMenu PauseMenu;
 
     public ParticleSFX[] Particles;
     public Level[] Levels;
@@ -168,9 +172,14 @@ public class GameManager : MonoBehaviour
 
         //Arriba cortina
         FadeCurtain.Toggle(); yield return new WaitForSeconds(0.5f);
-        _alreadyLoadingLevel = false;
 
-        //todo: letrerico de nivel por el que vas
+        //letrerico de nivel por el que vas
+        EnterLevelLabel.text = "Entering Level " + (level + 1);
+        EnterLevelLabelTween.Toggle();
+
+        yield return new WaitForSeconds(5f);
+
+        _alreadyLoadingLevel = false;
     }
 
 
@@ -189,9 +198,19 @@ public class GameManager : MonoBehaviour
     }
 
 
-    //<HACK> CHetos!
     void Update()
     {
+        //Pause
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!PauseMenu.gameObject.activeInHierarchy)
+                PauseMenu.Open();
+            else
+                PauseMenu.Close();
+        }
+
+
+        //<HACK> CHetos!
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             WinCurrentLevel();

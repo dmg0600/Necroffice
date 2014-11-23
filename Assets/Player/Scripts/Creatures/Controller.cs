@@ -45,12 +45,16 @@ public class Controller : MonoBehaviour
 
     void Update()
     {
+        if (PauseMenu.isPaused) return;
+
         RefreshVariables();
         RefreshUI();
     }
 
     void FixedUpdate()
     {
+        if (PauseMenu.isPaused) return;
+
         if (grounded)
         {
             // Calculate how fast we should be moving
