@@ -6,27 +6,31 @@ using System.Linq;
 public class PistolWeapon : Weapon
 {
     public AudioClip audio;
+
+    //public GameObject HitboxShoot;
+
     public override IEnumerator attack()
     {
         if (!canAttack())
             yield break;
 
-        Hitbox clone = Instantiate(Hitbox, transform.position, transform.rotation) as Hitbox;
+        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", UnityEngine.Random.Range(0, 3));
+        yield return new WaitForSeconds(0.2f + Random.Range(0.01f, 0.5f));
+
+        Hitbox clone = Instantiate(Hitbox, transform.position, owner.transform.rotation) as Hitbox;
 
         clone.Owner = this.owner;
         clone.Damage = DamageRanged;
-        clone.Duration = VelocityRanged * Range;
+        clone.Duration = Range;
         clone.name = "Hitbox (" + this.name + " - " + this.owner.name + ")";
         clone.Properties = this.Property.ToList();
 
-        clone.SetVelocity(owner.transform.forward * VelocityRanged);
+        clone.rigidbody.velocity = owner.transform.forward * VelocityRanged;
         clone.gameObject.SetActive(true);
 
-        clone.Begin();
+        StartCoroutine(clone.Begin());
         
         AudioSource.PlayClipAtPoint(audio, transform.position);
-
-        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", UnityEngine.Random.Range(0, 3));
     }
 
     public override bool canAttack()
