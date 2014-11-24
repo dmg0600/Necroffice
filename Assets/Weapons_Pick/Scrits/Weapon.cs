@@ -29,16 +29,16 @@ public abstract class Weapon : MonoBehaviour
 
     public IEnumerator atackHandler()
     {
-        
-
-        _attacking = true;
-        yield return StartCoroutine(attack());
-        /*_attacking = false;
-
+        if (!_attacking)
+        {
+            _attacking = true;
+            yield return StartCoroutine(attack());
+            _attacking = false;
+        }
         //Esto se pone aqui para no ponerse al final de cada attack
         //Aqui pasa igual que el OnAttack y OnAttackStart en contoller, 
         //pero interesa que varias cosas reciban este evento, beach
-        _owner.BroadcastMessage("OnAttackEnd");*/
+        _owner.BroadcastMessage("OnAttackEnd");
     }
 
     abstract public IEnumerator attack();
@@ -60,6 +60,8 @@ public abstract class Weapon : MonoBehaviour
         {
             Debug.LogError("ERROR!!! ARMA CON RANGO 0, ESTO ESTA PROHIBIDO POR DISEÑO! CACA! FUERAAAAAA");
         }
+
+        Hitbox.gameObject.SetActive(false);
     }
 
     public virtual void move()
