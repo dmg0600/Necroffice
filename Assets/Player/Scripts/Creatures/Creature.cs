@@ -110,6 +110,9 @@ public class Creature : MonoBehaviour
             //Muere player 
             GameManager.Instance.CreateParticle("BloodSplat", gameObject.transform.position);
             //AudioSource.PlayClipAtPoint(DwarfDeadAudio, transform.position);
+
+            _Life.life.Regenerate();
+            GameManager.Instance.LoadLevel(GameManager.Instance.CurrentlyLoadedLevel);
         }
         else
         {
