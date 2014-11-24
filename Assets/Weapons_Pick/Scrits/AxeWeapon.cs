@@ -6,17 +6,20 @@ public class AxeWeapon : Weapon
 {
     public AudioClip[] audio;
 
+    int i = 0;
+
     public override IEnumerator attack()
     {
         if (!canAttack())
             yield break;
 
-        //Propiedades de hitbox
-        Hitbox.Duration = 0;
-        Hitbox.Damage = Mathf.Clamp(_owner._Stats.Power.value + Power, 1, 5);
-
         //Habilitar hitbox
         Hitbox.gameObject.SetActive(true);
+
+        //Propiedades de hitbox
+        Hitbox.Duration = 0;
+
+        Hitbox.Damage = Mathf.Clamp(_owner._Stats.Power.value + Power, 1, 5);
 
 
         //todo: desactivar con animacion
@@ -26,9 +29,15 @@ public class AxeWeapon : Weapon
         //</HACK>
 
         // Play Animacion
-        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", 5);
+        i = i % 3 + 1;
+        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", i + 2);
 
         //AudioSource.PlayClipAtPoint(audio[Random.Range(0, audio.Length)], transform.position);
+
+        yield return new WaitForSeconds(0.7f);
+
+        //_attacking = false;
+        Hitbox.gameObject.SetActive(false);
     }
 
     public override bool canAttack()
@@ -39,14 +48,6 @@ public class AxeWeapon : Weapon
 
     void FixedUpdate()
     {
-        if (_attacking && !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("MeleeAtk_1") &&
-            !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("MeleeAtk_2") &&
-            !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("MeleeAtk_3"))
-        {
-            _attacking = false;
-            _owner.BroadcastMessage("OnAttackEnd");
-        }
-
         if (weaponMode == WeaponMode.AI)
             updateAI();
     }
