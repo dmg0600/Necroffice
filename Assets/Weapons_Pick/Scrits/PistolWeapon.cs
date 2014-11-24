@@ -61,6 +61,7 @@ public class PistolWeapon : Weapon
             if (!_attacking)
             {
                 StartCoroutine(attackHandler());
+                move();
             }
         }
         /*else

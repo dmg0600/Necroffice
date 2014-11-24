@@ -78,9 +78,9 @@ public class Creature : MonoBehaviour
     {
         //todo: soltar como objeto en vez de destruir
 
-        Destroy(_Weapon.gameObject);
+        //Destroy(_Weapon.gameObject);
 
-        GameObject.Instantiate(_Weapon._weaponPickeable, transform.position - Vector3.back, transform.rotation);
+        //GameObject.Instantiate(_Weapon._weaponPickeable, transform.position - Vector3.back, transform.rotation);
 
         _Weapon = null;
     }
