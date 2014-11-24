@@ -57,8 +57,8 @@ public class Creature : MonoBehaviour
         //Poner nueva
         GameObject _obj = Instantiate(newWeapon.gameObject, WeaponHoldPoint.position, WeaponHoldPoint.rotation) as GameObject;
         _obj.transform.parent = WeaponHoldPoint.transform;
-        _obj.transform.localPosition = Vector3.zero;
-        _obj.transform.localScale = Vector3.one;      //Todas las armas tienen que tener escala (1,1,1)!
+        //_obj.transform.localPosition = Vector3.zero;
+        //_obj.transform.localScale = Vector3.one;      //Todas las armas tienen que tener escala (1,1,1)!
 
         _Weapon = _obj.GetComponent<Weapon>();
 
@@ -88,7 +88,7 @@ public class Creature : MonoBehaviour
     public void OnAttack(Vector3 clickPoint)
     {
         if (_Weapon != null)
-            StartCoroutine(_Weapon.atackHandler());
+            StartCoroutine(_Weapon.attackHandler());
     }
 
     public bool IsPlayer()
