@@ -20,8 +20,10 @@ public class PistolWeapon : Weapon
         clone.Properties = this.Property.ToList();
 
         clone.SetVelocity(owner.transform.forward * VelocityRanged);
+        clone.gameObject.SetActive(true);
 
         clone.Begin();
+        
         AudioSource.PlayClipAtPoint(audio, transform.position);
 
         owner.GetComponent<Controller>()._Animator.SetInteger("Attack", UnityEngine.Random.Range(0, 3));
