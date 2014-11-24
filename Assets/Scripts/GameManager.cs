@@ -167,7 +167,8 @@ public class GameManager : MonoBehaviour
         if (CurrentlyLoadedLevel >= 0)
         {
             //Desactivar nivel previo
-            //todo
+            Levels[CurrentlyLoadedLevel].gameObject.SetActive(false);
+
         }
 
         //Comprobar entrada
@@ -238,12 +239,6 @@ public class GameManager : MonoBehaviour
                 PauseMenu.Close();
         }
 
-
-        //<HACK> CHetos!
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            WinCurrentLevel();
-        }
     }
 
     public void EnablePlayerNoDesactivate(bool enable) 

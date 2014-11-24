@@ -49,7 +49,7 @@ public class Creature : MonoBehaviour
 
     public void EquipWeapon(Weapon newWeapon)
     {
-        if (_Weapon != null && _Weapon != GameManager.Instance.DefaultWeapon)
+        if (_Weapon != null)
         {
             DropWeapon();
         }
@@ -122,7 +122,7 @@ public class Creature : MonoBehaviour
     public string GenerateDwarvenName()
     {
         //Nombres
-        string[] _names = new string[] { "Ulan", "Fikden", "Iolkhan", "Gegdo", "Glorirgoid ", "Groornuki ", "Snavromi ", "Brufirlum ", "Dumroir ", "Mogis", "Galtharm", "Huriuryl", "Kramohm", "Bandrus", "Sogthorm", "Karahrgrum", "Muirihrgrun", "Grunni", "Amkahm", "Beldur", "Toriamand", "Urmohan", "Orimiggs", "Bramoumiir", "Harthran", "Grenahgrom"};
+        string[] _names = new string[] { "Ulan", "Fikden", "Iolkhan", "Gegdo", "Glorirgoid ", "Groornuki ", "Snavromi ", "Brufirlum ", "Dumroir ", "Mogis", "Galtharm", "Huriuryl", "Kramohm", "Bandrus", "Sogthorm", "Karahrgrum", "Muirihrgrun", "Grunni", "Amkahm", "Beldur", "Toriamand", "Urmohan", "Orimiggs", "Bramoumiir", "Harthran", "Grenahgrom" };
 
         //Apellidos
         string[] _surnames = new string[] { "Trollrock", "Flaskmaker", "Brickarmour", "Chainflayer", "Axerock", "Chaosbreaker", "Pebblehorn", "Boneforged", "Koboldbelly", "Honorcloak", "Cliffbeard", "Marblebranch", "Marbledust", "Coldbreaker", "Stormbranch", "Palegem", "Palebelly", "Bronzesteel", "Highbraid", "Thunderroar", "Barleybreaker", "Blackbreaker", "Deepaxe", "Marblebeard", "Mountainbelly", "Ironriver" };

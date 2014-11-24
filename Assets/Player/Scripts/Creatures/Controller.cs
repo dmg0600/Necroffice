@@ -50,7 +50,8 @@ public class Controller : MonoBehaviour
 
         RefreshVariables();
 
-        RefreshUI();
+        if (_Creature.IsPlayer())
+            RefreshUI();
 
         RefreshAnimation();
     }
