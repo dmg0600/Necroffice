@@ -23,11 +23,16 @@ public class Life : MonoBehaviour
 
     public void OnDamage(int damage)
     {
-        /*if (owner._Weapon.weaponMode == WeaponMode.CONTROLLED) AudioSource.PlayClipAtPoint(DwarfDamage[Random.Range(0, DwarfDamage.Length)], transform.position);
-        else if (owner._Weapon.weaponMode == WeaponMode.CONTROLLED) AudioSource.PlayClipAtPoint(SkeDamage[Random.Range(0, SkeDamage.Length)], transform.position);
-        */
+        if (owner != null)
+            if (owner._Weapon != null)
+            {
+                if (owner._Weapon.weaponMode == WeaponMode.CONTROLLED) AudioSource.PlayClipAtPoint(DwarfDamage[Random.Range(0, DwarfDamage.Length)], transform.position);
+                else if (owner._Weapon.weaponMode == WeaponMode.AI) AudioSource.PlayClipAtPoint(SkeDamage[Random.Range(0, SkeDamage.Length)], transform.position);
+
+                GetComponent<Controller>()._Animator.SetBool("Damaged", false);
+            }
+        
         life.sub(damage);
-        GetComponent<Controller>()._Animator.SetBool("Damaged", false);
 
         if (life.isLower)
         {
@@ -35,13 +40,28 @@ public class Life : MonoBehaviour
             {
                 destroyinh = true;
                 transform.BroadcastMessage("OnDead");
-                GetComponent<Controller>()._Animator.SetBool("Death", true);
                 destroyinh = false;
+
+                if (owner != null)
+                    if (owner._Weapon != null)
+                    {
+                        if (owner._Weapon.weaponMode == WeaponMode.CONTROLLED) AudioSource.PlayClipAtPoint(DwarfDamage[Random.Range(0, DwarfDamage.Length)], transform.position);
+                        else if (owner._Weapon.weaponMode == WeaponMode.AI) AudioSource.PlayClipAtPoint(SkeDamage[Random.Range(0, SkeDamage.Length)], transform.position);
+
+                        GetComponent<Controller>()._Animator.SetBool("Death", true);
+                    }
             }
         }
         else
         {
-            GetComponent<Controller>()._Animator.SetBool("Damaged", true);
+            if (owner != null)
+                if (owner._Weapon != null)
+                {
+                    if (owner._Weapon.weaponMode == WeaponMode.CONTROLLED) AudioSource.PlayClipAtPoint(DwarfDamage[Random.Range(0, DwarfDamage.Length)], transform.position);
+                    else if (owner._Weapon.weaponMode == WeaponMode.AI) AudioSource.PlayClipAtPoint(SkeDamage[Random.Range(0, SkeDamage.Length)], transform.position);
+
+                    GetComponent<Controller>()._Animator.SetBool("Damaged", true);
+                }
         }
     }
 

@@ -6,7 +6,8 @@ using System;
 public enum WeaponMode
 {
     CONTROLLED,
-    AI
+    AI,
+    not
 }
 
 public abstract class Weapon : MonoBehaviour
