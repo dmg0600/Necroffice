@@ -16,7 +16,7 @@ public class PlayerUI : MonoBehaviour
 
     public UITexture WeaponTexture;
 
-    public UISlider HealthSlider;
+    public UISprite HealthSlider;
 
     public void Refresh(Creature Data)
     {
@@ -28,7 +28,7 @@ public class PlayerUI : MonoBehaviour
 
         WeaponTexture.mainTexture = Data._Weapon._icon;
 
-        HealthSlider.value = Data._Life.life.Get01Value();
+        HealthSlider.fillAmount = Data._Life.life.Get01Value();
     }
 
     void DrawPower(int innate, int bonus)

@@ -21,15 +21,13 @@ public class PowerUp_Mushroom : MonoBehaviour
             {
                 case Option.Health:
                     {
-                        System.Random r = new System.Random();
-                        Cure = r.Next(40, 60) / 100 * Player.GetComponent<Life>().life.value;
+                        Cure = Random.Range(40, 60) / 100 * Player.GetComponent<Life>().life.value;
                         Player.GetComponent<Life>().OnHeal(Cure);
                         break;
                     }
                 case Option.Explosion:
                     {
-                        System.Random r = new System.Random();
-                        Cure = r.Next(10, 25) / 100 * Player.GetComponent<Life>().life.value;
+                        Cure = Random.Range(10, 25) / 100 * Player.GetComponent<Life>().life.value;
                         Player.GetComponent<Life>().OnDamage(Cure);
                         //Todo
                         // en lugar de partículas spawmeamos un enemigo

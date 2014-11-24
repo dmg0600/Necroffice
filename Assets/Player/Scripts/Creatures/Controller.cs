@@ -59,10 +59,10 @@ public class Controller : MonoBehaviour
     {
         _Animator.SetInteger("Attack", 0);
 
-        if (Mathf.Abs(rigidbody.velocity.z) > 0.2f && grounded)
-        {
+        Debug.Log(Mathf.Abs(rigidbody.velocity.z) + " > 0.2f && " + grounded);
+
+        if ((Mathf.Abs(rigidbody.velocity.z) > 0.2f) || (Mathf.Abs(rigidbody.velocity.x) > 0.2f) && grounded)
             _Animator.SetBool("StartWalking", true);
-        }
         else
             _Animator.SetBool("StartWalking", false);
 

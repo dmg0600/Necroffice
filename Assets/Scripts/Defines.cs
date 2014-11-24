@@ -11,9 +11,11 @@ public class Defines : MonoBehaviour
 
     public static string ParticleFire = "Fire";
 
-    public static string ParticleDeath = "Death";
+    public static string ParticleDeath = "muerte_enemigos_particles_prefab";
 
-    public static string ParticleDustExplosion = "DustExplosion";
+    public static string ParticleDthEnemy = "hacer_damage_particles_prefab";
+
+    public static string ParticleDustExplosion = "muerte_objetos_particles_prefab";
 
     public static float burningTime = 3f;
 
