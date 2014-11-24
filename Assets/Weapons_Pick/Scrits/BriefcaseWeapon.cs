@@ -4,17 +4,21 @@ using System.Collections;
 public class BriefcaseWeapon : Weapon 
 {
     public AudioClip audio;
+    int i = 0;
     public override IEnumerator attack()
     {
         if (!canAttack())
             yield break;
 
-        //Propiedades de hitbox
-        Hitbox.Duration = 0;
-        Hitbox.Damage = Mathf.Clamp(_owner._Stats.Power.value + Power, 1, 5);
-
         //Habilitar hitbox
         Hitbox.gameObject.SetActive(true);
+
+        //Propiedades de hitbox
+        Hitbox.Duration = 0;
+
+        Hitbox.Damage = Mathf.Clamp(_owner._Stats.Power.value + Power, 1, 5);
+
+
         //todo: desactivar con animacion
 
         //<HACK>
@@ -22,8 +26,15 @@ public class BriefcaseWeapon : Weapon
         //</HACK>
 
         // Play Animacion
-        //todo
-        AudioSource.PlayClipAtPoint(audio, transform.position);
+        i = i % 3 + 1;
+        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", i + 2);
+
+        //AudioSource.PlayClipAtPoint(audio[Random.Range(0, audio.Length)], transform.position);
+
+        yield return new WaitForSeconds(0.7f);
+
+        //_attacking = false;
+        Hitbox.gameObject.SetActive(false);
     }
 
     public override bool canAttack()
@@ -31,11 +42,6 @@ public class BriefcaseWeapon : Weapon
         return true;
     }
 
-    // Use this for initialization
-    void Start()
-    {
-        selectTarget();
-    }
 
     void FixedUpdate()
     {
