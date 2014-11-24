@@ -61,10 +61,7 @@ public class Hitbox : MonoBehaviour
                 if (_creature.gameObject == Owner.gameObject)
                     return;
             }
-<<<<<<< HEAD
-=======
 
->>>>>>> e4908d6805e42fa21409bfbb55a56bf4e28201fc
             other.SendMessage("OnDamage", this);
         }
     }
