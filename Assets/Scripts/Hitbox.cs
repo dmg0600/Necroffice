@@ -24,7 +24,7 @@ public class Hitbox : MonoBehaviour
     }
 
     [HideInInspector]
-    public float Duration = -1;
+    public float Duration = 0;
 
     public List<InteractiveObject.Properties> Properties = new List<InteractiveObject.Properties>();
 
@@ -34,17 +34,21 @@ public class Hitbox : MonoBehaviour
         rigidbody.velocity = velocity;
     }
 
-    public void Begin()
+    public IEnumerator Begin()
     {
         if (Duration > 0)
         {
+            Invoke("End", Duration);
+        }
+        else{
+            yield return new WaitForSeconds(Duration);
             Invoke("End", Duration);
         }
     }
 
     public void End()
     {
-        Destroy(gameObject);
+        Destroy(this.gameObject);
     }
 
     public void OnTriggerEnter(Collider other)

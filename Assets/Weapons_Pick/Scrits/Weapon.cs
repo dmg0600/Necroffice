@@ -18,7 +18,7 @@ public abstract class Weapon : MonoBehaviour
     public Hitbox Hitbox;
 
     [HideInInspector]
-    public bool _attacking;
+    public bool _attacking = false;
 
     public void Awake()
     {
@@ -27,7 +27,7 @@ public abstract class Weapon : MonoBehaviour
 
     #region unimplemented methods
 
-    public IEnumerator atackHandler()
+    public IEnumerator attackHandler()
     {
         if (!_attacking)
         {

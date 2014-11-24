@@ -26,8 +26,8 @@ public class BriefcaseWeapon : Weapon
         //</HACK>
 
         // Play Animacion
-        i = i % 3 + 1;
-        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", i + 2);
+        int[] i = new int[] { 3, 5 };
+        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", i[Random.Range(0, i.Length)]);
 
         //AudioSource.PlayClipAtPoint(audio[Random.Range(0, audio.Length)], transform.position);
 
@@ -62,7 +62,7 @@ public class BriefcaseWeapon : Weapon
         {
             if (!_attacking)
             {
-                StartCoroutine(atackHandler());
+                StartCoroutine(attackHandler());
             }
         }
         /*else
