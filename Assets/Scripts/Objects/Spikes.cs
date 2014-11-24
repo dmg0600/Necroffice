@@ -30,7 +30,9 @@ public class Spikes : MonoBehaviour {
 
             //Vector3 otro = Quaternion.LookRotation(transform.forward) * other.rigidbody.velocity;
             Vector3 aleatorio = new Vector3(Random.Range(-0.3f, .3f), 0f, Random.Range(-0f, .3f));
-            Debug.Log(aleatorio);
+
+            //Debug.Log(aleatorio);
+
             Vector3 direction = transform.forward + aleatorio;
             other.rigidbody.AddForce(direction * force, ForceMode.Impulse);
 
