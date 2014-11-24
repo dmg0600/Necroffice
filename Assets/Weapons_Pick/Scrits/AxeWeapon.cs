@@ -25,7 +25,7 @@ public class AxeWeapon : Weapon
         //</HACK>
 
         // Play Animacion
-        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", UnityEngine.Random.Range(3, 6));
+        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", 4);
 
         //AudioSource.PlayClipAtPoint(audio[Random.Range(0, audio.Length)], transform.position);
     }
