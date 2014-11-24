@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
 
         _hitbox.SetVelocity(velocity);
 
-        _hitbox.Begin();
+        StartCoroutine(_hitbox.Begin());
     }
 
     public void CreateHitbox(Creature owner, float radius, int damage, Vector3 velocity, float duration, string nameOfHitbox = null)
@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
 
         _hitbox.SetVelocity(velocity);
 
-        _hitbox.Begin();
+        StartCoroutine(_hitbox.Begin());
     }
 
     public void CreateHitbox(Transform origin, float radius, int damage, float duration, string nameOfHitbox = null)
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
         _hitbox.name = nameOfHitbox ?? "Hitbox";
 
 
-        _hitbox.Begin();
+        StartCoroutine(_hitbox.Begin());
     }
 
     public void CreateParticle(string Name, Vector3 position)

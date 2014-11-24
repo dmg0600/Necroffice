@@ -6,25 +6,33 @@ using System.Linq;
 public class PistolWeapon : Weapon
 {
     public AudioClip audio;
+
+    //public GameObject HitboxShoot;
+
     public override IEnumerator attack()
     {
         if (!canAttack())
             yield break;
 
-        Hitbox clone = Instantiate(Hitbox, transform.position, transform.rotation) as Hitbox;
+        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", 2);
+        yield return new WaitForSeconds(0.25f);
+
+        Hitbox clone = Instantiate(Hitbox, transform.position, owner.transform.rotation) as Hitbox;
 
         clone.Owner = this.owner;
         clone.Damage = DamageRanged;
-        clone.Duration = VelocityRanged * Range;
+        clone.Duration = Range;
         clone.name = "Hitbox (" + this.name + " - " + this.owner.name + ")";
         clone.Properties = this.Property.ToList();
 
-        clone.SetVelocity(owner.transform.forward * VelocityRanged);
+        clone.rigidbody.velocity = owner.transform.forward * VelocityRanged;
+        clone.gameObject.SetActive(true);
 
-        clone.Begin();
+        StartCoroutine(clone.Begin());
+
         AudioSource.PlayClipAtPoint(audio, transform.position);
 
-        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", UnityEngine.Random.Range(0, 3));
+        yield return new WaitForSeconds(0.5f);
     }
 
     public override bool canAttack()
@@ -35,13 +43,6 @@ public class PistolWeapon : Weapon
 
     void FixedUpdate()
     {
-        if (_attacking && !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("RangedAtk_1") &&
-            !owner.GetComponent<Controller>()._Animator.GetCurrentAnimatorStateInfo(0).IsName("RangedAtk_2"))
-        {
-            _attacking = false;
-            _owner.BroadcastMessage("OnAttackEnd");
-        }
-
         if (weaponMode == WeaponMode.AI)
             updateAI();
     }
@@ -59,7 +60,7 @@ public class PistolWeapon : Weapon
         {
             if (!_attacking)
             {
-                StartCoroutine(atackHandler());
+                StartCoroutine(attackHandler());
             }
         }
         /*else

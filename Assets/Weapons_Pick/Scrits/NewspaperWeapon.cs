@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public class NewspaperWeapon : Weapon
 {
     public AudioClip[] audio;
-    int i = 0;
+
+
     public override IEnumerator attack()
     {
         if (!canAttack())
@@ -27,8 +28,8 @@ public class NewspaperWeapon : Weapon
         //</HACK>
 
         // Play Animacion
-        i = i % 3 + 1;
-        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", i + 2);
+        int[] i = new int[] { 3, 5 };
+        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", i[Random.Range(0, i.Length)]);
 
         //AudioSource.PlayClipAtPoint(audio[Random.Range(0, audio.Length)], transform.position);
 
@@ -63,7 +64,7 @@ public class NewspaperWeapon : Weapon
         {
             if (!_attacking)
             {
-                StartCoroutine(atackHandler());
+                StartCoroutine(attackHandler());
             }
         }
         /*else

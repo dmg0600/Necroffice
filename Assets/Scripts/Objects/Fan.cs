@@ -17,7 +17,6 @@ public class Fan : MonoBehaviour {
         if (other.rigidbody != null)
         {
             other.rigidbody.AddForce(transform.forward * force);
-            Debug.Log(other.name);
         }
 	}
 }
