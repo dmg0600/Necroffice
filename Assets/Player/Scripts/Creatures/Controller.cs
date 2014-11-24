@@ -57,6 +57,7 @@ public class Controller : MonoBehaviour
 
     void RefreshAnimation()
     {
+        _Animator.SetInteger("Attack", 0);
 
         if (Mathf.Abs(rigidbody.velocity.z) > 0.2f && grounded)
         {

@@ -18,6 +18,7 @@ public class AxeWeapon : Weapon
         //Habilitar hitbox
         Hitbox.gameObject.SetActive(true);
 
+
         //todo: desactivar con animacion
 
         //<HACK>
@@ -25,7 +26,7 @@ public class AxeWeapon : Weapon
         //</HACK>
 
         // Play Animacion
-        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", UnityEngine.Random.Range(3, 6));
+        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", 5);
 
         //AudioSource.PlayClipAtPoint(audio[Random.Range(0, audio.Length)], transform.position);
     }
