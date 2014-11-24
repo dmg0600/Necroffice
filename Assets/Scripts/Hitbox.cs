@@ -59,7 +59,7 @@ public class Hitbox : MonoBehaviour
                 if (_creature.gameObject == Owner.gameObject)
                     return;
             }
-            Debug.Log(_creature.name + " es pegado por " + (_creature.Equals(Owner)));
+
             other.SendMessage("OnDamage", this);
         }
     }
