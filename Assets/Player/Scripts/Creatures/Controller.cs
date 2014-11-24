@@ -29,7 +29,7 @@ public class Controller : MonoBehaviour
 
     void Awake()
     {
-        _Creature = transform.root.GetComponent<Creature>();
+        _Creature = transform.GetComponent<Creature>();
     }
 
     void RefreshVariables()
