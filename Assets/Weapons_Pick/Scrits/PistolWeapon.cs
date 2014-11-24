@@ -14,8 +14,8 @@ public class PistolWeapon : Weapon
         if (!canAttack())
             yield break;
 
-        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", UnityEngine.Random.Range(0, 3));
-        yield return new WaitForSeconds(0.2f + Random.Range(0.01f, 0.5f));
+        owner.GetComponent<Controller>()._Animator.SetInteger("Attack", 2);
+        yield return new WaitForSeconds(0.25f);
 
         Hitbox clone = Instantiate(Hitbox, transform.position, owner.transform.rotation) as Hitbox;
 
