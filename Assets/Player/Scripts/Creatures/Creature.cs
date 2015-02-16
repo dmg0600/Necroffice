@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Creature : MonoBehaviour
+public abstract class Creature : MonoBehaviour
 {
 
     public AudioClip DwarfDeadAudio;
@@ -11,7 +11,7 @@ public class Creature : MonoBehaviour
 
     public Alignments Alignment = Alignments.ENEMY;
 
-    public Transform WeaponHoldPoint;
+    public GameObject WeaponHoldPoint;
 
     public Weapon _Weapon;
 
@@ -25,7 +25,7 @@ public class Creature : MonoBehaviour
 
     [HideInInspector]
     public Life _Life;
-
+    bool _attacking = false;
 
     void Awake()
     {
@@ -34,16 +34,14 @@ public class Creature : MonoBehaviour
         _Stats = GetComponent<Stats>();
 
         _Life = GetComponent<Life>();
-
     }
 
     void Start()
     {
-        if (IsPlayer())
-        {
-            GeneratePlayerDwarf();
-        }
-
+        initialize();
+    }
+    protected virtual void initialize()
+    {
         EquipWeapon(GameManager.Instance.DefaultWeapon);
     }
 
@@ -53,9 +51,8 @@ public class Creature : MonoBehaviour
         {
             DropWeapon();
         }
-
         //Poner nueva
-        GameObject _obj = Instantiate(newWeapon.gameObject, WeaponHoldPoint.position, WeaponHoldPoint.rotation) as GameObject;
+        GameObject _obj = Instantiate(newWeapon.gameObject, WeaponHoldPoint.transform.position, WeaponHoldPoint.transform.rotation) as GameObject;
         _obj.transform.parent = WeaponHoldPoint.transform;
         //_obj.transform.localPosition = Vector3.zero;
         //_obj.transform.localScale = Vector3.one;      //Todas las armas tienen que tener escala (1,1,1)!
@@ -63,15 +60,6 @@ public class Creature : MonoBehaviour
         _Weapon = _obj.GetComponent<Weapon>();
 
         _Weapon.owner = this;
-
-        if (IsPlayer())
-        {
-            _Weapon.weaponMode = WeaponMode.CONTROLLED;
-        }
-        else
-        {
-            _Weapon.weaponMode = WeaponMode.AI;
-        }
     }
 
     void DropWeapon()
@@ -101,26 +89,7 @@ public class Creature : MonoBehaviour
         //Debug.Log("me estan destruyendo" + gameObject.name);
     }
 
-    public void OnDead()
-    {
-        //Debug.Log("Se muere " + name);
-
-        if (IsPlayer())
-        {
-            //Muere player 
-            GameManager.Instance.CreateParticle("BloodSplat", gameObject.transform.position);
-            //AudioSource.PlayClipAtPoint(DwarfDeadAudio, transform.position);
-
-            _Life.life.Regenerate();
-            GameManager.Instance.LoadLevel(GameManager.Instance.CurrentlyLoadedLevel);
-        }
-        else
-        {
-            //Muere enemigo
-            GameManager.Instance.DestroyWithParticle("BloodSplat", gameObject);
-            //AudioSource.PlayClipAtPoint(SkeletonDeadAudio, transform.position);
-        }
-    }
+    public abstract void OnDead();
 
     public string GenerateDwarvenName()
     {
@@ -147,5 +116,15 @@ public class Creature : MonoBehaviour
 
         _Life.life = new Stats.Attribute(0, _maxLife);
 
+    }
+
+    public bool imAttacking()
+    {
+        return _attacking;
+    }
+
+    public void attacking(bool attacking)
+    {
+        _attacking = attacking;
     }
 }

@@ -6,7 +6,7 @@ using System.Collections;
 
 public class Controller : MonoBehaviour
 {
-    public Creature _Creature = null;
+    private Creature _Creature = null;
     public AnimationCurve AgilityToSpeed;
     public Animator _Animator;
 

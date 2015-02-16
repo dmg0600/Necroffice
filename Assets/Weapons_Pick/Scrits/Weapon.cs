@@ -17,9 +17,6 @@ public abstract class Weapon : MonoBehaviour
 
     public Hitbox Hitbox;
 
-    [HideInInspector]
-    public bool _attacking = false;
-
     public void Awake()
     {
         DangerousPoint = this.transform.FindChild("DangerousPoint");
@@ -29,11 +26,11 @@ public abstract class Weapon : MonoBehaviour
 
     public IEnumerator attackHandler()
     {
-        if (!_attacking)
+        if (!owner.imAttacking())
         {
-            _attacking = true;
+            owner.attacking(true);
             yield return StartCoroutine(attack());
-            _attacking = false;
+            owner.attacking(false);
         }
         //Esto se pone aqui para no ponerse al final de cada attack
         //Aqui pasa igual que el OnAttack y OnAttackStart en contoller, 
@@ -44,15 +41,7 @@ public abstract class Weapon : MonoBehaviour
     abstract public IEnumerator attack();
     abstract public bool canAttack();
 
-    //IA METHODS
-    abstract public void updateAI();
-
     #endregion
-
-    public virtual void selectTarget()
-    {
-
-    }
 
     void Start()
     {
@@ -64,102 +53,6 @@ public abstract class Weapon : MonoBehaviour
         Hitbox.gameObject.SetActive(false);
     }
 
-    public virtual void move()
-    {
-
-        Vector3 direction = (GameManager.Instance.Player.transform.position - owner.transform.position).normalized;
-
-        int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
-
-        float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);
-
-        if (!Physics.Raycast(owner.transform.position, direction, (_visionRange > distance) ? distance : _visionRange, layermask))
-            owner.BroadcastMessage("OnInputAxis", direction);
-
-    }
-
-
-    protected void idle()
-    {
-        if (objective != Vector3.zero && Vector3.Distance(owner.transform.position, objective) < 2.0f)
-        {
-            Vector3 direction = (objective - owner.transform.position).normalized;
-            owner.BroadcastMessage("OnInputAxis", direction);
-        }
-        else
-        {
-            CancelInvoke();
-            selectObjective();
-        }
-    }
-
-    protected void selectObjective()
-    {
-        int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
-
-        float maxDistance = 0;
-        Vector3 direction;
-        Vector3 currentDir = Vector3.zero;
-
-        RaycastHit hit;
-        while (true)
-        {
-            direction = Vector3.forward;
-            if (!Physics.Raycast(transform.position, direction, out hit))
-            {
-                objective = direction;
-                break;
-            }
-
-            if (hit.distance > maxDistance)
-            {
-                maxDistance = hit.distance;
-                currentDir = direction;
-            }
-
-            direction = Vector3.back;
-            if (!Physics.Raycast(transform.position, direction, out hit))
-            {
-                objective = direction;
-                break;
-            }
-            if (hit.distance > maxDistance)
-            {
-                maxDistance = hit.distance;
-                currentDir = direction;
-            }
-
-            direction = Vector3.left;
-            if (!Physics.Raycast(transform.position, direction, out hit))
-            {
-                objective = direction;
-                break;
-            }
-            if (hit.distance > maxDistance)
-            {
-                maxDistance = hit.distance;
-                currentDir = direction;
-            }
-
-            direction = Vector3.right;
-            if (!Physics.Raycast(transform.position, direction, out hit))
-            {
-                objective = direction;
-                break;
-            }
-            if (hit.distance > maxDistance)
-            {
-                maxDistance = hit.distance;
-                currentDir = direction;
-            }
-
-            break;
-        }
-
-        owner.BroadcastMessage("OnInputAxis", currentDir);
-
-        Invoke("selectObjective", 5.0f);
-    }
 
     #region GET/SET
     ///////////////////////////////////////////////////////////////
@@ -172,7 +65,7 @@ public abstract class Weapon : MonoBehaviour
             this._mode = value;
 
             if (this._mode == WeaponMode.AI)
-                Invoke("selectTarget", 2.0f);
+                owner.Invoke("selectTarget", 2.0f);
         }
         get
         {

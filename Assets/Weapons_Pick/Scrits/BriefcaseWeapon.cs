@@ -42,32 +42,4 @@ public class BriefcaseWeapon : Weapon
         return true;
     }
 
-
-    void FixedUpdate()
-    {
-        if (weaponMode == WeaponMode.AI)
-            updateAI();
-    }
-
-    public override void updateAI()
-    {
-        float distance = Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position);
-        bool dead = GameManager.Instance.Player.GetComponent<Life>().life.value == 0;
-        //Debug.Log(Vector3.Distance(owner.transform.position, GameManager.Instance.Player.transform.position));
-        if (distance > Range && !dead)
-        {
-            move();
-        }
-        else if (!dead)
-        {
-            if (!_attacking)
-            {
-                StartCoroutine(attackHandler());
-            }
-        }
-        /*else
-        {
-            idle();
-        }*/
-    }
 }

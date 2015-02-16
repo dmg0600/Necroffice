@@ -5,7 +5,7 @@ using System.Linq;
 
 public class InputManager : MonoBehaviour
 {
-    GameObject Sujet;
+    GameObject Subject;
 
     [SerializeField]
     GameObject RotateRef;
@@ -21,7 +21,7 @@ public class InputManager : MonoBehaviour
 
     void Awake() 
     {
-        Sujet = this.transform.root.gameObject;
+        Subject = this.transform.root.gameObject;
         floorLayer = 1 << LayerMask.NameToLayer("Floor");
     }
 
@@ -38,7 +38,7 @@ public class InputManager : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, floorLayer))
                 {
-                    Sujet.BroadcastMessage("OnInputMouseClick", hit.point);
+                    Subject.BroadcastMessage("OnInputMouseClick", hit.point);
                 }
             }
 
@@ -46,9 +46,7 @@ public class InputManager : MonoBehaviour
 
             if (axis != Vector3.zero)
             {
-                Quaternion rotate = Quaternion.LookRotation(new Vector3(RotateRef.transform.forward.x, 0, RotateRef.transform.forward.z));
-                axis = rotate * axis;
-                Sujet.BroadcastMessage("OnInputAxis", axis);
+                Subject.BroadcastMessage("OnInputAxis", axis);
             }
         }
     }
