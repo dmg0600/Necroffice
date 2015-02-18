@@ -30,6 +30,8 @@ public class Controller : MonoBehaviour
     void Awake()
     {
         _Creature = transform.GetComponent<Creature>();
+        if(_Creature.IsPlayer())
+            InputManager.Instance.registerAxis(OnInputAxis);
     }
 
     void RefreshVariables()
@@ -122,17 +124,6 @@ public class Controller : MonoBehaviour
     public void OnInputAxis(Vector3 direction)
     {
         targetOrientation = direction;
-    }
-
-    public void OnInputMouseClick(object o)
-    {
-        Vector3 objetive = (Vector3)o;
-        if (objetive != null)
-        {
-            //Lo mismo de siempre, se puede cablear o hacerlo por evento con OnAttackStart, puede interesar
-            BroadcastMessage("OnAttackStart", objetive);
-            //OnAttackStart(objetive);
-        }
     }
 
     void LookAt(Vector3 direction, bool forze = false)

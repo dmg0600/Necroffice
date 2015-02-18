@@ -79,15 +79,7 @@ public abstract class Creature : MonoBehaviour
             StartCoroutine(_Weapon.attackHandler());
     }
 
-    public bool IsPlayer()
-    {
-        return (tag == "Player");
-    }
-
-    void OnDestroy()
-    {
-        //Debug.Log("me estan destruyendo" + gameObject.name);
-    }
+    public abstract bool IsPlayer();
 
     public abstract void OnDead();
 

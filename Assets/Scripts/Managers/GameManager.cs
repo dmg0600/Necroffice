@@ -224,7 +224,7 @@ public class GameManager : MonoBehaviour
 
     public void EnableInput(bool isEnable)
     {
-        Player.GetComponent<InputManager>().EnableInput(isEnable);
+        InputManager.Instance.EnableInput(isEnable);
         Camera.main.transform.GetComponent<PlayerCamera>().EnableInput(isEnable);
     }
 

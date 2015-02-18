@@ -14,6 +14,11 @@ public class AICreature : Creature {
         GameManager.Instance.LoadLevel(GameManager.Instance.CurrentlyLoadedLevel);
     }
 
+    public override bool IsPlayer()
+    {
+        return false;
+    }
+
     public void updateAI()
     {
         float distance = Vector3.Distance(transform.position, GameManager.Instance.Player.transform.position);
