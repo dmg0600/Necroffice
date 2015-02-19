@@ -27,11 +27,15 @@ public class Controller : MonoBehaviour
     Transform graphic;
     GameObject groundObject { get; set; }
 
-    void Awake()
+    void Start()
     {
         _Creature = transform.GetComponent<Creature>();
         if(_Creature.IsPlayer())
-            InputManager.Instance.registerAxis(OnInputAxis);
+        {
+            InputManager.Instance.registerAxis("Horizontal", OnInputXAxis);
+            InputManager.Instance.registerAxis("Vertical", OnInputZAxis);
+        }
+            
     }
 
     void RefreshVariables()
@@ -121,9 +125,14 @@ public class Controller : MonoBehaviour
         targetOrientation = Vector3.zero;
     }
 
-    public void OnInputAxis(Vector3 direction)
+    public void OnInputXAxis(string axe, float value)
     {
-        targetOrientation = direction;
+        targetOrientation.x = value;
+    }
+
+    public void OnInputZAxis(string axe, float value)
+    {
+        targetOrientation.z = value;
     }
 
     void LookAt(Vector3 direction, bool forze = false)

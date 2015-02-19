@@ -6,10 +6,12 @@ using System.Linq;
 public class InputManager : SingletonComponent<InputManager>
 {
     public delegate void KeyEvent(string K);
-    public delegate void JoystikEvent(Vector3 axis);
+    public delegate void JoystikEvent(string axe, float value);
 
     private List<string> keys;
+    private List<string> axis;
     private Dictionary<string, KeyEvent> keyDownEvents, keyUpEvents;
+    private Dictionary<string, JoystikEvent> axisEvents;
     private event JoystikEvent keyEventHandler;
 
     bool isInputEnable = true;
@@ -23,7 +25,9 @@ public class InputManager : SingletonComponent<InputManager>
     {
         keyDownEvents = new Dictionary<string, KeyEvent>();
         keyUpEvents = new Dictionary<string, KeyEvent>();
+        axisEvents = new Dictionary<string, JoystikEvent>();
         keys = new List<string>();
+        axis = new List<string>();
     }
 
     void Update()
@@ -39,66 +43,10 @@ public class InputManager : SingletonComponent<InputManager>
                 OnKeyUp(key);
         }
 
-        Vector3 axis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
-
-        if (axis != Vector3.zero && keyEventHandler != null)
+        foreach (string axe in axis)
         {
-            keyEventHandler(axis);
+            OnAxis(axe, Input.GetAxis(axe));
         }
-    }
-
-    // Default time in seconds for which to detect double clicking of a key.
-    public const float DefaultTimeThreshold = 0.5f;
-
-    private static string _multiClickAnchorKey;
-    private static float _multiClickAnchorTime;
-    private static int _multiClickCount;
-
-    public static void CancelMultiClick()
-    {
-        _multiClickAnchorKey = null;
-    }
-
-    public static int GetMultiClickKeyCount(string key, float timeThreshold)
-    {
-        if (Input.GetButtonDown(key))
-        {
-            // Do we need to cancel the last multi-click operation for this key?
-            if (_multiClickAnchorKey == key)
-                if (Time.time - _multiClickAnchorTime > timeThreshold)
-                    CancelMultiClick();
-
-            _multiClickAnchorTime = Time.time;
-
-            // Has button been pressed for first time?
-            if (_multiClickAnchorKey != key)
-            {
-                _multiClickAnchorKey = key;
-                _multiClickCount = 1;
-            }
-            else
-            {
-                // Okay, so this is a multi-click operation!
-                ++_multiClickCount;
-            }
-            return _multiClickCount;
-        }
-        return 0;
-    }
-
-    public static int GetMultiClickKeyCount(string key)
-    {
-        return GetMultiClickKeyCount(key, DefaultTimeThreshold);
-    }
-
-    public static bool HasDoubleClickedKey(string key, float timeThreshold)
-    {
-        return GetMultiClickKeyCount(key, timeThreshold) == 2;
-    }
-
-    public static bool HasDoubleClickedKey(string key)
-    {
-        return HasDoubleClickedKey(key, DefaultTimeThreshold);
     }
 
     #region Registration
@@ -146,17 +94,27 @@ public class InputManager : SingletonComponent<InputManager>
         if (removeKey) RemoveKey(K);
     }
 
-    public void registerAxis(JoystikEvent delegateFunc)
+    public void registerAxis(string axe, JoystikEvent kEvent)
     {
-        //unregister first
-        keyEventHandler -= delegateFunc;
-        keyEventHandler += delegateFunc;
+       
+        if (axisEvents.ContainsKey(axe))
+            axisEvents[axe] += kEvent;
+        else
+        {
+            if (!axis.Contains(axe)) axis.Add(axe);
+            axisEvents.Add(axe, kEvent);
+        }
     }
 
-    public void unRegisterAxis(JoystikEvent delegateFunc)
+    public void unRegisterAxis(string axe, JoystikEvent kEvent, bool removeKey)
     {
-        //unregister first
-        keyEventHandler -= delegateFunc;
+        if (axisEvents.ContainsKey(axe))
+        {
+            axisEvents[axe] -= kEvent;
+            if (axisEvents[axe] == null)
+                axisEvents.Remove(axe);
+        }
+        if (removeKey) RemoveAxe(axe);
     }
 
     public void RemoveKey(string K)
@@ -164,6 +122,12 @@ public class InputManager : SingletonComponent<InputManager>
         if (keyDownEvents.ContainsKey(K)) keyDownEvents.Remove(K);
         if (keyUpEvents.ContainsKey(K)) keyUpEvents.Remove(K);
         if (keys.Contains(K)) keys.Remove(K);
+    }
+
+    public void RemoveAxe(string K)
+    {
+        if (axisEvents.ContainsKey(K)) keyDownEvents.Remove(K);
+        if (axis.Contains(K)) keys.Remove(K);
     }
     #endregion
 
@@ -183,5 +147,14 @@ public class InputManager : SingletonComponent<InputManager>
             if (E != null)
                 E(K);
     }
+
+    private void OnAxis(string axe, float value)
+    {
+        JoystikEvent E = null;
+        if (axisEvents.TryGetValue(axe, out E))
+            if (E != null)
+                E(axe, value);
+    }
+
     #endregion
 }

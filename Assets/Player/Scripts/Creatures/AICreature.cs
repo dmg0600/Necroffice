@@ -3,7 +3,7 @@ using System.Collections;
 
 public class AICreature : Creature {
 
-
+    private Controller _movementController;
     public override void OnDead()
     {
         //Muere player 
@@ -17,6 +17,12 @@ public class AICreature : Creature {
     public override bool IsPlayer()
     {
         return false;
+    }
+
+    protected override void initialize()
+    {
+        base.initialize();
+        _movementController = GetComponent<Controller>();
     }
 
     public void updateAI()
@@ -36,10 +42,10 @@ public class AICreature : Creature {
                 move();
             }
         }
-        /*else
+        else
         {
             idle();
-        }*/
+        }
     }
 
 
@@ -53,7 +59,11 @@ public class AICreature : Creature {
         float distance = Vector3.Distance(transform.position, GameManager.Instance.Player.transform.position);
 
         if (!Physics.Raycast(transform.position, direction, (_visionRange > distance) ? distance : _visionRange, layermask))
-            BroadcastMessage("OnInputAxis", direction);
+        {
+            //send movement commands to the movement controller
+            _movementController.OnInputXAxis("Horizontal", direction.x);
+            _movementController.OnInputZAxis("Vertical", direction.z);
+        }
 
     }
 
@@ -74,7 +84,7 @@ public class AICreature : Creature {
 
     protected void idleMovement()
     {
-        int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
+        //int layermask = ~(1 << LayerMask.NameToLayer("Creature") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon"));
 
         BroadcastMessage("OnInputAxis", selectCurrentDirection());
 

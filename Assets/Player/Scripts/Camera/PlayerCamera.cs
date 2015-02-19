@@ -25,16 +25,18 @@ public class PlayerCamera : MonoBehaviour
     float damping = 3;
     Vector3 offset;
 
-    bool isInputEnable = true;
+    bool _enableMouseRotation = false;
 
-    public void EnableInput(bool isEnable)
+    void Start() 
     {
-        isInputEnable = isEnable;
-    }
-
-    public void Start() 
-    {
+        Debug.Log("Start");
         distance = Mathf.Clamp(distance, _zoomMin, _zoomMax);
+
+        InputManager.Instance.registerAxis("Mouse ScrollWheel", Zoom);
+        InputManager.Instance.registerAxis("CameraHorizontal", joystickRotation);
+        InputManager.Instance.registerAxis("Mouse X", mouseRotation);
+        InputManager.Instance.RegisterKeyDown("Fire2", rotateButtonDown);
+        InputManager.Instance.RegisterKeyUp("Fire2", rotateButtonUp);
     }
 
     void LateUpdate()
@@ -46,21 +48,28 @@ public class PlayerCamera : MonoBehaviour
 
             currentDistance = (transform.position - target.position).magnitude;
 
-            this.RotateControls();
-            this.Zoom();
+            Rotate(_x);
         }
     }
 
-    void RotateControls()
+    void rotateButtonUp(string key)
     {
-        if (isInputEnable)
-        {
-            _x += Input.GetAxis("CameraHorizontal");
+        _enableMouseRotation = false;
+    }
 
-            if (Input.GetButton("Fire2"))
-                _x += Input.GetAxis("Mouse X") * _xSpeed;
-        }
-        Rotate(_x);
+    void rotateButtonDown(string key)
+    {
+        _enableMouseRotation = true;
+    }
+
+    public void mouseRotation(string axe, float value)
+    {
+        _x += value;
+    }
+
+    public void joystickRotation(string axe, float value)
+    {
+        _x += value;
     }
 
     void Rotate(float x)
@@ -81,18 +90,15 @@ public class PlayerCamera : MonoBehaviour
     /**
      * Zoom or dezoom depending on the input of the mouse wheel.
      */
-    void Zoom()
+    void Zoom(string axe, float value)
     {
-        if (isInputEnable)
+        if (value < 0.0f)
         {
-            if (Input.GetAxis("Mouse ScrollWheel") < 0.0f)
-            {
-                this.ZoomOut();
-            }
-            else if (Input.GetAxis("Mouse ScrollWheel") > 0.0f)
-            {
-                this.ZoomIn();
-            }
+            this.ZoomOut();
+        }
+        else if (value > 0.0f)
+        {
+            this.ZoomIn();
         }
     }
 
