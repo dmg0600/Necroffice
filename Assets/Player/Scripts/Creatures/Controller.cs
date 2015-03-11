@@ -77,6 +77,8 @@ public class Controller : MonoBehaviour
     {
         if (PauseMenu.isPaused) return;
 
+        Vector3 movementForce = Vector3.zero;
+
         if (grounded)
         {
             // Calculate how fast we should be moving
@@ -100,8 +102,19 @@ public class Controller : MonoBehaviour
                 }
             }
 
+            Vector3 cameraDirection = transform.position - Camera.main.transform.position;
+            cameraDirection.y = 0;
+
+            Vector3 forwardDirection = cameraDirection * targetOrientation.z;
+
+            Vector3 strafeDirection = new Vector3(cameraDirection.z, 0, cameraDirection.x * -1) * targetOrientation.x;
+
+            Vector3 finalDirection = forwardDirection + strafeDirection;
+
+            Debug.Log(finalDirection);
+
             if (!attacking)
-                LookAt(targetOrientation);
+                LookAt(finalDirection.normalized);
 
             //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(targetOrientation), Time.deltaTime);
 
@@ -109,19 +122,16 @@ public class Controller : MonoBehaviour
 
             if (_angle < pivotAngleStop || attacking)
             {
-                if (_Creature != null && _Creature._Weapon != null && _Creature._Weapon.weaponMode == WeaponMode.AI)
-                {
-                    //Debug.Log("fuerza que le vamos a aplicar = " + targetOrientation);
-                }
+                Debug.Log("fuerza que le vamos a aplicar = " + Camera.main.transform.TransformDirection(targetOrientation).normalized * movementSpeed);
 
-                rigidbody.AddForce(targetOrientation * movementSpeed, ForceMode.VelocityChange);
+                movementForce = finalDirection.normalized * movementSpeed;
+
+                
             }
         }
 
-        // We apply gravity manually for more tuning control
-        rigidbody.AddForce(new Vector3(0, -floatiness * rigidbody.mass, 0));
+        rigidbody.AddForce(new Vector3(0,-5,0) + movementForce, ForceMode.VelocityChange);
 
-        grounded = false;
         targetOrientation = Vector3.zero;
     }
 
@@ -146,7 +156,15 @@ public class Controller : MonoBehaviour
 
     }
 
-    void OnCollisionStay(Collision other)
+    void OnCollisionExit(Collision other)
+    {
+        if (other.transform.gameObject.layer != LayerMask.NameToLayer("Floor")) return;
+
+        grounded = true;
+        groundObject = other.gameObject;
+    }
+
+    void OnCollisionEnter(Collision other)
     {
         if (other.transform.gameObject.layer != LayerMask.NameToLayer("Floor")) return;
 

@@ -64,7 +64,10 @@ public class PlayerCamera : MonoBehaviour
 
     public void mouseRotation(string axe, float value)
     {
-        _x += value;
+        if(_enableMouseRotation)
+        {
+            _x += value;
+        }
     }
 
     public void joystickRotation(string axe, float value)
