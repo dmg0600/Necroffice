@@ -11,7 +11,7 @@ public class Controller : MonoBehaviour
     public Animator _Animator;
 
     //Parametrization
-    float movementSpeed = 1;
+    float movementSpeed = 0f;
     float floatiness = Defines.Gravity;
     float pivotSpeed = 8;
     float pivotAngleStop = 45;
@@ -86,10 +86,10 @@ public class Controller : MonoBehaviour
 
             RaycastHit hit;
             int layermask = 1 << LayerMask.NameToLayer("Floor");
-            if (Physics.Raycast(transform.position, transform.up * -1, out hit, layermask))
+            if (Physics.Raycast(transform.position, transform.up * -1, out hit, 1000f, layermask))
             {
                 Transform rampa;
-                if (hit.transform.name == "Rampa")
+                if (hit.transform.name.Equals( "Rampa" ) )
                     rampa = hit.transform;
                 else
                     rampa = hit.transform.FindChild("Rampa");
@@ -111,8 +111,6 @@ public class Controller : MonoBehaviour
 
             Vector3 finalDirection = forwardDirection + strafeDirection;
 
-            Debug.Log(finalDirection);
-
             if (!attacking)
                 LookAt(finalDirection.normalized);
 
@@ -120,17 +118,12 @@ public class Controller : MonoBehaviour
 
             float _angle = Vector3.Angle(targetOrientation, transform.forward);
 
-            if (_angle < pivotAngleStop || attacking)
-            {
-                Debug.Log("fuerza que le vamos a aplicar = " + Camera.main.transform.TransformDirection(targetOrientation).normalized * movementSpeed);
+            movementForce = finalDirection.normalized * movementSpeed;
 
-                movementForce = finalDirection.normalized * movementSpeed;
-
-                
-            }
+            rigidbody.AddForce(movementForce * 50f, ForceMode.Acceleration);
         }
 
-        rigidbody.AddForce(new Vector3(0,-5,0) + movementForce, ForceMode.VelocityChange);
+        rigidbody.AddForce(new Vector3(0, -floatiness * 2, 0) + movementForce, ForceMode.Acceleration);
 
         targetOrientation = Vector3.zero;
     }
